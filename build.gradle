@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+group 'net.scoreworks'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //for sparse matrix interface
+    implementation 'org.la4j:la4j:0.6.0'
+
+    //include ARPACK bindings for java and all its required dependencies
+    implementation 'org.bytedeco:javacpp-platform:1.5.5'
+    implementation 'org.bytedeco:openblas-platform:0.3.23-1.5.9'
+    implementation 'org.bytedeco:arpack-ng-platform:3.9.0-1.5.9'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
