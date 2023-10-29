@@ -28,10 +28,8 @@ public class EigenvalueDecomposition {
         NEUPD_WHICH.add("SI");
     }
 
-
     /**
-     * Solve the standard eigenvalue problem A*x = lambda*x for a symmetric Matrix A
-     * @param A square, symmetric matrix
+     * Solve the standard eigenvalue problem A*x = lambda*x for a square, symmetric matrix A
      * @param nev number of eigenvalues to compute
      * @param which select which eigenvalues to compute
      * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
@@ -39,102 +37,188 @@ public class EigenvalueDecomposition {
      * @param tolerance iteration is terminated when this relative tolerance is reached
      */
     public static SymmetricArpackSolver eigsh_standard(Matrix A, int nev, String which, Integer ncv, int maxIter, double tolerance) {
-        return eigsh(A, nev, 1, which, ncv, 0, maxIter, tolerance, null, null);
+        if (A.rows() != A.columns())
+            throw new IllegalArgumentException("A is not a square matrix");
+        return eigsh(asLinearOperation(A), A.rows(), nev, 1, which, ncv, 0, maxIter, tolerance, null, null);
     }
 
+    /**
+     * Solve the standard eigenvalue problem A*x = lambda*x for a square, symmetric matrix A
+     * @param A Linear operation representing left multiplication by A
+     * @param n shape (rows, or columns) of A
+     * @param nev number of eigenvalues to compute
+     * @param which select which eigenvalues to compute
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static SymmetricArpackSolver eigsh_standard(LinearOperation A, int n, int nev, String which, Integer ncv, int maxIter, double tolerance) {
+        return eigsh(A, n, nev, 1, which, ncv, 0, maxIter, tolerance, null, null);
+    }
+
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x. A and M must be square, symmetric and match in dimensions
+     * @param nev number of eigenvalues to compute
+     * @param which select which eigenvalues to compute
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
     public static SymmetricArpackSolver eigsh_general(Matrix A, int nev, Matrix M, String which, Integer ncv, int maxIter, double tolerance) {
+        if (A.rows() != A.columns())
+            throw new IllegalArgumentException("A is not a square matrix");
         if (M.rows() != A.rows() || M.columns() != A.columns())
             throw new IllegalArgumentException("M must have same dimensions as A");
 
         //calculate inverse of M
-        MatrixInverter inverter = M.withInverter(LinearAlgebra.InverterFactory.GAUSS_JORDAN);
-        Matrix M_inv = inverter.inverse();
-
-        return eigsh(A, nev, 2, which, ncv, 0, maxIter, tolerance, asLinearOperation(M), asLinearOperation(M_inv));
+        Matrix M_inv = invert(M);
+        return eigsh(asLinearOperation(A), A.rows(), nev, 2, which, ncv, 0, maxIter, tolerance, asLinearOperation(M), asLinearOperation(M_inv));
     }
 
-    public static SymmetricArpackSolver eigsh_general(Matrix A, int nev, Matrix M, LinearOperation M_inv, String which, Integer ncv, int maxIter, double tolerance) {
-        if (M.rows() != A.rows() || M.columns() != A.columns())
-            throw new IllegalArgumentException("M must have same dimensions as A");
-        return eigsh(A, nev, 2, which, ncv, 0, maxIter, tolerance, asLinearOperation(M), M_inv);
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x. A and M must be square, symmetric and match in dimensions
+     * @param A Linear operation representing left multiplication by A
+     * @param n shape (rows, or columns) of A
+     * @param nev number of eigenvalues to compute
+     * @param M Linear operation representing left multiplication by M
+     * @param M_inv Linear operation representing left multiplication by inverse of M
+     * @param which select which eigenvalues to compute
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static SymmetricArpackSolver eigsh_general(LinearOperation A, int n, int nev, LinearOperation M, LinearOperation M_inv, String which, Integer ncv, int maxIter, double tolerance) {
+        return eigsh(A, n, nev, 2, which, ncv, 0, maxIter, tolerance, M, M_inv);
     }
 
-    public static SymmetricArpackSolver eigsh_shiftInvert(Matrix A, int nev, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x in shift-invert mode to find eigenvalues near sigma.
+     * A and M must be square, symmetric and match in dimensions. M is positive semi-definite
+     * If M is null, the standard eigenvalue problem will be solved instead
+     * @param nev number of eigenvalues to compute
+     * @param which select which eigenvalues to compute
+     * @param sigma shift applied to A
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static SymmetricArpackSolver eigsh_shiftInvert(Matrix A, int nev, Matrix M, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
         if (A.rows() != A.columns())
             throw new IllegalArgumentException("A is not a square matrix");
 
-        //calculate (A -sigma*I)^-1
-        double[] res = flattenMatrix(A);
-        for(int i=0; i<A.rows(); i++) {
-            res[i*A.columns()+i] -= sigma;
+        if (M == null) {
+            //calculate (A - sigma*I)^-1
+            double[] res = flattenMatrix(A);
+            for(int i=0; i<A.rows(); i++) {
+                res[i*A.columns()+i] -= sigma;
+            }
+            Matrix res_inv = invert(A.rows(), A.columns(), res);
+            return eigsh(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(res_inv));
         }
-        Matrix res_inv = invert(A.rows(), A.columns(), res);
-        return eigsh(A, nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(res_inv));
+        else {
+            if (M.rows() != A.rows() || M.columns() != A.columns())
+                throw new IllegalArgumentException("M must have same dimensions as A");
+
+            //calculate (A - sigma*M)^-1
+            Matrix res = A.subtract(M.multiply(sigma));
+            Matrix res_inv = invert(res);
+            return eigsh(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), asLinearOperation(res_inv));
+        }
     }
 
-    public static SymmetricArpackSolver eigsh_shiftInvert(Matrix A, int nev, LinearOperation OP_inv, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
-        return eigsh(A, nev, 3, which, ncv, sigma, maxIter, tolerance, null, OP_inv);
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x in shift-invert mode to find eigenvalues near sigma.
+     * A and M must be square, symmetric and match in dimensions. M is positive semi-definite
+     * If M is null, the standard eigenvalue problem will be solved instead
+     * @param A Linear operation representing left multiplication by A
+     * @param n shape (rows, or columns) of A
+     * @param nev number of eigenvalues to compute
+     * @param OP_inv Linear operation representing left multiplication by (A -sigma*M)^-1
+     * @param which select which eigenvalues to compute
+     * @param sigma shift applied to A
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static SymmetricArpackSolver eigsh_shiftInvert(LinearOperation A, int n, int nev, LinearOperation OP_inv, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
+        return eigsh(A, n, nev, 3, which, ncv, sigma, maxIter, tolerance, null, OP_inv);
     }
 
-    public static SymmetricArpackSolver eigsh_shiftInvert(Matrix A, int nev, Matrix M, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
-        if (M.rows() != A.rows() || M.columns() != A.columns())
-            throw new IllegalArgumentException("M must have same dimensions as A");
 
+
+    /*public static SymmetricArpackSolver eigsh_buckling(Matrix A, int nev, Matrix M, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
         //calculate (A -sigma*M)^-1
         Matrix res = A.subtract(M.multiply(sigma));
         Matrix res_inv = invert(res);
-        return eigsh(A, nev, 3, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), asLinearOperation(res_inv));
-    }
-
-    public static SymmetricArpackSolver eigsh_shiftInvert(Matrix A, int nev, Matrix M, LinearOperation OP_inv, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
-        return eigsh(A, nev, 3, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), OP_inv);
-    }
-
-    public static SymmetricArpackSolver eigsh_buckling(Matrix A, int nev, Matrix M, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
-        //calculate (A -sigma*M)^-1
-        Matrix res = A.subtract(M.multiply(sigma));
-        Matrix res_inv = invert(res);
-        return eigsh(A, nev, 4, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(res_inv));
+        return eigsh(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(res_inv));
     }
 
     public static SymmetricArpackSolver eigsh_buckling(Matrix A, int nev, LinearOperation OP_inv, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
-        return eigsh(A, nev, 4, which, ncv, sigma, maxIter, tolerance, null, OP_inv);
-    }
+        return eigsh(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, OP_inv);
+    }*/
 
-    public static SymmetricArpackSolver eigsh_cayley(Matrix A, int nev, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
-        //calculate (A -sigma*I)^-1
-        double[] res = flattenMatrix(A);
-        for(int i=0; i<A.rows(); i++) {
-            res[i*A.columns()+i] -= sigma;
-        }
-        Matrix res_inv = invert(A.rows(), A.columns(), res);
-        return eigsh(A, nev, 5, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(res_inv));
-    }
-
-    public static SymmetricArpackSolver eigsh_cayley(Matrix A, int nev, LinearOperation OP_inv, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
-        return eigsh(A, nev, 5, which, ncv, sigma, maxIter, tolerance, null, OP_inv);
-    }
-
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x in Cayley-transformed mode to find eigenvalues near sigma.
+     * A and M must be square, symmetric and match in dimensions. M is positive semi-definite
+     * If M is null, the standard eigenvalue problem will be solved instead
+     * @param nev number of eigenvalues to compute
+     * @param which select which eigenvalues to compute
+     * @param sigma shift applied to A
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
     public static SymmetricArpackSolver eigsh_cayley(Matrix A, int nev, Matrix M, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
-        //calculate (A -sigma*M)^-1
-        Matrix res = A.subtract(M.multiply(sigma));
-        Matrix res_inv = invert(res);
-        return eigsh(A, nev, 5, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), asLinearOperation(res_inv));
+        if (A.rows() != A.columns())
+            throw new IllegalArgumentException("A is not a square matrix");
+
+        if (M == null) {
+            //calculate (A - sigma*I)^-1
+            double[] res = flattenMatrix(A);
+            for(int i=0; i<A.rows(); i++) {
+                res[i*A.columns()+i] -= sigma;
+            }
+            Matrix res_inv = invert(A.rows(), A.columns(), res);
+            return eigsh(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(res_inv));
+        }
+        else {
+            if (M.rows() != A.rows() || M.columns() != A.columns())
+                throw new IllegalArgumentException("M must have same dimensions as A");
+
+            //calculate (A - sigma*M)^-1
+            Matrix res = A.subtract(M.multiply(sigma));
+            Matrix res_inv = invert(res);
+            return eigsh(asLinearOperation(A), A.rows(), nev, 5, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), asLinearOperation(res_inv));
+        }
     }
 
-    public static SymmetricArpackSolver eigsh_cayley(Matrix A, int nev, Matrix M, LinearOperation OP_inv, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
-        return eigsh(A, nev, 5, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), OP_inv);
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x in Cayley-transformed mode to find eigenvalues near sigma.
+     * A and M must be square, symmetric and match in dimensions. M is positive semi-definite
+     * If M is null, the standard eigenvalue problem will be solved instead
+     * @param A Linear operation representing left multiplication by A
+     * @param n shape (rows, or columns) of A
+     * @param nev number of eigenvalues to compute
+     * @param OP_inv Linear operation representing left multiplication by (A -sigma*M)^-1
+     * @param which select which eigenvalues to compute
+     * @param sigma shift applied to A
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static SymmetricArpackSolver eigsh_cayley(LinearOperation A, int n, int nev, LinearOperation OP_inv, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
+        return eigsh(A, n, nev, 5, which, ncv, sigma, maxIter, tolerance, null, OP_inv);
     }
+
+
+
 
 
     /**
      * trickle-down method used internally by publicly exposed methods
      */
-    private static SymmetricArpackSolver eigsh(Matrix A, int nev, int mode, String which, Integer ncv, double sigma,
+    private static SymmetricArpackSolver eigsh(LinearOperation A, int n, int nev, int mode, String which, Integer ncv, double sigma,
                                          int maxIter, double tolerance, LinearOperation M, LinearOperation Minv) {
-        if (A.rows() != A.columns())
-            throw new IllegalArgumentException("A is not a square matrix");
-        int n = A.rows();
         if (nev <= 0)
             throw new IllegalArgumentException("nev must be positive, nev="+nev);
         if (nev >= n)
@@ -150,6 +234,6 @@ public class EigenvalueDecomposition {
 
         if (mode == 3)
             return new SymmetricArpackSolver(n, nev, mode, which.getBytes(), ncv, sigma, maxIter, tolerance, null, M, Minv);
-        return new SymmetricArpackSolver(n, nev, mode, which.getBytes(), ncv, sigma, maxIter, tolerance, asLinearOperation(A), M, Minv);
+        return new SymmetricArpackSolver(n, nev, mode, which.getBytes(), ncv, sigma, maxIter, tolerance, A, M, Minv);
     }
 }

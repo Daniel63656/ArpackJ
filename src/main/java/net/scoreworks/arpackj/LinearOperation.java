@@ -5,7 +5,7 @@ package net.scoreworks.arpackj;
  * passed one untouched. Supports the case that x is saved as part of a bigger array.
  * See {@link MatrixOperations} for example implementations
  */
-@FunctionalInterface
+
 public interface LinearOperation {
     /**
      * @param x vector to apply the function to
