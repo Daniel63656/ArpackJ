@@ -67,7 +67,7 @@ public class SymmetricArpackSolver extends ArpackSolver {
                 throw new IllegalArgumentException("Minv_matvec must be specified for mode=4");
 
             this.OPa = Minv_matvec;
-            this.OP = (x, off) -> this.OPa.apply(A_matvec.apply(x, off), off);
+            this.OP = (x, off) -> this.OPa.apply(A_matvec.apply(x, off), 0);
             this.B = A_matvec;
             this.bmat = "G".getBytes();
         }
@@ -127,12 +127,12 @@ public class SymmetricArpackSolver extends ArpackSolver {
                 System.arraycopy(OPa.apply(workd, 0), 0, workd, ipntr[1] - 1, n);
             }
             else if (mode == 5) {
-                double[] res = new double[n];
-                System.arraycopy(A_matvec.apply(workd, 0), 0, res, 0, n);
+                double[] Ax = new double[n];
+                System.arraycopy(A_matvec.apply(workd, 0), 0, Ax, 0, n);
                 for (int i=0; i<n; i++) {
-                    res[i] += sigma*workd[ipntr[2]-1+i];
+                    Ax[i] += sigma*workd[ipntr[2]-1+i];
                 }
-                System.arraycopy(OPa.apply(res, 0), 0, workd, ipntr[1] - 1, n);
+                System.arraycopy(OPa.apply(Ax, 0), 0, workd, ipntr[1] - 1, n);
             }
             else {
                 //compute OPa*(B*x)

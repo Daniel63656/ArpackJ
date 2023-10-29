@@ -179,7 +179,7 @@ public class EigenvalueDecomposition {
                 res[i*A.columns()+i] -= sigma;
             }
             Matrix res_inv = invert(A.rows(), A.columns(), res);
-            return eigsh(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(res_inv));
+            return eigsh(asLinearOperation(A), A.rows(), nev, 5, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(res_inv));
         }
         else {
             if (M.rows() != A.rows() || M.columns() != A.columns())
