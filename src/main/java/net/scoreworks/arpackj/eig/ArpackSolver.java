@@ -94,6 +94,9 @@ public abstract class ArpackSolver {
         return d;
     }
 
+    /**
+     * @return the corresponding eigenvectors, listed in one array and ordered in the same way as eigenvalues
+     */
     public double[] getEigenvectors() {
         return z;
     }

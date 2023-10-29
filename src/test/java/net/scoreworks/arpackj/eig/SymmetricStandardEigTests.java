@@ -24,8 +24,8 @@ public class SymmetricStandardEigTests {
                 {0, 0, 5, 0, 7}};
         A = new Basic2DMatrix(data);
     }
-    private static final double[] eigenvalues = new double[]{-10.9023, -5.73301, 4.66164, 8.42532, 13.5483};
-    private static final double[] eigenvectors = new double[]{
+    private static final double[] eigenvalues = {-10.9023, -5.73301, 4.66164, 8.42532, 13.5483};
+    private static final double[] eigenvectors = {  //each row is one eigenvector
             0.53365, -0.60749, 0.455019, -0.350674, -0.12708,
             -0.4676, 0.36081, 0.53506, -0.56629, -0.21011,
             0.23612, 0.190267, -0.30952, -0.61175, 0.66182,
@@ -81,7 +81,7 @@ public class SymmetricStandardEigTests {
     public void testStandardEigenvalueProblemShiftInvertSM() {
         // (A - sigma*I)^-1 = A^-1 because sigma=0
         LinearOperation OP_inv = asLinearOperation(invert(A));
-        SymmetricArpackSolver solver = eigsh_shiftInvert(asLinearOperation(A), A.rows(), 4, OP_inv, "SM", 0, null, 100, 1e-5);
+        SymmetricArpackSolver solver = eigsh_shiftInvert(asLinearOperation(A), A.rows(), 4, null, OP_inv, "SM", 0, null, 100, 1e-5);
         Assertions.assertSame(3, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();

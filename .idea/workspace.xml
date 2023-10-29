@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="cayley fails as well as general">
+    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="checked and corrected res initialization in MatrixOperations">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/SymmetricArpackSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/SymmetricArpackSolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/LinalgTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/LinalgTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/ArpackSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/ArpackSolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricGeneralEigTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricGeneralEigTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,8 +76,8 @@
       <recent name="net.scoreworks.arpackj" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.SymmetricGeneralEigTests">
-    <configuration name="LinalgTests.foo" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.LinalgTests">
+    <configuration name="LinalgTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -91,30 +90,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.LinalgTests.foo&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="LinalgTests.testChainedMatmul" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.LinalgTests.testChainedMatmul&quot;" />
+            <option value="&quot;net.scoreworks.arpackj.LinalgTests&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -147,7 +123,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="SymmetricGeneralEigTests.testGeneralEigenvalueProblemLargestMagnitude" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="SymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertSM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -160,7 +136,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.eig.SymmetricGeneralEigTests.testGeneralEigenvalueProblemLargestMagnitude&quot;" />
+            <option value="&quot;net.scoreworks.arpackj.eig.SymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertSM&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -193,13 +169,36 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="SymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertSM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;net.scoreworks.arpackj.eig.SymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertSM&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.LinalgTests" />
         <item itemvalue="Gradle.SymmetricGeneralEigTests" />
         <item itemvalue="Gradle.SymmetricStandardEigTests" />
-        <item itemvalue="Gradle.LinalgTests.testChainedMatmul" />
-        <item itemvalue="Gradle.SymmetricGeneralEigTests.testGeneralEigenvalueProblemLargestMagnitude" />
-        <item itemvalue="Gradle.LinalgTests.foo" />
+        <item itemvalue="Gradle.SymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertSM" />
+        <item itemvalue="Gradle.SymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertSM" />
       </list>
     </recent_temporary>
   </component>
@@ -214,7 +213,7 @@
       <workItem from="1698500884114" duration="1358000" />
       <workItem from="1698502827274" duration="468000" />
       <workItem from="1698503319621" duration="117000" />
-      <workItem from="1698575156347" duration="20085000" />
+      <workItem from="1698575156347" duration="21240000" />
     </task>
     <task id="LOCAL-00001" summary="asdas">
       <created>1698578035328</created>
@@ -237,7 +236,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698590680630</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="checked and corrected res initialization in MatrixOperations">
+      <created>1698599152153</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1698599152153</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -258,47 +264,7 @@
     <MESSAGE value="asdas" />
     <MESSAGE value="completed symmetric std eigenvalue problem + tests" />
     <MESSAGE value="cayley fails as well as general" />
-    <option name="LAST_COMMIT_MESSAGE" value="cayley fails as well as general" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/SymmetricArpackSolver.java</url>
-          <line>142</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/SymmetricArpackSolver.java</url>
-          <line>117</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/SymmetricArpackSolver.java</url>
-          <line>125</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/SymmetricArpackSolver.java</url>
-          <line>122</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/SymmetricArpackSolver.java</url>
-          <line>138</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java</url>
-          <line>26</line>
-          <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java</url>
-          <line>41</line>
-          <option name="timeStamp" value="34" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="checked and corrected res initialization in MatrixOperations" />
+    <option name="LAST_COMMIT_MESSAGE" value="checked and corrected res initialization in MatrixOperations" />
   </component>
 </project>

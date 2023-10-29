@@ -33,13 +33,13 @@ public class SymmetricGeneralEigTests {
                 {5, 3, 1, 2, 5}};
         M = new Basic2DMatrix(dataM);
     }
-    private static final double[] eigenvalues = new double[]{-1.7666, -0.81, 0.7156, 1.5177, 9.1618};
-    private static final double[] eigenvectors = {
-            0.2710, 0.1510, -0.1433, -0.0356, -0.5809,
-            -0.2126, -0.1638, -0.1861, 0.0495, -0.2875,
-            0.1350, -0.2169, -0.0526, 0.2454, 0.2669,
-            -0.1876, 0.2146, 0.1027, 0.3501, 0.2723,
-            -0.0959, 0.0633, -0.1577, -0.2783, 0.7321};
+    private static final double[] eigenvalues = {-1.7666, -0.81, 0.7156, 1.5177, 9.1618};
+    private static final double[] eigenvectors = {  //each row is one eigenvector
+            -0.2709963, 0.21255562, -0.13496624, 0.18759745, 0.09585369,
+            0.15097938, -0.16383273, -0.21687804, 0.21463843, 0.06325637,
+            0.1432534, 0.18610294, 0.05259292, -0.10265756, 0.15772811,
+            0.03555523, -0.04953955, -0.24544191, -0.35011594, 0.27828486,
+            0.58091305, 0.28752617, -0.26688309, -0.27229615, -0.7321415};
 
     private static void checkSolution(double[] d, double[] v,int[] idx) {
         //idx is a list of entries that should be returned, considering they are returned in ascending order
@@ -90,7 +90,7 @@ public class SymmetricGeneralEigTests {
     public void testGeneralEigenvalueProblemShiftInvertSM() {
         // (A - sigma*M)^-1 = A^-1 because sigma=0
         LinearOperation OP_inv = asLinearOperation(invert(A));
-        SymmetricArpackSolver solver = eigsh_shiftInvert(asLinearOperation(A), A.rows(), 4, OP_inv, "SM", 0, null, 100, 1e-5);
+        SymmetricArpackSolver solver = eigsh_shiftInvert(asLinearOperation(A), A.rows(), 4, asLinearOperation(M), OP_inv, "SM", 0, null, 100, 1e-5);
         Assertions.assertSame(3, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();

@@ -140,8 +140,8 @@ public class EigenvalueDecomposition {
      * @param maxIter maximal number of iterations
      * @param tolerance iteration is terminated when this relative tolerance is reached
      */
-    public static SymmetricArpackSolver eigsh_shiftInvert(LinearOperation A, int n, int nev, LinearOperation OP_inv, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
-        return eigsh(A, n, nev, 3, which, ncv, sigma, maxIter, tolerance, null, OP_inv);
+    public static SymmetricArpackSolver eigsh_shiftInvert(LinearOperation A, int n, int nev, LinearOperation M, LinearOperation OP_inv, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
+        return eigsh(A, n, nev, 3, which, ncv, sigma, maxIter, tolerance, M, OP_inv);
     }
 
 
