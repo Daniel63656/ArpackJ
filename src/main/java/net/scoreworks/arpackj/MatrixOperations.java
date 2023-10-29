@@ -7,17 +7,21 @@ import org.la4j.matrix.SparseMatrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
 
 /**
- * Helper class for various general functions and operations
+ * Helper class for various general functions and operations regarding matrices
  */
-public final class Utils {
-    private Utils() {}  //make instantiation impossible
+public final class MatrixOperations {
+    private MatrixOperations() {}  //make instantiation impossible
 
 
     //========== Linear Operations ==========//
+    /**
+     * Implementation of the identity operation
+     */
     public static final LinearOperation IDENTITY = (x, off) -> x;
 
+    //TODO replace by openBLAS
     /**
-     * @return a given matrix as a {@link LinearOperation}. Takes sparsity into account.
+     * @return a given {@link Matrix} as a {@link LinearOperation}. Takes sparsity into account in case that matrix is sparse
      */
     public static LinearOperation asLinearOperation(Matrix A) {
         double[] result = new double[A.columns()];
@@ -50,7 +54,7 @@ public final class Utils {
     }
 
     /**
-     * @return a flattened matrix as a {@link LinearOperation}. Dense by definition.
+     * @return a flattened matrix in row-major ordering as a {@link LinearOperation}. Dense by definition.
      */
     public static LinearOperation asLinearOperation(int rows, int cols, double[] a) {
         double[] result = new double[cols];
@@ -72,7 +76,8 @@ public final class Utils {
 
     /**
      * @param A the Matrix to be inverted
-     * @return the inverse of A using openBLAS routines. Dense because inverses of sparse matrices are dense in general
+     * @return the inverse of A using openBLAS routines. Result is dense because inverses of sparse matrices are
+     * dense in general
      */
     public static Matrix invert(Matrix A) {
         return invert(A.rows(), A.columns(), flattenMatrix(A));
@@ -83,8 +88,8 @@ public final class Utils {
      * @param rows rows of the Matrix
      * @param cols columns of the Matrix
      * @param a the Matrix flattened to a 1d array
-     * @return the inverse of A using openBLAS routines. Dense because inverses of sparse matrices are dense in general.
-     * The result is directly written to the provided array
+     * @return the inverse of A using openBLAS routines. Result is dense because inverses of sparse matrices are
+     * dense in general. The result is written to the provided array directly
      */
     public static Matrix invert(int rows, int cols, double[] a) {
         int[] m = new int[]{rows};
@@ -107,7 +112,7 @@ public final class Utils {
     //========== Other ==========//
 
     /**
-     * @return a given matrix A as a flattened double array. This array is a deep copy, any changes made to it do not
+     * @return a given {@link Matrix} A as a flattened double array. This array is a deep copy, any changes made to it do not
      * affect the original matrix.
      */
     public static double[] flattenMatrix(Matrix A) {

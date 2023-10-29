@@ -6,20 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.la4j.Matrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
 
-import static net.scoreworks.arpackj.Utils.invert;
+import static net.scoreworks.arpackj.MatrixOperations.invert;
 import static net.scoreworks.arpackj.eig.EigenvalueDecomposition.eigsh_shiftInvert;
 import static net.scoreworks.arpackj.eig.EigenvalueDecomposition.eigsh_standard;
 
 public class EigenvalueDecompositionTests {
     private static final double epsilon = 0.0001;
+
+    /** Matrix to test on */
     private static final Matrix A;
-    private static final double[] eigenvalues = new double[]{-10.9023, -5.73301, 4.66164, 8.42532, 13.5483};
-    private static final double[] eigenvectors = new double[]{
-            0.53365, -0.60749, 0.455019, -0.350674, -0.12708,
-            -0.4676, 0.36081, 0.53506, -0.56629, -0.21011,
-            0.23612, 0.190267, -0.30952, -0.61175, 0.66182,
-            0.60465, 0.57489, -0.14954, -0.07968, -0.52459,
-            0.27418, 0.36616, 0.62330, 0.41923, 0.47592};
     static {
         A = new Basic2DMatrix(5, 5);
         A.set(0, 1, 9);
@@ -36,6 +31,13 @@ public class EigenvalueDecompositionTests {
         A.set(3, 3, 1);
         A.set(4, 4, 7);
     }
+    private static final double[] eigenvalues = new double[]{-10.9023, -5.73301, 4.66164, 8.42532, 13.5483};
+    private static final double[] eigenvectors = new double[]{
+            0.53365, -0.60749, 0.455019, -0.350674, -0.12708,
+            -0.4676, 0.36081, 0.53506, -0.56629, -0.21011,
+            0.23612, 0.190267, -0.30952, -0.61175, 0.66182,
+            0.60465, 0.57489, -0.14954, -0.07968, -0.52459,
+            0.27418, 0.36616, 0.62330, 0.41923, 0.47592};
 
     @Test
     public void testStandardEigenvalueProblemLM() {

@@ -8,7 +8,7 @@ import org.la4j.inversion.MatrixInverter;
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.scoreworks.arpackj.Utils.*;
+import static net.scoreworks.arpackj.MatrixOperations.*;
 
 public class EigenvalueDecomposition {
     private static final Set<String> SEUPD_WHICH = new HashSet<>();
@@ -126,6 +126,10 @@ public class EigenvalueDecomposition {
         return eigsh(A, nev, 5, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), OP_inv);
     }
 
+
+    /**
+     * trickle-down method used internally by publicly exposed methods
+     */
     private static SymmetricArpackSolver eigsh(Matrix A, int nev, int mode, String which, Integer ncv, double sigma,
                                          int maxIter, double tolerance, LinearOperation M, LinearOperation Minv) {
         if (A.rows() != A.columns())

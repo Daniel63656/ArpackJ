@@ -3,7 +3,7 @@ package net.scoreworks.arpackj.eig;
 import net.scoreworks.arpackj.LinearOperation;
 import org.bytedeco.arpackng.global.arpack;
 
-import static net.scoreworks.arpackj.Utils.IDENTITY;
+import static net.scoreworks.arpackj.MatrixOperations.IDENTITY;
 
 public class SymmetricArpackSolver extends ArpackSolver {
     private final LinearOperation OP, B;
