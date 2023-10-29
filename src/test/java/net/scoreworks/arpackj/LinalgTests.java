@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.la4j.Matrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
 
+import static net.scoreworks.arpackj.MatrixOperations.asLinearOperation;
 import static net.scoreworks.arpackj.MatrixOperations.invert;
 
 public class LinalgTests {
@@ -26,6 +27,30 @@ public class LinalgTests {
                 {-0.2038, -0.0753, 0.0813, 0.2885, 0.1173},
                 {-0.4092, -0.1849, 0.1087, 0.1173, 0.6515}};
         M_inv = new Basic2DMatrix(data_inv);
+    }
+
+    @Test
+    public void testMatmul() {
+        double[] x = new double[]{3, 2, 5, 3, 2};
+        double[] y = new double[]{68, 39, 48, 38, 42};
+        LinearOperation M_OP = asLinearOperation(M);
+        double[] res = M_OP.apply(x, 0);
+
+        for (int i=0; i<y.length; i++) {
+            Assertions.assertEquals(y[i], res[i], epsilon);
+        }
+    }
+
+    @Test
+    public void testChainedMatmul() {
+        double[] x = new double[]{-1, -1, -1, 3, 2, 5, 3, 2};
+        double[] y = new double[]{1196, 698, 621, 662, 791};
+        LinearOperation M_OP = asLinearOperation(M);
+        double[] res = M_OP.apply(M_OP.apply(x, 3), 0);
+
+        for (int i=0; i<y.length; i++) {
+            Assertions.assertEquals(y[i], res[i], epsilon);
+        }
     }
 
     @Test

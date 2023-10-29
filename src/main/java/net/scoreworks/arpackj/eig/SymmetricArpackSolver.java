@@ -115,20 +115,20 @@ public class SymmetricArpackSolver extends ArpackSolver {
 
         if (ido[0] == -1) {
             //initialization: compute y = Op*x
-            System.arraycopy(OP.apply(workd, 0), 0, workd, ipntr[1] - 1, n);
+            System.arraycopy(OP.apply(workd, ipntr[0] - 1), 0, workd, ipntr[1] - 1, n);
         }
         else if (ido[0] == 1) {
             //compute y = Op*x
             if (mode == 1) {
-                System.arraycopy(OP.apply(workd, 0), 0, workd, ipntr[1] - 1, n);
+                System.arraycopy(OP.apply(workd, ipntr[0] - 1), 0, workd, ipntr[1] - 1, n);
             }
             else if (mode == 2) {
-                System.arraycopy(OPb.apply(workd, 0), 0, workd, 0, n);
-                System.arraycopy(OPa.apply(workd, 0), 0, workd, ipntr[1] - 1, n);
+                System.arraycopy(OPb.apply(workd, ipntr[0] - 1), 0, workd, ipntr[0] - 1, n);
+                System.arraycopy(OPa.apply(workd, ipntr[0] - 1), 0, workd, ipntr[1] - 1, n);
             }
             else if (mode == 5) {
                 double[] Ax = new double[n];
-                System.arraycopy(A_matvec.apply(workd, 0), 0, Ax, 0, n);
+                System.arraycopy(A_matvec.apply(workd, ipntr[0] - 1), 0, Ax, 0, n);
                 for (int i=0; i<n; i++) {
                     Ax[i] += sigma*workd[ipntr[2]-1+i];
                 }
@@ -140,7 +140,7 @@ public class SymmetricArpackSolver extends ArpackSolver {
             }
         }
         else if (ido[0] == 2) {
-            System.arraycopy(B.apply(workd, 0), 0, workd, ipntr[1] - 1, n);
+            System.arraycopy(B.apply(workd, ipntr[0] - 1), 0, workd, ipntr[1] - 1, n);
         }
         else if (ido[0] == 3) {
             throw new IllegalArgumentException("ARPACK requested user shifts. Assure iparam(1) is set to 0");

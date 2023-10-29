@@ -24,10 +24,9 @@ public final class MatrixOperations {
      * @return a given {@link Matrix} as a {@link LinearOperation}. Takes sparsity into account in case that matrix is sparse
      */
     public static LinearOperation asLinearOperation(Matrix A) {
-        double[] result = new double[A.columns()];
-
         if (A instanceof SparseMatrix a) {
             return (b, off) -> {
+                double[] result = new double[A.columns()];
                 MatrixIterator it = a.nonZeroIterator();
                 double x;
                 int i, j;
@@ -41,6 +40,7 @@ public final class MatrixOperations {
             };
         }
         else return (b, off) -> {
+            double[] result = new double[A.columns()];
             double acc;
             for (int i=0; i<A.rows(); i++) {
                 acc = 0.0;
@@ -57,8 +57,8 @@ public final class MatrixOperations {
      * @return a flattened matrix in row-major ordering as a {@link LinearOperation}. Dense by definition.
      */
     public static LinearOperation asLinearOperation(int rows, int cols, double[] a) {
-        double[] result = new double[cols];
         return (b, off) -> {
+            double[] result = new double[cols];
             double acc;
             for (int i=0; i<rows; i++) {
                 acc = 0.0;
