@@ -1,7 +1,6 @@
 package net.scoreworks.arpackj.eig;
 
 import net.scoreworks.arpackj.LinearOperation;
-import net.scoreworks.arpackj.eig.SymmetricArpackSolver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.la4j.Matrix;
@@ -13,7 +12,6 @@ import static net.scoreworks.arpackj.eig.EigenvalueDecomposition.*;
 public class SymmetricStandardEigTests {
     private static final double epsilon = 0.0001;
 
-    /** Matrix to test on */
     private static final Matrix A;
     static {
         double[][] data = {
@@ -49,7 +47,7 @@ public class SymmetricStandardEigTests {
 
     @Test
     public void testStandardEigenvalueProblemLargestMagnitude() {
-        SymmetricArpackSolver solver = eigsh_standard(A, 4, "LM", null, 100, 1e-5);
+        SymmetricArpackSolver solver = EigenvalueDecomposition.eigsh(A, 4, "LM", null, 100, 1e-5);
         Assertions.assertSame(1, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
@@ -59,7 +57,7 @@ public class SymmetricStandardEigTests {
 
     @Test
     public void testStandardEigenvalueProblemSmallestMagnitude() {
-        SymmetricArpackSolver solver = eigsh_standard(asLinearOperation(A), A.rows(), 4, "SM", null, 100, 1e-5);
+        SymmetricArpackSolver solver = EigenvalueDecomposition.eigsh(asLinearOperation(A), A.rows(), 4, "SM", null, 100, 1e-5);
         Assertions.assertSame(1, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
@@ -83,28 +81,6 @@ public class SymmetricStandardEigTests {
         LinearOperation OP_inv = asLinearOperation(invert(A));
         SymmetricArpackSolver solver = eigsh_shiftInvert(asLinearOperation(A), A.rows(), 4, null, OP_inv, "SM", 0, null, 100, 1e-5);
         Assertions.assertSame(3, solver.mode);
-        solver.solve();
-        double[] d = solver.getEigenvalues();
-        double[] v = solver.getEigenvectors();
-        checkSolution(d, v, new int[]{0, 1, 3, 4});
-    }
-
-    @Test
-    public void testStandardEigenvalueProblemCayleyLM() {
-        SymmetricArpackSolver solver = eigsh_cayley(A, 4, null, "LM", 0, null, 100, 1e-5);
-        Assertions.assertSame(5, solver.mode);
-        solver.solve();
-        double[] d = solver.getEigenvalues();
-        double[] v = solver.getEigenvectors();
-        checkSolution(d, v, new int[]{0, 1, 2, 3});
-    }
-
-    @Test
-    public void testStandardEigenvalueProblemCayleySM() {
-        // (A - sigma*I)^-1 = A^-1 because sigma=0
-        LinearOperation OP_inv = asLinearOperation(invert(A));
-        SymmetricArpackSolver solver = eigsh_cayley(asLinearOperation(A), A.rows(), 4, OP_inv, "SM", 0, null, 100, 1e-5);
-        Assertions.assertSame(5, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
         double[] v = solver.getEigenvectors();

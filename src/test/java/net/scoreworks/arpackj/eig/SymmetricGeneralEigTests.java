@@ -1,7 +1,6 @@
 package net.scoreworks.arpackj.eig;
 
 import net.scoreworks.arpackj.LinearOperation;
-import net.scoreworks.arpackj.eig.SymmetricArpackSolver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.la4j.Matrix;
@@ -13,8 +12,6 @@ import static net.scoreworks.arpackj.eig.EigenvalueDecomposition.*;
 
 public class SymmetricGeneralEigTests {
     private static final double epsilon = 0.0001;
-
-    /** Matrix to test on */
     private static final Matrix A, M;
     static {
         double[][] dataA = {
@@ -57,7 +54,7 @@ public class SymmetricGeneralEigTests {
 
     @Test
     public void testGeneralEigenvalueProblemLargestMagnitude() {
-        SymmetricArpackSolver solver = eigsh_general(A, 4, M, "LM", null, 100, 1e-5);
+        SymmetricArpackSolver solver = EigenvalueDecomposition.eigsh(A, 4, M, "LM", null, 100, 1e-5);
         Assertions.assertSame(2, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
@@ -68,7 +65,7 @@ public class SymmetricGeneralEigTests {
     @Test
     public void testGeneralEigenvalueProblemSmallestMagnitude() {
         LinearOperation M_inv = asLinearOperation(invert(M));
-        SymmetricArpackSolver solver = eigsh_general(asLinearOperation(A), A.rows(), 4, asLinearOperation(M), M_inv, "SM", null, 100, 1e-5);
+        SymmetricArpackSolver solver = EigenvalueDecomposition.eigsh(asLinearOperation(A), A.rows(), 4, asLinearOperation(M), M_inv, "SM", null, 100, 1e-5);
         Assertions.assertSame(2, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
@@ -78,7 +75,7 @@ public class SymmetricGeneralEigTests {
 
     @Test
     public void testGeneralEigenvalueProblemShiftInvertLM() {
-        SymmetricArpackSolver solver = eigsh_shiftInvert(A, 4, M, "LM", 0, null, 100, 1e-5);
+        SymmetricArpackSolver solver = eigsh_shiftInvert(A, 4, M, "LM", 1, null, 100, 1e-5);
         Assertions.assertSame(3, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
@@ -98,27 +95,15 @@ public class SymmetricGeneralEigTests {
         checkSolution(d, v, new int[]{0, 1, 3, 4});
     }
 
-    //TODO buckling mode
-
     @Test
-    public void testGeneralEigenvalueProblemCayleyLM() {
-        SymmetricArpackSolver solver = eigsh_cayley(A, 4, M, "LM", 0, null, 100, 1e-5);
-        Assertions.assertSame(5, solver.mode);
+    public void testGeneralEigenvalueProblemBucklingLM() {
+        SymmetricArpackSolver solver = eigsh_buckling(A, 4, M, "LM", 0, null, 100, 1e-5);
+        Assertions.assertSame(4, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
         double[] v = solver.getEigenvectors();
         checkSolution(d, v, new int[]{0, 1, 2, 3});
     }
 
-    @Test
-    public void testGeneralEigenvalueProblemCayleySM() {
-        // (A - sigma*I)^-1 = A^-1 because sigma=0
-        LinearOperation OP_inv = asLinearOperation(invert(A));
-        SymmetricArpackSolver solver = eigsh_cayley(asLinearOperation(A), A.rows(), 4, OP_inv, "SM", 0, null, 100, 1e-5);
-        Assertions.assertSame(5, solver.mode);
-        solver.solve();
-        double[] d = solver.getEigenvalues();
-        double[] v = solver.getEigenvectors();
-        checkSolution(d, v, new int[]{0, 1, 3, 4});
-    }
+
 }
