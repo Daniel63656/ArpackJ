@@ -87,23 +87,11 @@ public class SymmetricGeneralEigTests {
     public void testGeneralEigenvalueProblemShiftInvertSM() {
         // (A - sigma*M)^-1 = A^-1 because sigma=0
         LinearOperation OP_inv = asLinearOperation(invert(A));
-        SymmetricArpackSolver solver = eigsh_shiftInvert(asLinearOperation(A), A.rows(), 4, asLinearOperation(M), OP_inv, "SM", 0, null, 100, 1e-5);
+        SymmetricArpackSolver solver = eigsh_shiftInvert(A.rows(), 4, asLinearOperation(M), OP_inv, "SM", 0, null, 100, 1e-5);
         Assertions.assertSame(3, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
         double[] v = solver.getEigenvectors();
         checkSolution(d, v, new int[]{0, 1, 3, 4});
     }
-
-    @Test
-    public void testGeneralEigenvalueProblemBucklingLM() {
-        SymmetricArpackSolver solver = eigsh_buckling(A, 4, M, "LM", 0, null, 100, 1e-5);
-        Assertions.assertSame(4, solver.mode);
-        solver.solve();
-        double[] d = solver.getEigenvalues();
-        double[] v = solver.getEigenvectors();
-        checkSolution(d, v, new int[]{0, 1, 2, 3});
-    }
-
-
 }

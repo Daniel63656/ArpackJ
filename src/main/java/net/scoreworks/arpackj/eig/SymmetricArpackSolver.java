@@ -3,15 +3,28 @@ package net.scoreworks.arpackj.eig;
 import net.scoreworks.arpackj.LinearOperation;
 import org.bytedeco.arpackng.global.arpack;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static net.scoreworks.arpackj.MatrixOperations.IDENTITY;
 
 public class SymmetricArpackSolver extends ArpackSolver {
+    private static final Set<String> SEUPD_WHICH = new HashSet<>();
+    static {
+        SEUPD_WHICH.add("LM");
+        SEUPD_WHICH.add("SM");
+        SEUPD_WHICH.add("LA");
+        SEUPD_WHICH.add("SA");
+        SEUPD_WHICH.add("BE");
+    }
     private final LinearOperation OP, B;
     private LinearOperation OPa, OPb, A_matvec;
 
-    SymmetricArpackSolver(int n, int nev, int mode, byte[] which, int ncv, double sigma, int maxIter, double tol,
-                          LinearOperation A_matvec, LinearOperation M_matvec, LinearOperation Minv_matvec) {
-        super(n, nev, mode, which, ncv, sigma, maxIter, tol);
+    SymmetricArpackSolver(LinearOperation A_matvec, int n, int nev, int mode, String which, Integer ncv, double sigma,
+                          int maxIter, double tol, LinearOperation M_matvec, LinearOperation Minv_matvec) {
+        super(n, nev, mode, which.getBytes(), ncv, sigma, maxIter, tol);
+        if (!SEUPD_WHICH.contains(which))
+            throw new IllegalArgumentException("which must be one of 'LM', 'SM', 'LA', 'SA' or 'BE");
 
         if (mode == 1) {
             if (A_matvec == null)
@@ -66,8 +79,8 @@ public class SymmetricArpackSolver extends ArpackSolver {
             if (Minv_matvec == null)
                 throw new IllegalArgumentException("Minv_matvec must be specified for mode=4");
 
+            this.OP = (x, off) -> Minv_matvec.apply(A_matvec.apply(x, off), 0);
             this.OPa = Minv_matvec;
-            this.OP = (x, off) -> this.OPa.apply(A_matvec.apply(x, off), 0);
             this.B = A_matvec;
             this.bmat = "G".getBytes();
         }

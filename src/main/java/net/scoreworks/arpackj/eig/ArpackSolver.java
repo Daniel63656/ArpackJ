@@ -63,7 +63,18 @@ public abstract class ArpackSolver {
     protected double[] z;
 
 
-    public ArpackSolver(int n, int nev, int mode, byte[] which, int ncv, double sigma, int maxIter, double tol) {
+    public ArpackSolver(int n, int nev, int mode, byte[] which, Integer ncv, double sigma, int maxIter, double tol) {
+        if (nev <= 0)
+            throw new IllegalArgumentException("nev must be positive, nev="+nev);
+        if (nev >= n)
+            throw new IllegalArgumentException("nev must be smaller than n="+n);
+        if (maxIter <= 0)
+            throw new IllegalArgumentException("max number of iterations must be positive");
+        if (ncv == null)
+            ncv = Math.min(n, Math.max(2 * nev + 1, 20));
+        else if (ncv > n || ncv <= nev)
+            throw new IllegalArgumentException("ncv must be nev<ncv<=n but is "+ncv);
+
         this.n = n;
         this.nev = nev;
         this.mode = mode;

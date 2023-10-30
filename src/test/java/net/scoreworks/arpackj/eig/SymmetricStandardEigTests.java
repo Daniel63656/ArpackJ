@@ -79,7 +79,7 @@ public class SymmetricStandardEigTests {
     public void testStandardEigenvalueProblemShiftInvertSM() {
         // (A - sigma*I)^-1 = A^-1 because sigma=0
         LinearOperation OP_inv = asLinearOperation(invert(A));
-        SymmetricArpackSolver solver = eigsh_shiftInvert(asLinearOperation(A), A.rows(), 4, null, OP_inv, "SM", 0, null, 100, 1e-5);
+        SymmetricArpackSolver solver = eigsh_shiftInvert(A.rows(), 4, null, OP_inv, "SM", 0, null, 100, 1e-5);
         Assertions.assertSame(3, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
