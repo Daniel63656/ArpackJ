@@ -1,15 +1,14 @@
 package net.scoreworks.arpackj.eig;
 
 import net.scoreworks.arpackj.LinearOperation;
+import org.bytedeco.openblas.global.openblas;
 import org.la4j.Matrix;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.la4j.matrix.dense.Basic2DMatrix;
 
 import static net.scoreworks.arpackj.MatrixOperations.*;
 
-public final class EigenvalueDecomposition {
-    private EigenvalueDecomposition() {}  //make instantiation impossible
+public final class MatrixDecomposition {
+    private MatrixDecomposition() {}  //make instantiation impossible
 
     //TODO move to UNSYMMETRIC ARPACK SOLVER
     /*static final Set<String> NEUPD_WHICH = new HashSet<>();
@@ -21,6 +20,32 @@ public final class EigenvalueDecomposition {
         NEUPD_WHICH.add("LI");
         NEUPD_WHICH.add("SI");
     }*/
+
+
+    /**
+     * @param A Matrix to perform the decomposition on
+     * @return a matrix that contains the lower triangular matrix (L) and the upper triangular matrix (U)
+     */
+    public static Matrix LU_decomposition(Matrix A) {
+        return Basic2DMatrix.from1DArray(A.rows(), A.columns(), LU_decomposition(A.rows(), A.columns(), flattenColumnMajor(A))).transpose();
+    }
+
+    /**
+     * @param rows of the matrix
+     * @param cols of the matrix
+     * @param a flattened matrix. Expects column-major ordering
+     * @return a matrix that contains the lower triangular matrix (L) and the upper triangular matrix (U) in
+     * column major ordering
+     */
+    public static double[] LU_decomposition(int rows, int cols, double[] a) {
+        int[] m = new int[]{rows};
+        int[] n = new int[]{cols};
+        int[] lda = new int[]{cols};
+        int[] ipiv = new int[lda[0]];
+        int[] info = new int[1];
+        openblas.LAPACK_dgetrf(m, n, a, lda, ipiv, info);
+        return a;
+    }
 
     /**
      * Solve the standard eigenvalue problem A*x = lambda*x for a square, symmetric matrix A
@@ -102,11 +127,11 @@ public final class EigenvalueDecomposition {
 
         if (M == null) {
             //calculate (A - sigma*I)^-1
-            double[] res = flattenMatrix(A);
+            double[] res = flattenRowMajor(A);
             for(int i=0; i<A.rows(); i++) {
                 res[i*A.columns()+i] -= sigma;
             }
-            Matrix res_inv = invert(A.rows(), A.columns(), res);
+            Matrix res_inv = Basic2DMatrix.from1DArray(A.rows(), A.columns(), invert(A.rows(), res));
             return new SymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(res_inv));
         }
         else {
@@ -124,7 +149,6 @@ public final class EigenvalueDecomposition {
      * Solve the general eigenvalue problem A*x = lambda*M*x in shift-invert mode to find eigenvalues near sigma.
      * A and M must be square, symmetric and match in dimensions. M is positive semi-definite
      * If M is null, the standard eigenvalue problem will be solved instead
-     * @param A Linear operation representing left multiplication by A
      * @param n shape (rows, or columns) of A
      * @param nev number of eigenvalues to compute
      * @param OP_inv Linear operation representing left multiplication by (A - sigma*M)^-1

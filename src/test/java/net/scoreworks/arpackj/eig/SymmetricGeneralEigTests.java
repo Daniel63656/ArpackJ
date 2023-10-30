@@ -5,22 +5,24 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.la4j.Matrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
+import org.la4j.matrix.sparse.CRSMatrix;
 
 import static net.scoreworks.arpackj.MatrixOperations.asLinearOperation;
 import static net.scoreworks.arpackj.MatrixOperations.invert;
-import static net.scoreworks.arpackj.eig.EigenvalueDecomposition.*;
+import static net.scoreworks.arpackj.eig.MatrixDecomposition.*;
 
 public class SymmetricGeneralEigTests {
     private static final double epsilon = 0.0001;
-    private static final Matrix A, M;
+    private static final Matrix A, A_sparse, M, M_sparse;
     static {
-        double[][] dataA = {
+        double[][] data = {
                 {0, 9, 0, 1, 0},
                 {9, 0, 4, 0, 0},
                 {0, 4, 2, 8, 5},
                 {1, 0, 8, 1, 0},
                 {0, 0, 5, 0, 7}};
-        A = new Basic2DMatrix(dataA);
+        A = new Basic2DMatrix(data);
+        A_sparse = CRSMatrix.from2DArray(data);
         //M is positive semi-definite
         double[][] dataM = {
                 {9, 2, 3, 4, 5},
@@ -29,6 +31,7 @@ public class SymmetricGeneralEigTests {
                 {4, 2, 0, 6, 2},
                 {5, 3, 1, 2, 5}};
         M = new Basic2DMatrix(dataM);
+        M_sparse = CRSMatrix.from2DArray(dataM);
     }
     private static final double[] eigenvalues = {-1.7666, -0.81, 0.7156, 1.5177, 9.1618};
     private static final double[] eigenvectors = {  //each row is one eigenvector
@@ -53,8 +56,8 @@ public class SymmetricGeneralEigTests {
     }
 
     @Test
-    public void testGeneralEigenvalueProblemLargestMagnitude() {
-        SymmetricArpackSolver solver = EigenvalueDecomposition.eigsh(A, 4, M, "LM", null, 100, 1e-5);
+    public void testGeneralEigenvalueProblemLM() {
+        SymmetricArpackSolver solver = MatrixDecomposition.eigsh(A, 4, M, "LM", null, 100, 1e-5);
         Assertions.assertSame(2, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
@@ -63,9 +66,19 @@ public class SymmetricGeneralEigTests {
     }
 
     @Test
-    public void testGeneralEigenvalueProblemSmallestMagnitude() {
+    public void testGeneralEigenvalueProblemLM_CRS() {
+        SymmetricArpackSolver solver = MatrixDecomposition.eigsh(A_sparse, 4, M_sparse, "LM", null, 100, 1e-5);
+        Assertions.assertSame(2, solver.mode);
+        solver.solve();
+        double[] d = solver.getEigenvalues();
+        double[] v = solver.getEigenvectors();
+        checkSolution(d, v, new int[]{0, 1, 3, 4});
+    }
+
+    @Test
+    public void testGeneralEigenvalueProblemSM() {
         LinearOperation M_inv = asLinearOperation(invert(M));
-        SymmetricArpackSolver solver = EigenvalueDecomposition.eigsh(asLinearOperation(A), A.rows(), 4, asLinearOperation(M), M_inv, "SM", null, 100, 1e-5);
+        SymmetricArpackSolver solver = MatrixDecomposition.eigsh(asLinearOperation(A), A.rows(), 4, asLinearOperation(M), M_inv, "SM", null, 100, 1e-5);
         Assertions.assertSame(2, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
@@ -76,6 +89,16 @@ public class SymmetricGeneralEigTests {
     @Test
     public void testGeneralEigenvalueProblemShiftInvertLM() {
         SymmetricArpackSolver solver = eigsh_shiftInvert(A, 4, M, "LM", 1, null, 100, 1e-5);
+        Assertions.assertSame(3, solver.mode);
+        solver.solve();
+        double[] d = solver.getEigenvalues();
+        double[] v = solver.getEigenvectors();
+        checkSolution(d, v, new int[]{0, 1, 2, 3});
+    }
+
+    @Test
+    public void testGeneralEigenvalueProblemShiftInvertLM_CRS() {
+        SymmetricArpackSolver solver = eigsh_shiftInvert(A_sparse, 4, M_sparse, "LM", 1, null, 100, 1e-5);
         Assertions.assertSame(3, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();

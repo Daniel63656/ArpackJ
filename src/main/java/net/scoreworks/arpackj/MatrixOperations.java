@@ -75,26 +75,26 @@ public final class MatrixOperations {
     //========== Matrix inversions ==========//
 
     /**
-     * @param A the Matrix to be inverted
+     * @param A square matrix to calculate inverse of
      * @return the inverse of A using openBLAS routines. Result is dense because inverses of sparse matrices are
      * dense in general
      */
     public static Matrix invert(Matrix A) {
-        return invert(A.rows(), A.columns(), flattenMatrix(A));
+        if (A.rows() != A.columns())
+            throw new IllegalArgumentException("A must be square in order to be invertible");
+        return Basic2DMatrix.from1DArray(A.rows(), A.rows(), invert(A.rows(), flattenRowMajor(A)));
     }
 
     /**
-     *
-     * @param rows rows of the Matrix
-     * @param cols columns of the Matrix
-     * @param a the Matrix flattened to a 1d array
+     * @param rows dimensions of the square matrix
+     * @param a the Matrix flattened to a 1d array. Indifferent to ordering (row-major, column-major)
      * @return the inverse of A using openBLAS routines. Result is dense because inverses of sparse matrices are
      * dense in general. The result is written to the provided array directly
      */
-    public static Matrix invert(int rows, int cols, double[] a) {
+    public static double[] invert(int rows, double[] a) {
         int[] m = new int[]{rows};
-        int[] n = new int[]{cols};
-        int[] lda = new int[]{cols};
+        int[] n = new int[]{rows};
+        int[] lda = new int[]{rows};
         int[] ipiv = new int[lda[0]];
         int[] info = new int[1];
         int[] lwork = new int[]{n[0]*n[0]};
@@ -104,18 +104,17 @@ public final class MatrixOperations {
         openblas.LAPACK_dgetrf(m, n, a, lda, ipiv, info);
         //calculate inverse of A: A^-1 = L^-1*U^-1
         openblas.LAPACK_dgetri(n, a, lda, ipiv, work, lwork, info);
-
-        return Basic2DMatrix.from1DArray(rows, cols, a);
+        return a;
     }
 
 
     //========== Other ==========//
 
     /**
-     * @return a given {@link Matrix} A as a flattened double array. This array is a deep copy, any changes made to it do not
+     * @return a given {@link Matrix} A as a flattened, row-major double array. This array is a deep copy, any changes made to it do not
      * affect the original matrix.
      */
-    public static double[] flattenMatrix(Matrix A) {
+    public static double[] flattenRowMajor(Matrix A) {
         double[] result = new double[A.rows() * A.columns()];
 
         if (A instanceof SparseMatrix a) {
@@ -126,14 +125,41 @@ public final class MatrixOperations {
                 x = it.next();
                 i = it.rowIndex();
                 j = it.columnIndex();
-                result[j*A.columns() + i] = x;
+                result[i*A.columns() + j] = x;
             }
+        }
+        else {
+            for (int i=0; i<A.rows(); i++) {
+                for (int j = 0; j<A.columns(); j++) {
+                    result[i*A.columns() + j] = A.get(i, j);
+                }
+            }
+        }
+        return result;
+    }
 
+    /**
+     * @return a given {@link Matrix} A as a flattened, column-major double array. This array is a deep copy, any changes made to it do not
+     * affect the original matrix.
+     */
+    public static double[] flattenColumnMajor(Matrix A) {
+        double[] result = new double[A.columns() * A.rows()];
+
+        if (A instanceof SparseMatrix a) {
+            MatrixIterator it = a.nonZeroIterator();
+            double x;
+            int i, j;
+            while (it.hasNext()) {
+                x = it.next();
+                i = it.rowIndex();
+                j = it.columnIndex();
+                result[j*A.rows() + i] = x;
+            }
         }
         else {
             for (int i=0; i<A.rows(); i++) {
                 for (int j = 0; j < A.columns(); j++) {
-                    result[j*A.columns() + i] = A.get(i, j);
+                    result[j*A.rows() + i] = A.get(i, j);
                 }
             }
         }
