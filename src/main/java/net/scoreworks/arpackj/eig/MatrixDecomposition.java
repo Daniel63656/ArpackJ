@@ -88,7 +88,6 @@ public final class MatrixDecomposition {
             throw new IllegalArgumentException("A is not a square matrix");
         if (M.rows() != A.rows() || M.columns() != A.columns())
             throw new IllegalArgumentException("M must have same dimensions as A");
-
         //calculate inverse of M
         Matrix M_inv = invert(M);
         return new SymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 2, which, ncv, 0, maxIter, tolerance, asLinearOperation(M), asLinearOperation(M_inv));
@@ -124,25 +123,10 @@ public final class MatrixDecomposition {
     public static SymmetricArpackSolver eigsh_shiftInvert(Matrix A, int nev, Matrix M, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
         if (A.rows() != A.columns())
             throw new IllegalArgumentException("A is not a square matrix");
-
-        if (M == null) {
-            //calculate (A - sigma*I)^-1
-            double[] res = flattenRowMajor(A);
-            for(int i=0; i<A.rows(); i++) {
-                res[i*A.columns()+i] -= sigma;
-            }
-            Matrix res_inv = Basic2DMatrix.from1DArray(A.rows(), A.columns(), invert(A.rows(), res));
-            return new SymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(res_inv));
-        }
-        else {
-            if (M.rows() != A.rows() || M.columns() != A.columns())
-                throw new IllegalArgumentException("M must have same dimensions as A");
-
-            //calculate (A - sigma*M)^-1
-            Matrix res = A.subtract(M.multiply(sigma));
-            Matrix res_inv = invert(res);
-            return new SymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), asLinearOperation(res_inv));
-        }
+        if (M == null)
+            return new SymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, getOP_inv(A, null, sigma));
+        else
+            return new SymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), getOP_inv(A, M, sigma));
     }
 
     /**
@@ -174,11 +158,7 @@ public final class MatrixDecomposition {
      * @param tolerance iteration is terminated when this relative tolerance is reached
      */
     public static SymmetricArpackSolver eigsh_buckling(Matrix A, int nev, Matrix M, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
-        //calculate (A -sigma*M)^-1
-        //TODO check if sigma is 0
-        Matrix res = A.subtract(M.multiply(sigma));
-        Matrix res_inv = invert(res);
-        return new SymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(res_inv));
+        return new SymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, getOP_inv(A, M, sigma));
     }
 
     /**
@@ -197,5 +177,28 @@ public final class MatrixDecomposition {
      */
     public static SymmetricArpackSolver eigsh_buckling(LinearOperation A, int n, int nev, LinearOperation OP_inv, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
         return new SymmetricArpackSolver(A, n, nev, 4, which, ncv, sigma, maxIter, tolerance, null, OP_inv);
+    }
+
+
+
+
+
+
+    /**
+     * @return (A -sigma*M)^-1
+     */
+    private static LinearOperation getOP_inv(Matrix A, Matrix M, double sigma) {
+        if (sigma == 0) {
+            return asLinearOperation(invert(A));
+        }
+        if (M == null) {
+            //calculate (A - sigma*I)^-1
+            double[] res = flattenRowMajor(A);
+            for(int i=0; i<A.rows(); i++) {
+                res[i*A.columns()+i] -= sigma;
+            }
+            return asLinearOperation(A.rows(), A.columns(), res);
+        }
+        return asLinearOperation(invert(A.subtract(M.multiply(sigma))));
     }
 }

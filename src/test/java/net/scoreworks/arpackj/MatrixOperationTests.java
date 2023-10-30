@@ -87,8 +87,6 @@ public class MatrixOperationTests {
     @Test
     public void testLU_Decomposition() {
         Matrix res = LU_decomposition(B);
-        System.out.println(res);
-
         //check result
         for (int i = 0; i< B.rows(); i++) {
             for (int j = 0; j< B.columns(); j++) {
@@ -100,7 +98,6 @@ public class MatrixOperationTests {
     @Test
     public void testInverse() {
         Matrix inverse = invert(B);
-
         //check result
         for (int i = 0; i< B.rows(); i++) {
             for (int j = 0; j< B.columns(); j++) {

@@ -48,12 +48,6 @@ public class SymmetricStandardEigTests {
     }
 
     @Test
-    public void foo() {
-        Matrix A = Basic2DMatrix.from1DArray(5, 5, eigenvectors);
-        System.out.println(A);
-    }
-
-    @Test
     public void testStandardEigenvalueProblemLM() {
         SymmetricArpackSolver solver = MatrixDecomposition.eigsh(A, 4, "LM", null, 100, 1e-5);
         Assertions.assertSame(1, solver.mode);
