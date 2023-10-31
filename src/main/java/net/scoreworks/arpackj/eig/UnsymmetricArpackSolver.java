@@ -29,12 +29,13 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
     UnsymmetricArpackSolver(LinearOperation A_matvec, int n, int nev, int mode, String which, Integer ncv, double sigma_r, double sigma_i,
                             int maxIter, double tol, LinearOperation M_matvec, LinearOperation Minv_matvec) {
         super(n, nev, mode, which.getBytes(), ncv, maxIter, tol);
-        if (!NEUPD_WHICH.contains(which))
-            throw new IllegalArgumentException("which must be one of 'LM', 'SM', 'LR', 'SR', 'LI' or 'SI");
-
+        lworkl = 3*this.ncv * (this.ncv + 2);
+        workl = new double[lworkl];
         this.sigma_r = sigma_r;
         this.sigma_i = sigma_i;
 
+        if (!NEUPD_WHICH.contains(which))
+            throw new IllegalArgumentException("which must be one of 'LM', 'SM', 'LR', 'SR', 'LI' or 'SI");
         if (mode == 1) {
             if (A_matvec == null)
                 throw new IllegalArgumentException("matvec must be specified for mode=1");

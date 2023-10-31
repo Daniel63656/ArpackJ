@@ -28,11 +28,12 @@ public class SymmetricArpackSolver extends ArpackSolver {
     SymmetricArpackSolver(LinearOperation A_matvec, int n, int nev, int mode, String which, Integer ncv, double sigma,
                           int maxIter, double tol, LinearOperation M_matvec, LinearOperation Minv_matvec) {
         super(n, nev, mode, which.getBytes(), ncv, maxIter, tol);
-        if (!SEUPD_WHICH.contains(which))
-            throw new IllegalArgumentException("which must be one of 'LM', 'SM', 'LA', 'SA' or 'BE");
-
+        lworkl = this.ncv * (this.ncv + 8);
+        workl = new double[lworkl];
         this.sigma = sigma;
 
+        if (!SEUPD_WHICH.contains(which))
+            throw new IllegalArgumentException("which must be one of 'LM', 'SM', 'LA', 'SA' or 'BE");
         if (mode == 1) {
             if (A_matvec == null)
                 throw new IllegalArgumentException("matvec must be specified for mode=1");
