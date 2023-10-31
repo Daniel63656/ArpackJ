@@ -10,17 +10,6 @@ import static net.scoreworks.arpackj.MatrixOperations.*;
 public final class MatrixDecomposition {
     private MatrixDecomposition() {}  //make instantiation impossible
 
-    //TODO move to UNSYMMETRIC ARPACK SOLVER
-    /*static final Set<String> NEUPD_WHICH = new HashSet<>();
-    static {
-        NEUPD_WHICH.add("LM");
-        NEUPD_WHICH.add("SM");
-        NEUPD_WHICH.add("LR");
-        NEUPD_WHICH.add("SR");
-        NEUPD_WHICH.add("LI");
-        NEUPD_WHICH.add("SI");
-    }*/
-
 
     /**
      * @param A Matrix to perform the decomposition on
@@ -181,6 +170,70 @@ public final class MatrixDecomposition {
 
 
 
+
+    /**
+     * Solve the standard eigenvalue problem A*x = lambda*x for a square matrix A
+     * @param nev number of eigenvalues to compute
+     * @param which select which eigenvalues to compute
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static UnsymmetricArpackSolver eigs(Matrix A, int nev, String which, Integer ncv, int maxIter, double tolerance) {
+        if (A.rows() != A.columns())
+            throw new IllegalArgumentException("A is not a square matrix");
+        return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 1, which, ncv, 0, 0, maxIter, tolerance, null, null);
+    }
+
+    /**
+     * Solve the standard eigenvalue problem A*x = lambda*x for a square matrix A
+     * @param A Linear operation representing left multiplication by A
+     * @param n shape (rows, or columns) of A
+     * @param nev number of eigenvalues to compute
+     * @param which select which eigenvalues to compute
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static UnsymmetricArpackSolver eigs(LinearOperation A, int n, int nev, String which, Integer ncv, int maxIter, double tolerance) {
+        return new UnsymmetricArpackSolver(A, n, nev, 1, which, ncv, 0, 0, maxIter, tolerance, null, null);
+    }
+
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x. A and M must be square and match in dimensions
+     * @param nev number of eigenvalues to compute
+     * @param which select which eigenvalues to compute
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static UnsymmetricArpackSolver eigs(Matrix A, int nev, Matrix M, String which, Integer ncv, int maxIter, double tolerance) {
+        if (A.rows() != A.columns())
+            throw new IllegalArgumentException("A is not a square matrix");
+        if (M.rows() != A.rows() || M.columns() != A.columns())
+            throw new IllegalArgumentException("M must have same dimensions as A");
+        //calculate inverse of M
+        Matrix M_inv = invert(M);
+        return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 2, which, ncv, 0, 0, maxIter, tolerance, asLinearOperation(M), asLinearOperation(M_inv));
+    }
+
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x. A and M must be square and match in dimensions
+     * @param A Linear operation representing left multiplication by A
+     * @param n shape (rows, or columns) of A
+     * @param nev number of eigenvalues to compute
+     * @param M Linear operation representing left multiplication by M
+     * @param M_inv Linear operation representing left multiplication by inverse of M
+     * @param which select which eigenvalues to compute
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static UnsymmetricArpackSolver eigs(LinearOperation A, int n, int nev, LinearOperation M, LinearOperation M_inv, String which, Integer ncv, int maxIter, double tolerance) {
+        return new UnsymmetricArpackSolver(A, n, nev, 2, which, ncv, 0, 0, maxIter, tolerance, M, M_inv);
+    }
+    
+    
 
 
 

@@ -13,9 +13,6 @@ public abstract class ArpackSolver {
     /** ARPACK internal parameter */
     protected byte[] which;
 
-    /** shift parameter when used in shift-invert mode (3,4,5) */
-    protected double sigma;
-
     /** storage for the Lanczos vectors*/
     protected double[] v;
 
@@ -56,14 +53,11 @@ public abstract class ArpackSolver {
     /** log convergence status */
     protected boolean converged;
 
-    /** store computed eigenvalues */
-    protected double[] d;
-
     /** store computed eigenvectors */
     protected double[] z;
 
 
-    public ArpackSolver(int n, int nev, int mode, byte[] which, Integer ncv, double sigma, int maxIter, double tol) {
+    public ArpackSolver(int n, int nev, int mode, byte[] which, Integer ncv, int maxIter, double tol) {
         if (nev <= 0)
             throw new IllegalArgumentException("nev must be positive, nev="+nev);
         if (nev >= n)
@@ -78,7 +72,6 @@ public abstract class ArpackSolver {
         this.n = n;
         this.nev = nev;
         this.mode = mode;
-        this.sigma = sigma;
         this.ncv = ncv;
         v = new double[n * ncv];
         resid = new double[n];  //if no v0 is provided via setInitialV(), ARPACK will choose them at random
@@ -99,10 +92,6 @@ public abstract class ArpackSolver {
     public void setInitialV(double[] v0) {
         System.arraycopy(v0, 0, resid, 0, n);
         info[0] = 1;
-    }
-
-    public double[] getEigenvalues() {
-        return d;
     }
 
     /**

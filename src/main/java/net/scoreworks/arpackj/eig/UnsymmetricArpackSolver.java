@@ -8,30 +8,32 @@ import java.util.Set;
 
 import static net.scoreworks.arpackj.MatrixOperations.IDENTITY;
 
-public class SymmetricArpackSolver extends ArpackSolver {
-    private static final Set<String> SEUPD_WHICH = new HashSet<>();
+public class UnsymmetricArpackSolver extends ArpackSolver {
+    static final Set<String> NEUPD_WHICH = new HashSet<>();
     static {
-        SEUPD_WHICH.add("LM");
-        SEUPD_WHICH.add("SM");
-        SEUPD_WHICH.add("LA");
-        SEUPD_WHICH.add("SA");
-        SEUPD_WHICH.add("BE");
+        NEUPD_WHICH.add("LM");
+        NEUPD_WHICH.add("SM");
+        NEUPD_WHICH.add("LR");
+        NEUPD_WHICH.add("SR");
+        NEUPD_WHICH.add("LI");
+        NEUPD_WHICH.add("SI");
     }
 
     /** store computed eigenvalues */
-    protected double[] d;
+    protected double[] d_r, d_i;
     /** shift parameter when used in shift-invert mode (3,4,5) */
-    protected double sigma;
+    protected double sigma_r, sigma_i;
     private final LinearOperation OP, B;
-    private LinearOperation OPa, OPb, A_matvec;
+    private LinearOperation OPa, OPb;
 
-    SymmetricArpackSolver(LinearOperation A_matvec, int n, int nev, int mode, String which, Integer ncv, double sigma,
-                          int maxIter, double tol, LinearOperation M_matvec, LinearOperation Minv_matvec) {
+    UnsymmetricArpackSolver(LinearOperation A_matvec, int n, int nev, int mode, String which, Integer ncv, double sigma_r, double sigma_i,
+                            int maxIter, double tol, LinearOperation M_matvec, LinearOperation Minv_matvec) {
         super(n, nev, mode, which.getBytes(), ncv, maxIter, tol);
-        if (!SEUPD_WHICH.contains(which))
-            throw new IllegalArgumentException("which must be one of 'LM', 'SM', 'LA', 'SA' or 'BE");
+        if (!NEUPD_WHICH.contains(which))
+            throw new IllegalArgumentException("which must be one of 'LM', 'SM', 'LR', 'SR', 'LI' or 'SI");
 
-        this.sigma = sigma;
+        this.sigma_r = sigma_r;
+        this.sigma_i = sigma_i;
 
         if (mode == 1) {
             if (A_matvec == null)
@@ -59,79 +61,14 @@ public class SymmetricArpackSolver extends ArpackSolver {
             this.B = M_matvec;
             this.bmat = "G".getBytes();
         }
-        else if (mode == 3) {
-            if (A_matvec != null)
-                throw new IllegalArgumentException("matvec must not be specified for mode=3");
-            if (Minv_matvec == null)
-                throw new IllegalArgumentException("Minv_matvec must be specified for mode=3");
-
-            if (M_matvec == null) {
-                this.OP = Minv_matvec;
-                this.OPa = Minv_matvec;
-                this.B = IDENTITY;
-                this.bmat = "I".getBytes();
-            }
-            else {
-                this.OP = (x, off) -> Minv_matvec.apply(M_matvec.apply(x, off), 0);
-                this.OPa = Minv_matvec;
-                this.B = M_matvec;
-                this.bmat = "G".getBytes();
-            }
-        }
-        else if (mode == 4) {
-            if (A_matvec == null)
-                throw new IllegalArgumentException("matvec must be specified for mode=4");
-            if (M_matvec != null)
-                throw new IllegalArgumentException("M_matvec must not be specified for mode=4");
-            if (Minv_matvec == null)
-                throw new IllegalArgumentException("Minv_matvec must be specified for mode=4");
-
-            this.OP = (x, off) -> Minv_matvec.apply(A_matvec.apply(x, off), 0);
-            this.OPa = Minv_matvec;
-            this.B = A_matvec;
-            this.bmat = "G".getBytes();
-        }
-        else if (mode == 5) {
-            if (A_matvec == null)
-                throw new IllegalArgumentException("matvec must be specified for mode=5");
-            if (Minv_matvec == null)
-                throw new IllegalArgumentException("Minv_matvec must be specified for mode=5");
-
-            this.OPa = Minv_matvec;
-            this.A_matvec = A_matvec;
-            if (M_matvec == null) {
-                //this.OP = Minv_matvec(A_matvec(x) + sigma*x))
-                this.OP = (x, off) -> {
-                    double[] res = A_matvec.apply(x, off);
-                    for (int i=0; i<res.length; i++) {
-                        res[i] += sigma*x[i + off];
-                    }
-                    return Minv_matvec.apply(res, 0);
-                };
-                this.B = IDENTITY;
-                this.bmat = "I".getBytes();
-            }
-            else {
-                this.OP = (x, off) -> {
-                    //this.OP = Minv_matvec(A_matvec(x) + sigma*M_matvec(x)))
-                    double[] res1 = A_matvec.apply(x, off);
-                    double[] res2 = M_matvec.apply(x, off);
-                    for (int i=0; i<res1.length; i++) {
-                        res1[i] += sigma*res2[i];
-                    }
-                    return Minv_matvec.apply(res1, 0);
-                };
-                this.B = M_matvec;
-                this.bmat = "G".getBytes();
-            }
-        }
+        //TODO 3,4
         else {
             throw new IllegalArgumentException("mode=" + mode + " not implemented");
         }
     }
 
     protected void iterate() {
-        arpack.dsaupd_c(ido, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
+        arpack.dnaupd_c(ido, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
 
         if (ido[0] == -1) {
             //initialization: compute y = Op*x
@@ -139,20 +76,8 @@ public class SymmetricArpackSolver extends ArpackSolver {
         }
         else if (ido[0] == 1) {
             //compute y = Op*x
-            if (mode == 1) {
+            if (mode == 1 || mode == 2) {
                 System.arraycopy(OP.apply(workd, ipntr[0] - 1), 0, workd, ipntr[1] - 1, n);
-            }
-            else if (mode == 2) {
-                System.arraycopy(OPb.apply(workd, ipntr[0] - 1), 0, workd, ipntr[0] - 1, n);
-                System.arraycopy(OPa.apply(workd, ipntr[0] - 1), 0, workd, ipntr[1] - 1, n);
-            }
-            else if (mode == 5) {
-                double[] Ax = new double[n];
-                System.arraycopy(A_matvec.apply(workd, ipntr[0] - 1), 0, Ax, 0, n);
-                for (int i=0; i<n; i++) {
-                    Ax[i] += sigma*workd[ipntr[2]-1+i];
-                }
-                System.arraycopy(OPa.apply(Ax, 0), 0, workd, ipntr[1] - 1, n);
             }
             else {
                 //compute OPa*(B*x)
@@ -172,16 +97,21 @@ public class SymmetricArpackSolver extends ArpackSolver {
         int rvec = 1;                   //0 would mean no eigenvectors
         byte[] howmy = "A".getBytes();  //get all nev eigenvalues/eigenvectors
         int[] select = new int[ncv];    //unused
-        d = new double[nev];            //eigenvalues in ascending order
+        double[] workev = new double[3*ncv];
+        d_r = new double[nev];            //eigenvalues in ascending order
+        d_i = new double[nev];
         z = new double[n * nev];        //eigenvectors
 
-        arpack.dseupd_c(rvec, howmy, select, d, z, ncv, sigma, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
+        arpack.dneupd_c(rvec, howmy, select, d_r, d_i, z, ncv, sigma_r, sigma_i, workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
         if (info[0] != 0)
             throw new ArpackException(getExtractionErrorCode(info[0]));
     }
 
-    public double[] getEigenvalues() {
-        return d;
+    public double[] getEigenvalues_real() {
+        return d_r;
+    }
+    public double[] getEigenvalues_imag() {
+        return d_i;
     }
 
     protected void noConvergence() {
