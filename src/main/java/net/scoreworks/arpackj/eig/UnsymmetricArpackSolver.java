@@ -4,13 +4,15 @@ import net.scoreworks.arpackj.LinearOperation;
 import org.apache.commons.math3.complex.Complex;
 import org.bytedeco.arpackng.global.arpack;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
 import static net.scoreworks.arpackj.MatrixOperations.IDENTITY;
 
 public class UnsymmetricArpackSolver extends ArpackSolver {
-    static final Set<String> NEUPD_WHICH = new HashSet<>();
+    private static final Set<String> NEUPD_WHICH = new HashSet<>();
     static {
         NEUPD_WHICH.add("LM");
         NEUPD_WHICH.add("SM");
@@ -106,23 +108,75 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
         byte[] howmy = "A".getBytes();  //get all nev eigenvalues/eigenvectors
         int[] select = new int[ncv];    //unused
         double[] workev = new double[3 * ncv];
-        double[] d_r = new double[nev];            //eigenvalues in ascending order
-        double[] d_i = new double[nev];
-        double[] z_r = new double[n * nev];        //eigenvectors
+        //ATTENTION: the +1 is needed for a potential complex conjugate that needs to be sorted out later in the routine
+        double[] d_r = new double[nev+1];           //eigenvalues in ascending order
+        double[] d_i = new double[nev+1];
+        double[] z_r = new double[n * (nev+1)];     //eigenvectors, stored consecutively as real part (, imaginary part)
 
         arpack.dneupd_c(rvec, howmy, select, d_r, d_i, z_r, ncv, sigma_r, sigma_i, workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
         if (info[0] != 0)
             throw new ArpackException(getExtractionErrorCode(info[0]));
 
-        //convert d_r, d_i to complex
-        d = new Complex[d_r.length];
-        for (int i = 0; i < d_r.length; i++)
-            d[i] = new Complex(d_r[i], d_i[i]);
+        //create complex eigenvectors
+        d = new Complex[nev];
+        z = new Complex[n * nev];
+        Complex[] z_raw = new Complex[n * (nev+1)];
+        //TODO if sigma_i == 0
 
-        //TODO calculate eigenvectors
-        z = new Complex[z_r.length];
-        for (int i = 0; i < d_r.length; i++)
-            z[i] = new Complex(d_r[i], 0);
+        int i = 0;
+        while (i <= nev) {
+            if (Math.abs(d_i[i]) != 0) {
+                // this is a complex conjugate pair (2 columns in z_r)
+                if (i < nev) {
+                    for (int j=0; j<n; j++) {
+                        z_raw[i*n + j] = new Complex(z_r[i*n + j], z_r[(i + 1)*n + j]);
+                        z_raw[(i + 1)*n + j] = z_raw[i*n + j].conjugate();
+                    }
+                    i++;
+                }
+                else {
+
+                }
+            }
+            else {
+                //this is a real eigenvector (1 column  in z_r)
+                for (int j=0; j<n; j++) {
+                    z_raw[i*n + j] = new Complex(z_r[i*n + j], 0);
+                }
+            }
+            i++;
+        }
+        //TODO handle sigma != 0
+
+
+        //now there are nev+1 possible eigenvector/eigenvalue pairs. Filter one out based on "which"
+        //TODO check if this is true with nreturned
+
+        if (which[1] == 'R')
+            Arrays.sort(z_raw, Comparator.comparing(Complex::getReal));
+        else if (which[1] == 'I')
+            Arrays.sort(z_raw, Comparator.comparing(Complex::getImaginary));
+
+
+        if (which[0] == 'L') {
+            //copy first nev values to solution arrays
+            for (i=0; i<nev; i++)
+                d[i] = new Complex(d_r[i], d_i[i]);
+            System.arraycopy(z_raw, 0, z, 0, n*nev);
+        }
+        else if (which[0] == 'S') {
+            //copy last nev values in reverse to solution arrays
+            for (i=0; i<nev; i++)
+                d[i] = new Complex(d_r[nev - i], d_i[nev - i]);
+            int idx;
+            for (i=0; i<n*nev; i++) {
+                idx = n*(nev-i/n) + i%n;
+                z[i] = z_raw[idx];
+            }
+        }
+
+
+
     }
 
     public Complex[] getEigenvalues() {
