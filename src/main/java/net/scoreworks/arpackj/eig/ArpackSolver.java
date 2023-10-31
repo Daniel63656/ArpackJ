@@ -79,7 +79,7 @@ public abstract class ArpackSolver {
         this.which = which;
         this.tol = tol;
         workd = new double[3 * n];
-        lworkl = ncv * (ncv + 8);
+        lworkl = ncv * (ncv + 8) * 2;   //TODO 2 only in case of complex
         workl = new double[lworkl];
         
         // set solver mode and parameters

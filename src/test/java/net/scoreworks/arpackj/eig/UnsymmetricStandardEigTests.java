@@ -48,15 +48,15 @@ public class UnsymmetricStandardEigTests {
         }
     }
 
-    /*@Test
+    @Test
     public void testStandardEigenvalueProblemLM() {
-        UnsymmetricArpackSolver solver = MatrixDecomposition.eigs(A, 2, "LM", null, 100, 1e-5);
+        UnsymmetricArpackSolver solver = MatrixDecomposition.eigs(A, 3, "LM", null, 100, 1e-15);
         Assertions.assertSame(1, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues_real();
         double[] v = solver.getEigenvectors();
         checkSolution(d, v, new int[]{0, 1, 3, 4});
-    }*/
+    }
 
     /*@Test
     public void testStandardEigenvalueProblemLM_CRS() {

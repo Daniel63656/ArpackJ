@@ -69,6 +69,7 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
 
     protected void iterate() {
         arpack.dnaupd_c(ido, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
+        //System.out.println("ido:"+ido[0]);
 
         if (ido[0] == -1) {
             //initialization: compute y = Op*x
@@ -98,9 +99,9 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
         byte[] howmy = "A".getBytes();  //get all nev eigenvalues/eigenvectors
         int[] select = new int[ncv];    //unused
         double[] workev = new double[3*ncv];
-        d_r = new double[nev];            //eigenvalues in ascending order
-        d_i = new double[nev];
-        z = new double[n * nev];        //eigenvectors
+        d_r = new double[nev+1];            //eigenvalues in ascending order
+        d_i = new double[nev+1];
+        z = new double[n * (nev+1)];        //eigenvectors
 
         arpack.dneupd_c(rvec, howmy, select, d_r, d_i, z, ncv, sigma_r, sigma_i, workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
         if (info[0] != 0)
