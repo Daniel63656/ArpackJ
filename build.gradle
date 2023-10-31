@@ -12,6 +12,8 @@ repositories {
 dependencies {
     //for sparse matrix interface
     implementation 'org.la4j:la4j:0.6.0'
+    //for complex number class
+    implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
 
     //include ARPACK bindings for java and all its required dependencies
     implementation 'org.bytedeco:javacpp-platform:1.5.5'

@@ -41,7 +41,7 @@ public class SymmetricGeneralEigTests {
             0.03555523, -0.04953955, -0.24544191, -0.35011594, 0.27828486,
             0.58091305, 0.28752617, -0.26688309, -0.27229615, -0.7321415};
 
-    private static void checkSolution(double[] d, double[] v,int[] idx) {
+    private static void checkSolution(double[] d, double[] z, int[] idx) {
         //idx is a list of entries that should be returned, considering they are returned in ascending order
         for (int i=0; i<idx.length; i++) {
             Assertions.assertEquals(eigenvalues[idx[i]], d[i], epsilon);
@@ -50,7 +50,7 @@ public class SymmetricGeneralEigTests {
         //check eigenvectors match up to sign flip
         for (int i=0; i< idx.length; i++) {
             for (int j=0; j<eigenvalues.length; j++) {
-                Assertions.assertEquals(Math.abs(eigenvectors[idx[i]*5 + j]), Math.abs(v[i*5 + j]), epsilon);
+                Assertions.assertEquals(Math.abs(eigenvectors[idx[i]*5 + j]), Math.abs(z[i*5 + j]), epsilon);
             }
         }
     }
@@ -61,8 +61,8 @@ public class SymmetricGeneralEigTests {
         Assertions.assertSame(2, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
-        double[] v = solver.getEigenvectors();
-        checkSolution(d, v, new int[]{0, 1, 3, 4});
+        double[] z = solver.getEigenvectors();
+        checkSolution(d, z, new int[]{0, 1, 3, 4});
     }
 
     @Test
@@ -71,8 +71,8 @@ public class SymmetricGeneralEigTests {
         Assertions.assertSame(2, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
-        double[] v = solver.getEigenvectors();
-        checkSolution(d, v, new int[]{0, 1, 3, 4});
+        double[] z = solver.getEigenvectors();
+        checkSolution(d, z, new int[]{0, 1, 3, 4});
     }
 
     @Test
@@ -82,8 +82,8 @@ public class SymmetricGeneralEigTests {
         Assertions.assertSame(2, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
-        double[] v = solver.getEigenvectors();
-        checkSolution(d, v, new int[]{0, 1, 2, 3});
+        double[] z = solver.getEigenvectors();
+        checkSolution(d, z, new int[]{0, 1, 2, 3});
     }
 
     @Test
@@ -92,8 +92,8 @@ public class SymmetricGeneralEigTests {
         Assertions.assertSame(3, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
-        double[] v = solver.getEigenvectors();
-        checkSolution(d, v, new int[]{0, 1, 2, 3});
+        double[] z = solver.getEigenvectors();
+        checkSolution(d, z, new int[]{0, 1, 2, 3});
     }
 
     @Test
@@ -102,8 +102,8 @@ public class SymmetricGeneralEigTests {
         Assertions.assertSame(3, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
-        double[] v = solver.getEigenvectors();
-        checkSolution(d, v, new int[]{0, 1, 2, 3});
+        double[] z = solver.getEigenvectors();
+        checkSolution(d, z, new int[]{0, 1, 2, 3});
     }
 
     @Test
@@ -114,7 +114,7 @@ public class SymmetricGeneralEigTests {
         Assertions.assertSame(3, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
-        double[] v = solver.getEigenvectors();
-        checkSolution(d, v, new int[]{0, 1, 3, 4});
+        double[] z = solver.getEigenvectors();
+        checkSolution(d, z, new int[]{0, 1, 3, 4});
     }
 }

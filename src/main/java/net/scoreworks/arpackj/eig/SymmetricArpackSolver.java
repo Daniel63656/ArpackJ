@@ -19,7 +19,11 @@ public class SymmetricArpackSolver extends ArpackSolver {
     }
 
     /** store computed eigenvalues */
-    protected double[] d;
+    private double[] d;
+
+    /** store computed eigenvectors */
+    private double[] z;
+
     /** shift parameter when used in shift-invert mode (3,4,5) */
     protected double sigma;
     private final LinearOperation OP, B;
@@ -184,6 +188,10 @@ public class SymmetricArpackSolver extends ArpackSolver {
 
     public double[] getEigenvalues() {
         return d;
+    }
+
+    public double[] getEigenvectors() {
+        return z;
     }
 
     protected void noConvergence() {

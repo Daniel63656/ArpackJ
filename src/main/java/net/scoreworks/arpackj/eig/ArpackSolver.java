@@ -53,9 +53,6 @@ public abstract class ArpackSolver {
     /** log convergence status */
     protected boolean converged;
 
-    /** store computed eigenvectors */
-    protected double[] z;
-
 
     public ArpackSolver(int n, int nev, int mode, byte[] which, Integer ncv, int maxIter, double tol) {
         if (nev <= 0)
@@ -90,13 +87,6 @@ public abstract class ArpackSolver {
     public void setInitialV(double[] v0) {
         System.arraycopy(v0, 0, resid, 0, n);
         info[0] = 1;
-    }
-
-    /**
-     * @return the corresponding eigenvectors, listed in one array and ordered in the same way as eigenvalues
-     */
-    public double[] getEigenvectors() {
-        return z;
     }
 
     /**

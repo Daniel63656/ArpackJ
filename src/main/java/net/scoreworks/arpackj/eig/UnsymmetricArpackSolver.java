@@ -1,6 +1,7 @@
 package net.scoreworks.arpackj.eig;
 
 import net.scoreworks.arpackj.LinearOperation;
+import org.apache.commons.math3.complex.Complex;
 import org.bytedeco.arpackng.global.arpack;
 
 import java.util.HashSet;
@@ -20,9 +21,13 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
     }
 
     /** store computed eigenvalues */
-    protected double[] d_r, d_i;
+    private Complex[] d;
+
+    /** store computed eigenvectors */
+    private Complex[] z;
+
     /** shift parameter when used in shift-invert mode (3,4,5) */
-    protected double sigma_r, sigma_i;
+    private final double sigma_r, sigma_i;
     private final LinearOperation OP, B;
     private LinearOperation OPa, OPb;
 
@@ -100,23 +105,31 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
         int rvec = 1;                   //0 would mean no eigenvectors
         byte[] howmy = "A".getBytes();  //get all nev eigenvalues/eigenvectors
         int[] select = new int[ncv];    //unused
-        double[] workev = new double[3*ncv];
+        double[] workev = new double[3 * ncv];
+        double[] d_r = new double[nev];            //eigenvalues in ascending order
+        double[] d_i = new double[nev];
+        double[] z_r = new double[n * nev];        //eigenvectors
 
-
-        d_r = new double[nev+1];            //eigenvalues in ascending order
-        d_i = new double[nev+1];
-        z = new double[n * (nev+1)];        //eigenvectors
-
-        arpack.dneupd_c(1, howmy, select, d_r, d_i, z, ncv, sigma_r, sigma_i, workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
+        arpack.dneupd_c(rvec, howmy, select, d_r, d_i, z_r, ncv, sigma_r, sigma_i, workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
         if (info[0] != 0)
             throw new ArpackException(getExtractionErrorCode(info[0]));
+
+        //convert d_r, d_i to complex
+        d = new Complex[d_r.length];
+        for (int i = 0; i < d_r.length; i++)
+            d[i] = new Complex(d_r[i], d_i[i]);
+
+        //TODO calculate eigenvectors
+        z = new Complex[z_r.length];
+        for (int i = 0; i < d_r.length; i++)
+            z[i] = new Complex(d_r[i], 0);
     }
 
-    public double[] getEigenvalues_real() {
-        return d_r;
+    public Complex[] getEigenvalues() {
+        return d;
     }
-    public double[] getEigenvalues_imag() {
-        return d_i;
+    public Complex[] getEigenvectors() {
+        return z;
     }
 
     protected void noConvergence() {
