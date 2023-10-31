@@ -29,6 +29,7 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
     UnsymmetricArpackSolver(LinearOperation A_matvec, int n, int nev, int mode, String which, Integer ncv, double sigma_r, double sigma_i,
                             int maxIter, double tol, LinearOperation M_matvec, LinearOperation Minv_matvec) {
         super(n, nev, mode, which.getBytes(), ncv, maxIter, tol);
+        ipntr = new int[14];
         lworkl = 3*this.ncv * (this.ncv + 2);
         workl = new double[lworkl];
         this.sigma_r = sigma_r;
@@ -100,11 +101,13 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
         byte[] howmy = "A".getBytes();  //get all nev eigenvalues/eigenvectors
         int[] select = new int[ncv];    //unused
         double[] workev = new double[3*ncv];
+
+
         d_r = new double[nev+1];            //eigenvalues in ascending order
         d_i = new double[nev+1];
         z = new double[n * (nev+1)];        //eigenvectors
 
-        arpack.dneupd_c(rvec, howmy, select, d_r, d_i, z, ncv, sigma_r, sigma_i, workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
+        arpack.dneupd_c(1, howmy, select, d_r, d_i, z, ncv, sigma_r, sigma_i, workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
         if (info[0] != 0)
             throw new ArpackException(getExtractionErrorCode(info[0]));
     }

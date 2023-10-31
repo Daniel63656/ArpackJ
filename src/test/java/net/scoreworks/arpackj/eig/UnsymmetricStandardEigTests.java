@@ -53,9 +53,10 @@ public class UnsymmetricStandardEigTests {
         UnsymmetricArpackSolver solver = MatrixDecomposition.eigs(A, 3, "LM", null, 100, 1e-15);
         Assertions.assertSame(1, solver.mode);
         solver.solve();
-        double[] d = solver.getEigenvalues_real();
+        double[] d_r = solver.getEigenvalues_real();
+        double[] d_i = solver.getEigenvalues_imag();
         double[] v = solver.getEigenvectors();
-        checkSolution(d, v, new int[]{0, 1, 3, 4});
+        checkSolution(d_r, v, new int[]{0, 1, 3, 4});
     }
 
     /*@Test

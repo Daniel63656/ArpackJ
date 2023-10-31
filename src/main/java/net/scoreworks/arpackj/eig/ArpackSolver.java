@@ -38,7 +38,7 @@ public abstract class ArpackSolver {
     protected int[] iparam = new int[11];
 
     /** ARPACK internal parameters */
-    protected int[] ipntr = new int[11];
+    protected int[] ipntr;
 
     /** arpack workspace array*/
     protected double[] workd;
