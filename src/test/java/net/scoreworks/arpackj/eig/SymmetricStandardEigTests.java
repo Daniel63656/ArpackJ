@@ -12,7 +12,7 @@ import static net.scoreworks.arpackj.TestUtils.checkSolution;
 import static net.scoreworks.arpackj.eig.MatrixDecomposition.*;
 
 public class SymmetricStandardEigTests {
-
+    //TODO test buckling mode
     private static final Matrix A, A_sparse;
     static {
         double[][] data = {

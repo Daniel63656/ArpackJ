@@ -192,7 +192,7 @@ public final class MatrixDecomposition {
     public static UnsymmetricArpackSolver eigs(Matrix A, int nev, String which, Integer ncv, int maxIter, double tolerance) {
         if (A.rows() != A.columns())
             throw new IllegalArgumentException("A is not a square matrix");
-        return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 1, which, ncv, 0, 0, maxIter, tolerance, null, null);
+        return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 1, which, ncv, null, maxIter, tolerance, null, null);
     }
 
     /**
@@ -206,7 +206,7 @@ public final class MatrixDecomposition {
      * @param tolerance iteration is terminated when this relative tolerance is reached
      */
     public static UnsymmetricArpackSolver eigs(LinearOperation A, int n, int nev, String which, Integer ncv, int maxIter, double tolerance) {
-        return new UnsymmetricArpackSolver(A, n, nev, 1, which, ncv, 0, 0, maxIter, tolerance, null, null);
+        return new UnsymmetricArpackSolver(A, n, nev, 1, which, ncv, null, maxIter, tolerance, null, null);
     }
 
     /**
@@ -226,7 +226,7 @@ public final class MatrixDecomposition {
             throw new IllegalArgumentException("M must have same dimensions as A");
         //calculate inverse of M
         Matrix M_inv = invert(M);
-        return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 2, which, ncv, 0, 0, maxIter, tolerance, asLinearOperation(M), asLinearOperation(M_inv));
+        return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 2, which, ncv, null, maxIter, tolerance, asLinearOperation(M), asLinearOperation(M_inv));
     }
 
     /**
@@ -242,7 +242,7 @@ public final class MatrixDecomposition {
      * @param tolerance iteration is terminated when this relative tolerance is reached
      */
     public static UnsymmetricArpackSolver eigs(LinearOperation A, LinearOperation M, LinearOperation M_inv, int n, int nev, String which, Integer ncv, int maxIter, double tolerance) {
-        return new UnsymmetricArpackSolver(A, n, nev, 2, which, ncv, 0, 0, maxIter, tolerance, M, M_inv);
+        return new UnsymmetricArpackSolver(A, n, nev, 2, which, ncv, null, maxIter, tolerance, M, M_inv);
     }
     
     

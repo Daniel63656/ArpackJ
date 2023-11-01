@@ -4,17 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="SM, LM working for non hermetian">
-      <change afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/TestUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricGeneralEigTests.java" afterDir="false" />
+    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="corrected java docs, test methods in TestUtils">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/MatrixOperationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/MatrixOperationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricBucklingModeTests.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricGeneralEigTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricGeneralEigTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricStandardEigTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricStandardEigTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricStandardEigTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricStandardEigTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -215,7 +210,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="UnsymmetricStandardEigTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="UnsymmetricStandardEigTests.testStandardEigenvalueProblemLM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -228,7 +223,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricStandardEigTests&quot;" />
+            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricStandardEigTests.testStandardEigenvalueProblemLM&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -252,16 +247,16 @@
       <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testStandardEigenvalueProblemLM" />
       <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testStandardEigenvalueProblemLM_CRS" />
       <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testStandardEigenvalueProblemSM" />
-      <item itemvalue="Gradle.UnsymmetricStandardEigTests" />
+      <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemLM" />
       <item itemvalue="JUnit.Test" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemLM" />
         <item itemvalue="Gradle.SymmetricBucklingModeTests" />
         <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testStandardEigenvalueProblemSM" />
         <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testStandardEigenvalueProblemLM_CRS" />
         <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testStandardEigenvalueProblemLM" />
-        <item itemvalue="Gradle.UnsymmetricStandardEigTests" />
       </list>
     </recent_temporary>
   </component>
@@ -276,7 +271,7 @@
       <workItem from="1698500884114" duration="1358000" />
       <workItem from="1698502827274" duration="468000" />
       <workItem from="1698503319621" duration="117000" />
-      <workItem from="1698575156347" duration="71267000" />
+      <workItem from="1698575156347" duration="71911000" />
     </task>
     <task id="LOCAL-00001" summary="asdas">
       <created>1698578035328</created>
@@ -383,7 +378,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698760068608</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="corrected java docs, test methods in TestUtils">
+      <created>1698831012216</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1698831012216</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -416,7 +418,8 @@
     <MESSAGE value="found problem: ipntr must be bigger in unsymmetrical case!" />
     <MESSAGE value="added complex return functions" />
     <MESSAGE value="SM, LM working for non hermetian" />
-    <option name="LAST_COMMIT_MESSAGE" value="SM, LM working for non hermetian" />
+    <MESSAGE value="corrected java docs, test methods in TestUtils" />
+    <option name="LAST_COMMIT_MESSAGE" value="corrected java docs, test methods in TestUtils" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

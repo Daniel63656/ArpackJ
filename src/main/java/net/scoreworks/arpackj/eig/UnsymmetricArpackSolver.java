@@ -29,18 +29,17 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
     private Complex[] z;
 
     /** shift parameter when used in shift-invert mode (3,4,5) */
-    private final double sigma_r, sigma_i;
+    private final Complex sigma;
     private final LinearOperation OP, B;
     private LinearOperation OPa, OPb;
 
-    UnsymmetricArpackSolver(LinearOperation A_matvec, int n, int nev, int mode, String which, Integer ncv, double sigma_r, double sigma_i,
+    UnsymmetricArpackSolver(LinearOperation A_matvec, int n, int nev, int mode, String which, Integer ncv, Complex sigma,
                             int maxIter, double tol, LinearOperation M_matvec, LinearOperation Minv_matvec) {
         super(n, nev, mode, which.getBytes(), ncv, maxIter, tol);
         ipntr = new int[14];
         lworkl = 3*this.ncv * (this.ncv + 2);
         workl = new double[lworkl];
-        this.sigma_r = sigma_r;
-        this.sigma_i = sigma_i;
+        this.sigma = sigma;
 
         if (!NEUPD_WHICH.contains(which))
             throw new IllegalArgumentException("which must be one of 'LM', 'SM', 'LR', 'SR', 'LI' or 'SI");
@@ -113,7 +112,10 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
         double[] d_i = new double[nev+1];
         double[] z_r = new double[n * (nev+1)];     //eigenvectors, stored consecutively as real part (, imaginary part)
 
-        arpack.dneupd_c(rvec, howmy, select, d_r, d_i, z_r, ncv, sigma_r, sigma_i, workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
+        if (sigma == null)
+            arpack.dneupd_c(rvec, howmy, select, d_r, d_i, z_r, ncv, 0, 0, workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
+        else
+            arpack.dneupd_c(rvec, howmy, select, d_r, d_i, z_r, ncv, sigma.getReal(), sigma.getImaginary(), workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
         if (info[0] != 0)
             throw new ArpackException(getExtractionErrorCode(info[0]));
 
