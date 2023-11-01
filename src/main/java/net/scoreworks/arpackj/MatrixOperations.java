@@ -22,7 +22,6 @@ public final class MatrixOperations {
      */
     public static final LinearOperation IDENTITY = (x, off) -> x;
 
-    //TODO replace by openBLAS
     /**
      * @return a given {@link Matrix} as a {@link LinearOperation}. Takes sparsity into account in case that matrix is sparse
      */
@@ -37,7 +36,7 @@ public final class MatrixOperations {
                     x = it.next();
                     i = it.rowIndex();
                     j = it.columnIndex();
-                    result[i] = result[i] + (x * b[j + off]);
+                    result[i] += (x * b[j + off]);
                 }
                 return result;
             };
@@ -66,7 +65,7 @@ public final class MatrixOperations {
             double acc;
             for (int i=0; i<rows; i++) {
                 acc = 0.0;
-                for (int j = 0; j < cols; j++) {
+                for (int j=0; j<cols; j++) {
                     acc += a[i*cols + j] * b[j + off];
                 }
                 result[i] = acc;
@@ -82,13 +81,13 @@ public final class MatrixOperations {
     public static LinearOperation asLinearOperationReal(int rows, int cols, double[] a) {
         return (b, off) -> {
             double[] result = new double[cols];
-            double acc;
+            double real;
             for (int i=0; i<rows; i++) {
-                acc = 0.0;
-                for (int j = 0; j < cols; j++) {
-                    acc += a[2*(i*cols + j)] * b[j + off];
+                real = 0.0;
+                for (int j=0; j<cols; j++) {
+                    real += a[2*(i*cols + j)] * b[j + off];
                 }
-                result[i] = acc;
+                result[i] = real;
             }
             return result;
         };
@@ -177,7 +176,7 @@ public final class MatrixOperations {
         }
         else {
             for (int i=0; i<A.rows(); i++) {
-                for (int j = 0; j<A.columns(); j++) {
+                for (int j=0; j<A.columns(); j++) {
                     result[i*A.columns() + j] = A.get(i, j);
                 }
             }
@@ -205,7 +204,7 @@ public final class MatrixOperations {
         }
         else {
             for (int i=0; i<A.rows(); i++) {
-                for (int j = 0; j < A.columns(); j++) {
+                for (int j=0; j<A.columns(); j++) {
                     result[j*A.rows() + i] = A.get(i, j);
                 }
             }

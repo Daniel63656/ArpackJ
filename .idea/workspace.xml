@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="complex matrix inversion">
+    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="asdsa">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" afterDir="false" />
@@ -94,29 +94,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Test all">
-    <configuration name="MatrixOperationTests.luuuu" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.MatrixOperationTests.luuuu&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="MatrixOperationTests.testCompleverse" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -163,29 +140,6 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="MatrixOperationTests.testCoplevedffsfsdfsdrse" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.MatrixOperationTests.testCoplevedffsfsdfsdrse&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="Test all" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -200,6 +154,52 @@
             <option value=":test" />
             <option value="--tests" />
             <option value="&quot;net.scoreworks.arpackj.*&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="UnsymmetricStandardEigTests.foo" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricStandardEigTests.foo&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="UnsymmetricStandardEigTests.testStandardEigenvalueProblemSM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricStandardEigTests.testStandardEigenvalueProblemSM&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -242,20 +242,20 @@
     </configuration>
     <list>
       <item itemvalue="Gradle.Test all" />
-      <item itemvalue="Gradle.MatrixOperationTests.luuuu" />
       <item itemvalue="Gradle.MatrixOperationTests.testCompleverse" />
-      <item itemvalue="Gradle.MatrixOperationTests.testCoplevedffsfsdfsdrse" />
+      <item itemvalue="Gradle.UnsymmetricStandardEigTests.foo" />
+      <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemSM" />
       <item itemvalue="Gradle.MatrixOperationTests.testComplexInverse" />
       <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealLM" />
       <item itemvalue="JUnit.Test" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemSM" />
         <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealLM" />
+        <item itemvalue="Gradle.UnsymmetricStandardEigTests.foo" />
         <item itemvalue="Gradle.MatrixOperationTests.testComplexInverse" />
         <item itemvalue="Gradle.MatrixOperationTests.testCompleverse" />
-        <item itemvalue="Gradle.MatrixOperationTests.luuuu" />
-        <item itemvalue="Gradle.MatrixOperationTests.testCoplevedffsfsdfsdrse" />
       </list>
     </recent_temporary>
   </component>
@@ -272,7 +272,7 @@
       <workItem from="1698503319621" duration="117000" />
       <workItem from="1698575156347" duration="76838000" />
       <workItem from="1698837123360" duration="1123000" />
-      <workItem from="1698838623740" duration="8910000" />
+      <workItem from="1698838623740" duration="13193000" />
     </task>
     <task id="LOCAL-00001" summary="asdas">
       <created>1698578035328</created>
@@ -407,7 +407,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698844119718</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="asdsa">
+      <created>1698851282663</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1698851282663</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -444,7 +451,8 @@
     <MESSAGE value="complex sigma" />
     <MESSAGE value="made invert return void" />
     <MESSAGE value="complex matrix inversion" />
-    <option name="LAST_COMMIT_MESSAGE" value="complex matrix inversion" />
+    <MESSAGE value="asdsa" />
+    <option name="LAST_COMMIT_MESSAGE" value="asdsa" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -465,24 +473,9 @@
           <option name="timeStamp" value="142" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java</url>
-          <line>273</line>
-          <option name="timeStamp" value="144" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java</url>
           <line>142</line>
           <option name="timeStamp" value="145" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java</url>
-          <line>293</line>
-          <option name="timeStamp" value="146" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java</url>
-          <line>86</line>
-          <option name="timeStamp" value="148" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

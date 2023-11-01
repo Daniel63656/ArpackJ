@@ -287,7 +287,7 @@ public final class MatrixDecomposition {
                 for (int j=0; j<A.columns(); j++) {
                     Z[2*(i*cols + j)] = A.get(i, j);
                 }
-                //subtract identity from real part on trace
+                //subtract sigma on trace
                 Z[2*(i*cols + i)] -= sigma_r;
                 Z[2*(i*cols + i) + 1] = -sigma_i;
             }
