@@ -1,12 +1,13 @@
 package net.scoreworks.arpackj;
 
+import net.scoreworks.arpackj.eig.MatrixDecomposition;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.la4j.Matrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
 
 import static net.scoreworks.arpackj.MatrixOperations.*;
-import static net.scoreworks.arpackj.eig.MatrixDecomposition.LU_decomposition;
+import static net.scoreworks.arpackj.eig.MatrixDecomposition.LU;
 
 public class MatrixOperationTests {
     private static final double epsilon = 0.0001;
@@ -86,7 +87,7 @@ public class MatrixOperationTests {
 
     @Test
     public void testLU_Decomposition() {
-        Matrix res = LU_decomposition(B);
+        Matrix res = MatrixDecomposition.LU(B);
         //check result
         for (int i = 0; i< B.rows(); i++) {
             for (int j = 0; j< B.columns(); j++) {

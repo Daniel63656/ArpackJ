@@ -153,9 +153,9 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
         //TODO check if this is true with nreturned
 
         if (which[1] == 'R')
-            Arrays.sort(z_raw, Comparator.comparing(Complex::getReal));
+            Arrays.sort(z_raw, Comparator.comparing(n -> Math.abs(n.getReal())));
         else if (which[1] == 'I')
-            Arrays.sort(z_raw, Comparator.comparing(Complex::getImaginary));
+            Arrays.sort(z_raw, Comparator.comparing(n -> Math.abs(n.getImaginary())));
 
 
         if (which[0] == 'L') {
@@ -174,9 +174,6 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
                 z[i] = z_raw[idx];
             }
         }
-
-
-
     }
 
     public Complex[] getEigenvalues() {

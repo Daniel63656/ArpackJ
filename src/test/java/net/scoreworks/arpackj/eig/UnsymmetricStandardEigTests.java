@@ -8,10 +8,9 @@ import org.la4j.matrix.dense.Basic2DMatrix;
 import org.la4j.matrix.sparse.CRSMatrix;
 
 import static net.scoreworks.arpackj.MatrixOperations.asLinearOperation;
+import static net.scoreworks.arpackj.TestUtils.checkSolution;
 
 public class UnsymmetricStandardEigTests {
-    private static final double epsilon = 0.0001;
-
     private static final Matrix A, A_sparse;
     static {
         double[][] data = {
@@ -54,28 +53,7 @@ public class UnsymmetricStandardEigTests {
                 new Complex(-0.12271274, 0.0),
                 new Complex(-0.23191235, 0.0),
                 new Complex(0.27322528, 0.0),
-                new Complex(0.84851378, 0.0)
-        };
-
-
-    private static void checkSolution(Complex[] d, Complex[] z, int[] idx) {
-        //idx is a list of entries that should be returned, considering they are returned in ascending order
-        for (int i=0; i<idx.length; i++) {
-            Assertions.assertEquals(eigenvalues[idx[i]].getReal(), d[i].getReal(), epsilon);
-            Assertions.assertEquals(eigenvalues[idx[i]].getImaginary(), d[i].getImaginary(), epsilon);
-        }
-
-        //check eigenvectors match up to sign flip
-        Complex rotation = null;
-        for (int i=0; i<idx.length; i++) {
-            for (int j=0; j<eigenvalues.length; j++) {
-                //each vector can be rotated in the complex plane so calculate rotation factor on first element
-                if (j == 0) rotation = eigenvectors[idx[i]*5].divide(z[i*5]);
-                Assertions.assertEquals(eigenvectors[idx[i]*5 + j].getReal(), z[i*5 + j].multiply(rotation).getReal(), epsilon);
-                Assertions.assertEquals(eigenvectors[idx[i]*5 + j].getImaginary(), z[i*5 + j].multiply(rotation).getImaginary(), epsilon);
-            }
-        }
-    }
+                new Complex(0.84851378, 0.0)};
 
     @Test
     public void testStandardEigenvalueProblemLM() {
@@ -84,16 +62,7 @@ public class UnsymmetricStandardEigTests {
         solver.solve();
         Complex[] d = solver.getEigenvalues();
         Complex[] z = solver.getEigenvectors();
-        checkSolution(d, z, new int[]{0, 1, 2});
-    }
-
-    @Test
-    public void foo() {
-        int n = 5;
-        int nev = 3;
-        for (int i=0; i<15; i++) {
-            System.out.println(n*(nev-1-i/n) + i%n);
-        }
+        checkSolution(eigenvalues, eigenvectors, new int[]{0, 1, 2}, d, z);
     }
 
     @Test
@@ -103,7 +72,7 @@ public class UnsymmetricStandardEigTests {
         solver.solve();
         Complex[] d = solver.getEigenvalues();
         Complex[] z = solver.getEigenvectors();
-        checkSolution(d, z, new int[]{0, 1, 2});
+        checkSolution(eigenvalues, eigenvectors, new int[]{0, 1, 2}, d, z);
     }
 
     @Test
@@ -113,6 +82,6 @@ public class UnsymmetricStandardEigTests {
         solver.solve();
         Complex[] d = solver.getEigenvalues();
         Complex[] z = solver.getEigenvectors();
-        checkSolution(d, z, new int[]{3, 4, 2});
+        checkSolution(eigenvalues, eigenvectors, new int[]{3, 4, 2}, d, z);
     }
 }
