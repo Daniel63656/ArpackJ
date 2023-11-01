@@ -69,7 +69,25 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
             this.B = M_matvec;
             this.bmat = "G".getBytes();
         }
-        //TODO 3,4
+        else if (mode == 3 || mode == 4) {
+            if (A_matvec != null)
+                throw new IllegalArgumentException("matvec must not be specified for mode=3,4");
+            if (Minv_matvec == null)
+                throw new IllegalArgumentException("Minv_matvec must be specified for mode=3,4");
+
+            if (M_matvec == null) {
+                this.OP = Minv_matvec;
+                this.OPa = Minv_matvec;
+                this.B = IDENTITY;
+                this.bmat = "I".getBytes();
+            }
+            else {
+                this.OP = (x, off) -> Minv_matvec.apply(M_matvec.apply(x, off), 0);
+                this.OPa = Minv_matvec;
+                this.B = M_matvec;
+                this.bmat = "G".getBytes();
+            }
+        }
         else {
             throw new IllegalArgumentException("mode=" + mode + " not implemented");
         }

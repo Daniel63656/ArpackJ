@@ -1,5 +1,6 @@
 package net.scoreworks.arpackj;
 
+import org.apache.commons.math3.complex.Complex;
 import org.bytedeco.openblas.global.openblas;
 import org.la4j.Matrix;
 import org.la4j.iterator.MatrixIterator;
@@ -82,16 +83,18 @@ public final class MatrixOperations {
     public static Matrix invert(Matrix A) {
         if (A.rows() != A.columns())
             throw new IllegalArgumentException("A must be square in order to be invertible");
-        return Basic2DMatrix.from1DArray(A.rows(), A.rows(), invert(A.rows(), flattenRowMajor(A)));
+        double[] res = flattenRowMajor(A);
+        invert(A.rows(), res);
+        return Basic2DMatrix.from1DArray(A.rows(), A.rows(), res);
     }
 
     /**
+     * Calculate the inverse of A using openBLAS routines. Result is dense because inverses of sparse matrices are
+     * dense in general. The result is written to the provided array directly
      * @param rows dimensions of the square matrix
      * @param a the Matrix flattened to a 1d array. Indifferent to ordering (row-major, column-major)
-     * @return the inverse of A using openBLAS routines. Result is dense because inverses of sparse matrices are
-     * dense in general. The result is written to the provided array directly
      */
-    public static double[] invert(int rows, double[] a) {
+    public static void invert(int rows, double[] a) {
         int[] m = new int[]{rows};
         int[] n = new int[]{rows};
         int[] lda = new int[]{rows};
@@ -104,7 +107,21 @@ public final class MatrixOperations {
         openblas.LAPACK_dgetrf(m, n, a, lda, ipiv, info);
         //calculate inverse of A: A^-1 = L^-1*U^-1
         openblas.LAPACK_dgetri(n, a, lda, ipiv, work, lwork, info);
-        return a;
+    }
+
+    public static void invertComplex(int rows, double[] a) {
+        int[] m = new int[]{rows};
+        int[] n = new int[]{rows};
+        int[] lda = new int[]{rows};
+        int[] ipiv = new int[lda[0]];
+        int[] info = new int[1];
+        int[] lwork = new int[]{n[0]*n[0]};
+        double[] work = new double[lwork[0]];
+
+        // LU decomposition
+        openblas.LAPACK_zgetrf(m, n, a, lda, ipiv, info);
+        // Calculate the inverse of A: A^-1 = L^-1 * U^-1
+        openblas.LAPACK_zgetri(n, a, lda, ipiv, work, lwork, info);
     }
 
 

@@ -11,13 +11,8 @@ import static net.scoreworks.arpackj.eig.MatrixDecomposition.LU;
 
 public class MatrixOperationTests {
     private static final double epsilon = 0.0001;
-    private static final Matrix A, B, B_inv, B_LU;
+    private static final Matrix B, B_inv, B_LU;
     static {
-        double[][] dataA = {
-                {9, 1, 9, 1, 5},
-                {6, 8, 1, 2, 3},
-                {3, 1, 7, 5, 1}};
-        A = new Basic2DMatrix(dataA);
         double[][] dataB = {    //non-symmetric
                 {9, 1, 9, 1, 5},
                 {6, 8, 1, 2, 3},
@@ -43,20 +38,20 @@ public class MatrixOperationTests {
 
     @Test
     public void testFlattenRowMajor() {
-        double[] res = flattenRowMajor(A);
-        for (int i=0; i<A.rows(); i++) {
-            for (int j=0; j<A.columns(); j++) {
-                Assertions.assertEquals(A.get(i, j), res[i*A.columns() + j], epsilon);
+        double[] res = flattenRowMajor(B);
+        for (int i = 0; i< B.rows(); i++) {
+            for (int j = 0; j< B.columns(); j++) {
+                Assertions.assertEquals(B.get(i, j), res[i* B.columns() + j], epsilon);
             }
         }
     }
 
     @Test
     public void testFlattenColumnMajor() {
-        double[] res = flattenColumnMajor(A);
-        for (int i=0; i<A.rows(); i++) {
-            for (int j=0; j<A.columns(); j++) {
-                Assertions.assertEquals(A.get(i, j), res[j*A.rows() + i], epsilon);
+        double[] res = flattenColumnMajor(B);
+        for (int i = 0; i< B.rows(); i++) {
+            for (int j = 0; j< B.columns(); j++) {
+                Assertions.assertEquals(B.get(i, j), res[j* B.rows() + i], epsilon);
             }
         }
     }
@@ -105,5 +100,32 @@ public class MatrixOperationTests {
                 Assertions.assertEquals(B_inv.get(i, j), inverse.get(i, j), epsilon);
             }
         }
+    }
+
+    @Test
+    public void testCompleverse() {
+        double[] Z = new double[]{
+                1,2, 3,4,
+                11,12, 13,14
+        };
+
+        invertComplex(2, Z);
+        System.out.println("eee");
+    }
+
+    @Test
+    public void testComplexInverse() {
+        //3x3 complex matrix (real, imaginary as 2 consecutive double values)
+        double[] Z = new double[]{
+                1,2, 3,4, 5,6,
+                7,8, 9,10, 11,12,
+                13,14, 15,16, 16,17};
+        double[] inv = {
+                5.2983525e+13, 2.38425863e+14, -1.0596705e+14, -4.76851725e+14, 5.2983525e+13, 2.38425863e+14,
+                -1.0596705e+14, -4.76851725e+14, 2.1193410e+14, 9.53703451e+14, -1.0596705e+14, -4.76851725e+14,
+                5.2983525e+13, 2.38425863e+14, -1.0596705e+14, -4.76851725e+14, 5.2983525e+13, 2.38425863e+14};
+
+        invertComplex(3, Z);
+        System.out.println("eee");
     }
 }

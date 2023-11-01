@@ -84,4 +84,24 @@ public class UnsymmetricStandardEigTests {
         Complex[] z = solver.getEigenvectors();
         checkSolution(eigenvalues, eigenvectors, new int[]{3, 4, 2}, d, z);
     }
+
+    /*@Test
+    public void testStandardEigenvalueProblemShiftInvertRealLM() {
+        UnsymmetricArpackSolver solver = MatrixDecomposition.eigs_shiftInvertReal(A, null, 3, "LM", new Complex(1, 0), null, 100, 1e-15);
+        Assertions.assertSame(3, solver.mode);
+        solver.solve();
+        Complex[] d = solver.getEigenvalues();
+        Complex[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues, eigenvectors, new int[]{3, 4, 2}, d, z);
+    }
+
+    @Test
+    public void testStandardEigenvalueProblemShiftInvertImagLM() {
+        UnsymmetricArpackSolver solver = MatrixDecomposition.eigs_shiftInvertImag(A, null, 3, "LM", new Complex(0, 1), null, 100, 1e-15);
+        Assertions.assertSame(4, solver.mode);
+        solver.solve();
+        Complex[] d = solver.getEigenvalues();
+        Complex[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues, eigenvectors, new int[]{3, 4, 2}, d, z);
+    }*/
 }

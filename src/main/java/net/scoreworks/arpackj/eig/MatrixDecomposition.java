@@ -1,6 +1,7 @@
 package net.scoreworks.arpackj.eig;
 
 import net.scoreworks.arpackj.LinearOperation;
+import org.apache.commons.math3.complex.Complex;
 import org.bytedeco.openblas.global.openblas;
 import org.la4j.Matrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
@@ -141,9 +142,6 @@ public final class MatrixDecomposition {
         return new SymmetricArpackSolver(null, n, nev, 3, which, ncv, sigma, maxIter, tolerance, M, OP_inv);
     }
 
-
-    //TODO here A positive-definite
-
     /**
      * Solve the general eigenvalue problem A*x = lambda*M*x for a square, symmetric and positive-definite matrix A in buckling mode to find eigenvalues near sigma.
      * If M is null, the standard eigenvalue problem will be solved instead
@@ -176,7 +174,6 @@ public final class MatrixDecomposition {
     public static SymmetricArpackSolver eigsh_buckling(LinearOperation A, LinearOperation OP_inv, int n, int nev, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
         return new SymmetricArpackSolver(A, n, nev, 4, which, ncv, sigma, maxIter, tolerance, null, OP_inv);
     }
-
 
 
 
@@ -244,9 +241,132 @@ public final class MatrixDecomposition {
     public static UnsymmetricArpackSolver eigs(LinearOperation A, LinearOperation M, LinearOperation M_inv, int n, int nev, String which, Integer ncv, int maxIter, double tolerance) {
         return new UnsymmetricArpackSolver(A, n, nev, 2, which, ncv, null, maxIter, tolerance, M, M_inv);
     }
-    
-    
 
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x for a square matrix A in shift-invert xxx mode to find eigenvalues near sigma.
+     * If M is null, the standard eigenvalue problem will be solved instead
+     * @param A square {@link Matrix}
+     * @param M square, symmetric and positive semi-definite {@link Matrix}. Must have same dimensions as A
+     * @param nev number of eigenvalues to compute
+     * @param which select which eigenvalues to compute
+     * @param sigma complex shift applied to A
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static UnsymmetricArpackSolver eigs_shiftInvertReal(Matrix A, Matrix M, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
+        if (A.rows() != A.columns())
+            throw new IllegalArgumentException("A is not a square matrix");
+        if (sigma.getReal() == 0 && sigma.getImaginary() == 0) {
+            return new UnsymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(invert(A)));
+        }
+
+        Complex z;
+        //deepcopy and convert to dense for later invert
+        double[] res = flattenRowMajor(A);
+        if (M == null) {    //calculate real((A - sigma*I)^-1)
+            //subtract sigma on the trace and take real part
+            for(int i=0; i<A.rows(); i++) {
+                z = new Complex(res[i*A.columns()+i], 0).subtract(sigma);
+                res[i*A.columns()+i] = z.getReal();
+            }
+        }
+        else {      //calculate real((A - sigma*M)^-1)
+            //can't use la4j's operations as it does not support complex type
+            for(int i=0; i<A.rows(); i++) {
+                for(int j=0; i<A.columns(); j++) {
+                    z = sigma.multiply(M.get(i, j));
+                    z = new Complex(res[i*A.columns()+i], 0).subtract(z);
+                    res[i*A.columns()+i] = z.getReal();
+                }
+            }
+        }
+        invert(A.rows(), res);
+        LinearOperation OPinv = asLinearOperation(A.rows(), A.columns(), res);
+        return new UnsymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, OPinv);
+    }
+
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x for a square matrix A in shift-invert xxx mode to find eigenvalues near sigma.
+     * If M is null, the standard eigenvalue problem will be solved instead
+     * @param M Left multiplication by square and positive semi-definite matrix M with same dimensions as A
+     * @param OP_inv Linear operation representing left multiplication by real((A - sigma*M)^-1)
+     * @param n shape (rows, or columns) of A
+     * @param nev number of eigenvalues to compute
+     * @param which select which eigenvalues to compute
+     * @param sigma complex shift applied to A
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static UnsymmetricArpackSolver eigsh_shiftInvertReal(LinearOperation M, LinearOperation OP_inv, int n, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
+        return new UnsymmetricArpackSolver(null, n, nev, 3, which, ncv, sigma, maxIter, tolerance, M, OP_inv);
+    }
+
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x for a square matrix A in shift-invert xxx mode to find eigenvalues near sigma.
+     * If M is null, the standard eigenvalue problem will be solved instead
+     * @param A square {@link Matrix}
+     * @param M square, symmetric and positive semi-definite {@link Matrix}. Must have same dimensions as A
+     * @param nev number of eigenvalues to compute
+     * @param which select which eigenvalues to compute
+     * @param sigma complex shift applied to A
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static UnsymmetricArpackSolver eigs_shiftInvertImag(Matrix A, Matrix M, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
+        if (sigma.getImaginary() == 0)
+            throw new IllegalArgumentException("sigma must be complex in this mode");
+        if (A.rows() != A.columns())
+            throw new IllegalArgumentException("A is not a square matrix");
+        if (sigma.getReal() == 0 && sigma.getImaginary() == 0) {
+            return new UnsymmetricArpackSolver(null, A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(invert(A)));
+        }
+
+        Complex z;
+        //deepcopy and convert to dense for later invert
+        double[] res = flattenRowMajor(A);
+        if (M == null) {    //calculate real((A - sigma*I)^-1)
+            //subtract sigma on the trace and take real part
+            for(int i=0; i<A.rows(); i++) {
+                z = new Complex(res[i*A.columns()+i], 0).subtract(sigma);
+                res[i*A.columns()+i] = z.getImaginary();
+            }
+        }
+        else {      //calculate real((A - sigma*M)^-1)
+            //can't use la4j's operations as it does not support complex type
+            for(int i=0; i<A.rows(); i++) {
+                for(int j=0; i<A.columns(); j++) {
+                    z = sigma.multiply(M.get(i, j));
+                    z = new Complex(res[i*A.columns()+i], 0).subtract(z);
+                    res[i*A.columns()+i] = z.getImaginary();
+                }
+            }
+        }
+        invert(A.rows(), res);
+        LinearOperation OPinv = asLinearOperation(A.rows(), A.columns(), res);
+        return new UnsymmetricArpackSolver(null, A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, OPinv);
+    }
+
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x for a square matrix A in shift-invert xxx mode to find eigenvalues near sigma.
+     * If M is null, the standard eigenvalue problem will be solved instead
+     * @param M Left multiplication by square and positive semi-definite matrix M with same dimensions as A
+     * @param OP_inv Linear operation representing left multiplication by imag((A - sigma*M)^-1)
+     * @param n shape (rows, or columns) of A
+     * @param nev number of eigenvalues to compute
+     * @param which select which eigenvalues to compute
+     * @param sigma complex shift applied to A
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static UnsymmetricArpackSolver eigsh_shiftInvertImag(LinearOperation M, LinearOperation OP_inv, int n, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
+        if (sigma.getImaginary() == 0)
+            throw new IllegalArgumentException("sigma must be complex in this mode");
+        return new UnsymmetricArpackSolver(null, n, nev, 4, which, ncv, sigma, maxIter, tolerance, M, OP_inv);
+    }
 
 
     /**
@@ -256,12 +376,14 @@ public final class MatrixDecomposition {
         if (sigma == 0) {
             return asLinearOperation(invert(A));
         }
-        if (M == null) {
-            //calculate (A - sigma*I)^-1
+        if (M == null) {     //calculate (A - sigma*I)^-1
+            //deepcopy and convert to dense for later invert
             double[] res = flattenRowMajor(A);
+            //subtract sigma on the trace
             for(int i=0; i<A.rows(); i++) {
                 res[i*A.columns()+i] -= sigma;
             }
+            invert(A.rows(), res);
             return asLinearOperation(A.rows(), A.columns(), res);
         }
         return asLinearOperation(invert(A.subtract(M.multiply(sigma))));
