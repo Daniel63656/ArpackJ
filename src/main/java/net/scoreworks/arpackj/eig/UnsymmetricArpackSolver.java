@@ -133,20 +133,20 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
         if (info[0] != 0)
             throw new ArpackException(getExtractionErrorCode(info[0]));
 
-        //calculate eigenvalues and eigenvalues
-        d = new Complex[nev+1];
-        z = new Complex[n * (nev+1)];
-        int i = 0;
+        //calculate eigenvalues and eigenvalues and store them as pairs to allow for easy sorting afterwards
+        EigenPair[] eigenPair = new EigenPair[nev+1];
         if (sigma.getImaginary() == 0) {
             //in this case eigenvalues are correct and only eigenvectors need to be computed
+            int i = 0;
             while (i <= nev) {
-                d[i] = new Complex(d_r[nev - i], d_i[nev - i]);
                 if (Math.abs(d_i[i]) != 0) {
                     // this is a complex conjugate pair (2 columns in z_r)
                     if (i < nev) {
+                        eigenPair[i] = new EigenPair(new Complex(d_r[i], d_i[i]), n);
+                        eigenPair[i+1] = new EigenPair(eigenPair[i].d.conjugate(), n);
                         for (int j=0; j<n; j++) {
-                            z[i*n + j] = new Complex(z_r[i*n + j], z_r[(i + 1)*n + j]);
-                            z[(i + 1)*n + j] = z[i*n + j].conjugate();
+                            eigenPair[i].z[j] = new Complex(z_r[i*n + j], z_r[(i + 1)*n + j]);
+                            eigenPair[i+1].z[j] = eigenPair[i].z[j].conjugate();
                         }
                         i++;
                     }
@@ -154,8 +154,9 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
                 }
                 else {
                     //this is a real eigenvector (1 column in z_r)
+                    eigenPair[i] = new EigenPair(new Complex(d_r[i], d_i[i]), n);
                     for (int j=0; j<n; j++) {
-                        z[i*n + j] = new Complex(z_r[i*n + j], 0);
+                        eigenPair[i].z[j] = new Complex(z_r[i*n + j], 0);
                     }
                 }
                 i++;
@@ -164,31 +165,35 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
         else {
             // d_r contains the real part of the Ritz values of OP computed by DNAUPD. eigenvectors AND eigenvalues
             // must therefore be computed
+            int i = 0;
             while (i <= nev) {
                 if (Math.abs(d_i[i]) == 0) {
+                    eigenPair[i] = new EigenPair(n);
                     // d = z_r * A(z_r)
                     double[] Az = A.apply(z_r, i*n);
                     double real = 0;
                     for (int j=0; j<n; j++) {
                         real += z_r[i*n + j] * Az[j];
-                        z[i*n + j] = new Complex(z_r[i*n + j], 0);
+                        eigenPair[i].z[j] = new Complex(z_r[i*n + j], 0);
                     }
-                    d[i] = new Complex(real, 0);
+                    eigenPair[i].d = new Complex(real, 0);
                 }
                 else {
                     if (i < nev) {
+                        eigenPair[i] = new EigenPair(n);
+                        eigenPair[i+1] = new EigenPair(n);
                         double[] Az    = A.apply(z_r, i*n);
                         double[] Az_cc = A.apply(z_r, (i+1)*n);
                         double real = 0;
                         double imag = 0;
                         for (int j=0; j<n; j++) {
-                            z[i*n + j] = new Complex(z_r[i*n + j], z_r[(i + 1)*n + j]);
-                            z[(i + 1)*n + j] = z[i*n + j].conjugate();
+                            eigenPair[i].z[j] = new Complex(z_r[i*n + j], z_r[(i + 1)*n + j]);
+                            eigenPair[i+1].z[j] = eigenPair[i].z[j].conjugate();
                             real += z_r[i*n + j] * Az[j]    + z_r[(i+1)*n + j] * Az_cc[j];
                             imag += z_r[i*n + j] * Az_cc[j] - z_r[(i+1)*n + j] * Az[j];
                         }
-                        d[i] = new Complex(real, imag);
-                        d[i+1] = d[i].conjugate();
+                        eigenPair[i].d = new Complex(real, imag);
+                        eigenPair[i+1].d = eigenPair[i].d.conjugate();
                         i++;
                     }
                     else {} //nreturned
@@ -199,29 +204,28 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
 
 
         //at this point there are nev+1 possible eigenvector/eigenvalue pairs. Filter one out based on "which"
+        this.d = new Complex[nev];
+        this.z = new Complex[n * nev];
         //TODO check if this is true with nreturned
-        //TODO true sort index
 
         if (which[1] == 'R')
-            Arrays.sort(z, Comparator.comparing(n -> Math.abs(n.getReal())));
+            Arrays.sort(eigenPair, Comparator.comparing(eig -> eig.d.getReal()));
         else if (which[1] == 'I')
-            Arrays.sort(z, Comparator.comparing(n -> Math.abs(n.getImaginary())));
+            Arrays.sort(eigenPair, Comparator.comparing(eig -> eig.d.getImaginary()));
 
 
         if (which[0] == 'L') {
             //copy first nev values to solution arrays
-            for (i=0; i<nev; i++)
-                d[i] = new Complex(d_r[i], d_i[i]);
-            System.arraycopy(z, 0, this.z, 0, n*nev);
+            for (int i=0; i<nev; i++) {
+                d[i] = eigenPair[i].d;
+                System.arraycopy(eigenPair[i].z, 0, this.z, i*n, n);
+            }
         }
         else if (which[0] == 'S') {
             //copy last nev values in reverse to solution arrays
-            for (i=0; i<nev; i++)
-                d[i] = new Complex(d_r[nev - i], d_i[nev - i]);
-            int idx;
-            for (i=0; i<n*nev; i++) {
-                idx = n*(nev-i/n) + i%n;
-                this.z[i] = z[idx];
+            for (int i=0; i<nev; i++) {
+                d[i] = eigenPair[nev-i].d;
+                System.arraycopy(eigenPair[nev-i].z, 0, this.z, i*n, n);
             }
         }
     }
@@ -236,6 +240,21 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
     protected void noConvergence() {
         extract();
         int nconv = iparam[4];  //number of converged ritz vectors
+    }
+
+    /**
+     * Simple POJO to help during calculation and sorting of eigenvalues/-vectors
+     */
+    private static class EigenPair {
+        Complex d;
+        Complex[] z;
+        public EigenPair(int nev) {
+            this.z = new Complex[nev];
+        }
+        public EigenPair(Complex d, int nev) {
+            this.d = d;
+            this.z = new Complex[nev];
+        }
     }
 
     @Override
