@@ -57,7 +57,8 @@ public final class MatrixOperations {
     }
 
     /**
-     * @return a flattened matrix in row-major ordering as a {@link LinearOperation}. Dense by definition.
+     * @return left multiplication by the matrix given as input array. Dense by definition.
+     * @param a flattened matrix in row-major order
      */
     public static LinearOperation asLinearOperation(int rows, int cols, double[] a) {
         return (b, off) -> {
@@ -66,7 +67,26 @@ public final class MatrixOperations {
             for (int i=0; i<rows; i++) {
                 acc = 0.0;
                 for (int j = 0; j < cols; j++) {
-                    acc += a[j*cols + i] * b[j + off];
+                    acc += a[i*cols + j] * b[j + off];
+                }
+                result[i] = acc;
+            }
+            return result;
+        };
+    }
+
+    /**
+     * @return left multiplication by real(matrix) given as input array. Dense by definition.
+     * @param a double array holding complex numbers (real, imag) in row-major order
+     */
+    public static LinearOperation asLinearOperationReal(int rows, int cols, double[] a) {
+        return (b, off) -> {
+            double[] result = new double[cols];
+            double acc;
+            for (int i=0; i<rows; i++) {
+                acc = 0.0;
+                for (int j = 0; j < cols; j++) {
+                    acc += a[2*(i*cols + j)] * b[j + off];
                 }
                 result[i] = acc;
             }

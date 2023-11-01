@@ -261,7 +261,8 @@ public final class MatrixDecomposition {
             return new UnsymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(invert(A)));
         }
 
-        Complex z;
+
+        /*Complex z;
         //deepcopy and convert to dense for later invert
         double[] res = flattenRowMajor(A);
         if (M == null) {    //calculate real((A - sigma*I)^-1)
@@ -270,19 +271,32 @@ public final class MatrixDecomposition {
                 z = new Complex(res[i*A.columns()+i], 0).subtract(sigma);
                 res[i*A.columns()+i] = z.getReal();
             }
+            invert(A.rows(), res);
+            LinearOperation OPinv = asLinearOperation(A.rows(), A.columns(), res);
+            return new UnsymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, OPinv);
+        }*/
+
+
+        //create complex matrix Z=A-sigma*M
+        double[] Z = new double[2*A.rows()*A.columns()];
+        double sigma_r = sigma.getReal();
+        double sigma_i = sigma.getImaginary();
+        int cols = A.columns();
+        if (M == null) {    //Z=A-sigma*I
+            for (int i=0; i<A.rows(); i++) {
+                for (int j=0; j<A.columns(); j++) {
+                    Z[2*(i*cols + j)] = A.get(i, j);
+                }
+                //subtract identity from real part on trace
+                Z[2*(i*cols + i)] -= sigma_r;
+                Z[2*(i*cols + i) + 1] = -sigma_i;
+            }
+            invertComplex(cols, Z);
         }
         else {      //calculate real((A - sigma*M)^-1)
-            //can't use la4j's operations as it does not support complex type
-            for(int i=0; i<A.rows(); i++) {
-                for(int j=0; i<A.columns(); j++) {
-                    z = sigma.multiply(M.get(i, j));
-                    z = new Complex(res[i*A.columns()+i], 0).subtract(z);
-                    res[i*A.columns()+i] = z.getReal();
-                }
-            }
+
         }
-        invert(A.rows(), res);
-        LinearOperation OPinv = asLinearOperation(A.rows(), A.columns(), res);
+        LinearOperation OPinv = asLinearOperationReal(A.rows(), A.columns(), Z);
         return new UnsymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, OPinv);
     }
 
