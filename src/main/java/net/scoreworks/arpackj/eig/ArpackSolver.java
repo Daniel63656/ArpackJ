@@ -50,9 +50,6 @@ public abstract class ArpackSolver {
     /** returns the status of the computation upon completion */
     protected int[] info = new int[1];
 
-    /** log convergence status */
-    protected boolean converged;
-
 
     public ArpackSolver(int n, int nev, int mode, byte[] which, Integer ncv, int maxIter, double tol) {
         if (nev <= 0)
@@ -93,7 +90,7 @@ public abstract class ArpackSolver {
      * solve the given eigenvalue problem
      */
     public void solve() {
-        while (!converged) {
+        while (true) {
             iterate();
             if (ido[0] == 99) {
                 if (info[0] == 0) {

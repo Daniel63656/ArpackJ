@@ -4,10 +4,7 @@ import net.scoreworks.arpackj.LinearOperation;
 import org.apache.commons.math3.complex.Complex;
 import org.bytedeco.arpackng.global.arpack;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static net.scoreworks.arpackj.MatrixOperations.IDENTITY;
 
@@ -32,6 +29,7 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
     private final Complex sigma;
     private final LinearOperation OP, B;
     private LinearOperation OPa, OPb;
+    private LinearOperation A;  //needed for modes 3,4 to transform eigenvalues/eigenvectors back into original system
 
     UnsymmetricArpackSolver(LinearOperation A_matvec, int n, int nev, int mode, String which, Integer ncv, Complex sigma,
                             int maxIter, double tol, LinearOperation M_matvec, LinearOperation Minv_matvec) {
@@ -39,7 +37,7 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
         ipntr = new int[14];
         lworkl = 3*this.ncv * (this.ncv + 2);
         workl = new double[lworkl];
-        this.sigma = sigma;
+        this.sigma = Objects.requireNonNullElseGet(sigma, () -> new Complex(0, 0));
 
         if (!NEUPD_WHICH.contains(which))
             throw new IllegalArgumentException("which must be one of 'LM', 'SM', 'LR', 'SR', 'LI' or 'SI");
@@ -70,10 +68,11 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
             this.bmat = "G".getBytes();
         }
         else if (mode == 3 || mode == 4) {
-            if (A_matvec != null)
+            if (A_matvec == null)
                 throw new IllegalArgumentException("matvec must not be specified for mode=3,4");
             if (Minv_matvec == null)
                 throw new IllegalArgumentException("Minv_matvec must be specified for mode=3,4");
+            this.A = A_matvec;
 
             if (M_matvec == null) {
                 this.OP = Minv_matvec;
@@ -130,59 +129,90 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
         double[] d_i = new double[nev+1];
         double[] z_r = new double[n * (nev+1)];     //eigenvectors, stored consecutively as real part (, imaginary part)
 
-        if (sigma == null)
-            arpack.dneupd_c(rvec, howmy, select, d_r, d_i, z_r, ncv, 0, 0, workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
-        else
-            arpack.dneupd_c(rvec, howmy, select, d_r, d_i, z_r, ncv, sigma.getReal(), sigma.getImaginary(), workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
+        arpack.dneupd_c(rvec, howmy, select, d_r, d_i, z_r, ncv, sigma.getReal(), sigma.getImaginary(), workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
         if (info[0] != 0)
             throw new ArpackException(getExtractionErrorCode(info[0]));
 
-        //create complex eigenvectors
-        d = new Complex[nev];
-        z = new Complex[n * nev];
-        Complex[] z_raw = new Complex[n * (nev+1)];
-        //TODO if sigma_i == 0
-
+        //calculate eigenvalues and eigenvalues
+        d = new Complex[nev+1];
+        z = new Complex[n * (nev+1)];
         int i = 0;
-        while (i <= nev) {
-            if (Math.abs(d_i[i]) != 0) {
-                // this is a complex conjugate pair (2 columns in z_r)
-                if (i < nev) {
-                    for (int j=0; j<n; j++) {
-                        z_raw[i*n + j] = new Complex(z_r[i*n + j], z_r[(i + 1)*n + j]);
-                        z_raw[(i + 1)*n + j] = z_raw[i*n + j].conjugate();
+        if (sigma.getImaginary() == 0) {
+            //in this case eigenvalues are correct and only eigenvectors need to be computed
+            while (i <= nev) {
+                d[i] = new Complex(d_r[nev - i], d_i[nev - i]);
+                if (Math.abs(d_i[i]) != 0) {
+                    // this is a complex conjugate pair (2 columns in z_r)
+                    if (i < nev) {
+                        for (int j=0; j<n; j++) {
+                            z[i*n + j] = new Complex(z_r[i*n + j], z_r[(i + 1)*n + j]);
+                            z[(i + 1)*n + j] = z[i*n + j].conjugate();
+                        }
+                        i++;
                     }
-                    i++;
+                    else {}     //nreturned
                 }
                 else {
-
+                    //this is a real eigenvector (1 column in z_r)
+                    for (int j=0; j<n; j++) {
+                        z[i*n + j] = new Complex(z_r[i*n + j], 0);
+                    }
                 }
+                i++;
             }
-            else {
-                //this is a real eigenvector (1 column  in z_r)
-                for (int j=0; j<n; j++) {
-                    z_raw[i*n + j] = new Complex(z_r[i*n + j], 0);
-                }
-            }
-            i++;
         }
-        //TODO handle sigma != 0
+        else {
+            // d_r contains the real part of the Ritz values of OP computed by DNAUPD. eigenvectors AND eigenvalues
+            // must therefore be computed
+            while (i <= nev) {
+                if (Math.abs(d_i[i]) == 0) {
+                    // d = z_r * A(z_r)
+                    double[] Az = A.apply(z_r, i*n);
+                    double real = 0;
+                    for (int j=0; j<n; j++) {
+                        real += z_r[i*n + j] * Az[j];
+                        z[i*n + j] = new Complex(z_r[i*n + j], 0);
+                    }
+                    d[i] = new Complex(real, 0);
+                }
+                else {
+                    if (i < nev) {
+                        double[] Az    = A.apply(z_r, i*n);
+                        double[] Az_cc = A.apply(z_r, (i+1)*n);
+                        double real = 0;
+                        double imag = 0;
+                        for (int j=0; j<n; j++) {
+                            z[i*n + j] = new Complex(z_r[i*n + j], z_r[(i + 1)*n + j]);
+                            z[(i + 1)*n + j] = z[i*n + j].conjugate();
+                            real += z_r[i*n + j] * Az[j]    + z_r[(i+1)*n + j] * Az_cc[j];
+                            imag += z_r[i*n + j] * Az_cc[j] - z_r[(i+1)*n + j] * Az[j];
+                        }
+                        d[i] = new Complex(real, imag);
+                        d[i+1] = d[i].conjugate();
+                        i++;
+                    }
+                    else {} //nreturned
+                }
+                i++;
+            }
+        }
 
 
-        //now there are nev+1 possible eigenvector/eigenvalue pairs. Filter one out based on "which"
+        //at this point there are nev+1 possible eigenvector/eigenvalue pairs. Filter one out based on "which"
         //TODO check if this is true with nreturned
+        //TODO true sort index
 
         if (which[1] == 'R')
-            Arrays.sort(z_raw, Comparator.comparing(n -> Math.abs(n.getReal())));
+            Arrays.sort(z, Comparator.comparing(n -> Math.abs(n.getReal())));
         else if (which[1] == 'I')
-            Arrays.sort(z_raw, Comparator.comparing(n -> Math.abs(n.getImaginary())));
+            Arrays.sort(z, Comparator.comparing(n -> Math.abs(n.getImaginary())));
 
 
         if (which[0] == 'L') {
             //copy first nev values to solution arrays
             for (i=0; i<nev; i++)
                 d[i] = new Complex(d_r[i], d_i[i]);
-            System.arraycopy(z_raw, 0, z, 0, n*nev);
+            System.arraycopy(z, 0, this.z, 0, n*nev);
         }
         else if (which[0] == 'S') {
             //copy last nev values in reverse to solution arrays
@@ -191,7 +221,7 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
             int idx;
             for (i=0; i<n*nev; i++) {
                 idx = n*(nev-i/n) + i%n;
-                z[i] = z_raw[idx];
+                this.z[i] = z[idx];
             }
         }
     }

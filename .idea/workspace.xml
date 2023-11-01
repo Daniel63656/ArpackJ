@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="asdsa">
+    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="dasef">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/ArpackSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/ArpackSolver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricStandardEigTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricStandardEigTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -93,7 +94,7 @@
       <recent name="net.scoreworks.arpackj" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Test all">
+  <component name="RunManager" selected="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealLM">
     <configuration name="MatrixOperationTests.testCompleverse" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -251,8 +252,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemSM" />
         <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealLM" />
+        <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemSM" />
         <item itemvalue="Gradle.UnsymmetricStandardEigTests.foo" />
         <item itemvalue="Gradle.MatrixOperationTests.testComplexInverse" />
         <item itemvalue="Gradle.MatrixOperationTests.testCompleverse" />
@@ -272,7 +273,7 @@
       <workItem from="1698503319621" duration="117000" />
       <workItem from="1698575156347" duration="76838000" />
       <workItem from="1698837123360" duration="1123000" />
-      <workItem from="1698838623740" duration="13193000" />
+      <workItem from="1698838623740" duration="20760000" />
     </task>
     <task id="LOCAL-00001" summary="asdas">
       <created>1698578035328</created>
@@ -414,7 +415,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698851282663</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="dasef">
+      <created>1698855870215</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1698855870215</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -452,16 +460,12 @@
     <MESSAGE value="made invert return void" />
     <MESSAGE value="complex matrix inversion" />
     <MESSAGE value="asdsa" />
-    <option name="LAST_COMMIT_MESSAGE" value="asdsa" />
+    <MESSAGE value="dasef" />
+    <option name="LAST_COMMIT_MESSAGE" value="dasef" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/SymmetricArpackSolver.java</url>
-          <line>177</line>
-          <option name="timeStamp" value="87" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricStandardEigTests.java</url>
           <line>104</line>
@@ -474,8 +478,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java</url>
-          <line>142</line>
-          <option name="timeStamp" value="145" />
+          <line>204</line>
+          <option name="timeStamp" value="195" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java</url>
+          <line>210</line>
+          <option name="timeStamp" value="196" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -258,7 +258,7 @@ public final class MatrixDecomposition {
         if (A.rows() != A.columns())
             throw new IllegalArgumentException("A is not a square matrix");
         if (sigma.getReal() == 0 && sigma.getImaginary() == 0) {
-            return new UnsymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(invert(A)));
+            return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(invert(A)));
         }
 
 
@@ -297,12 +297,13 @@ public final class MatrixDecomposition {
 
         }
         LinearOperation OPinv = asLinearOperationReal(A.rows(), A.columns(), Z);
-        return new UnsymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, OPinv);
+        return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, OPinv);
     }
 
     /**
      * Solve the general eigenvalue problem A*x = lambda*M*x for a square matrix A in shift-invert xxx mode to find eigenvalues near sigma.
      * If M is null, the standard eigenvalue problem will be solved instead
+     * @param A Left multiplication by square A
      * @param M Left multiplication by square and positive semi-definite matrix M with same dimensions as A
      * @param OP_inv Linear operation representing left multiplication by real((A - sigma*M)^-1)
      * @param n shape (rows, or columns) of A
@@ -313,8 +314,8 @@ public final class MatrixDecomposition {
      * @param maxIter maximal number of iterations
      * @param tolerance iteration is terminated when this relative tolerance is reached
      */
-    public static UnsymmetricArpackSolver eigsh_shiftInvertReal(LinearOperation M, LinearOperation OP_inv, int n, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
-        return new UnsymmetricArpackSolver(null, n, nev, 3, which, ncv, sigma, maxIter, tolerance, M, OP_inv);
+    public static UnsymmetricArpackSolver eigsh_shiftInvertReal(LinearOperation A, LinearOperation M, LinearOperation OP_inv, int n, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
+        return new UnsymmetricArpackSolver(A, n, nev, 3, which, ncv, sigma, maxIter, tolerance, M, OP_inv);
     }
 
     /**
@@ -335,7 +336,7 @@ public final class MatrixDecomposition {
         if (A.rows() != A.columns())
             throw new IllegalArgumentException("A is not a square matrix");
         if (sigma.getReal() == 0 && sigma.getImaginary() == 0) {
-            return new UnsymmetricArpackSolver(null, A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(invert(A)));
+            return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(invert(A)));
         }
 
         Complex z;
@@ -360,12 +361,13 @@ public final class MatrixDecomposition {
         }
         invert(A.rows(), res);
         LinearOperation OPinv = asLinearOperation(A.rows(), A.columns(), res);
-        return new UnsymmetricArpackSolver(null, A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, OPinv);
+        return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, OPinv);
     }
 
     /**
      * Solve the general eigenvalue problem A*x = lambda*M*x for a square matrix A in shift-invert xxx mode to find eigenvalues near sigma.
      * If M is null, the standard eigenvalue problem will be solved instead
+     * @param A Left multiplication by square A
      * @param M Left multiplication by square and positive semi-definite matrix M with same dimensions as A
      * @param OP_inv Linear operation representing left multiplication by imag((A - sigma*M)^-1)
      * @param n shape (rows, or columns) of A
@@ -376,10 +378,10 @@ public final class MatrixDecomposition {
      * @param maxIter maximal number of iterations
      * @param tolerance iteration is terminated when this relative tolerance is reached
      */
-    public static UnsymmetricArpackSolver eigsh_shiftInvertImag(LinearOperation M, LinearOperation OP_inv, int n, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
+    public static UnsymmetricArpackSolver eigsh_shiftInvertImag(LinearOperation A, LinearOperation M, LinearOperation OP_inv, int n, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
         if (sigma.getImaginary() == 0)
             throw new IllegalArgumentException("sigma must be complex in this mode");
-        return new UnsymmetricArpackSolver(null, n, nev, 4, which, ncv, sigma, maxIter, tolerance, M, OP_inv);
+        return new UnsymmetricArpackSolver(A, n, nev, 4, which, ncv, sigma, maxIter, tolerance, M, OP_inv);
     }
 
 
