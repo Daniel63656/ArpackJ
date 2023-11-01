@@ -208,20 +208,33 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
         this.z = new Complex[n * nev];
         //TODO check if this is true with nreturned
 
-        if (which[1] == 'R')
-            Arrays.sort(eigenPair, Comparator.comparing(eig -> eig.d.getReal()));
-        else if (which[1] == 'I')
-            Arrays.sort(eigenPair, Comparator.comparing(eig -> eig.d.getImaginary()));
+        if (mode == 1 || mode == 2) {   //no shift
+            if (which[1] == 'R')
+                Arrays.sort(eigenPair, Comparator.comparing(eig -> eig.d.getReal()));
+            else if (which[1] == 'I')
+                Arrays.sort(eigenPair, Comparator.comparing(eig -> eig.d.getImaginary()));
+            else    //sort by magnitude
+                Arrays.sort(eigenPair, Comparator.comparing(eig -> eig.d.abs()));
+        }
+        else {   //no shift
+            Complex one = new Complex(1, 0);
+            if (which[1] == 'R')
+                Arrays.sort(eigenPair, Comparator.comparing(eig -> one.divide(eig.d.subtract(sigma)).getReal()));
+            else if (which[1] == 'I')
+                Arrays.sort(eigenPair, Comparator.comparing(eig -> one.divide(eig.d.subtract(sigma)).getImaginary()));
+            else    //sort by magnitude
+                Arrays.sort(eigenPair, Comparator.comparing(eig -> one.divide(eig.d.subtract(sigma)).abs()));
+        }
 
 
-        if (which[0] == 'L') {
+        if (which[0] == 'S') {
             //copy first nev values to solution arrays
             for (int i=0; i<nev; i++) {
                 d[i] = eigenPair[i].d;
                 System.arraycopy(eigenPair[i].z, 0, this.z, i*n, n);
             }
         }
-        else if (which[0] == 'S') {
+        else if (which[0] == 'L') {
             //copy last nev values in reverse to solution arrays
             for (int i=0; i<nev; i++) {
                 d[i] = eigenPair[nev-i].d;
