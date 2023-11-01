@@ -7,6 +7,8 @@ import org.la4j.iterator.MatrixIterator;
 import org.la4j.matrix.SparseMatrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
 
+import java.util.Arrays;
+
 /**
  * Helper class for various general functions and operations regarding matrices
  */
@@ -100,7 +102,7 @@ public final class MatrixOperations {
         int[] lda = new int[]{rows};
         int[] ipiv = new int[lda[0]];
         int[] info = new int[1];
-        int[] lwork = new int[]{n[0]*n[0]};
+        int[] lwork = new int[]{2*n[0]};
         double[] work = new double[lwork[0]];
 
         //LU decomposition
@@ -109,13 +111,21 @@ public final class MatrixOperations {
         openblas.LAPACK_dgetri(n, a, lda, ipiv, work, lwork, info);
     }
 
+    /**
+     * Calculate the inverse of a complex matrix A using openBLAS routines. Complex numbers are stored in a double array
+     * twice the size, to represent real and imaginary part of each number consecutively
+     * Result is dense because inverses of sparse matrices are
+     * dense in general. The result is written to the provided array directly
+     * @param rows dimensions of the square matrix
+     * @param a the Matrix flattened to a 1d array. Indifferent to ordering (row-major, column-major)
+     */
     public static void invertComplex(int rows, double[] a) {
         int[] m = new int[]{rows};
         int[] n = new int[]{rows};
         int[] lda = new int[]{rows};
         int[] ipiv = new int[lda[0]];
         int[] info = new int[1];
-        int[] lwork = new int[]{n[0]*n[0]};
+        int[] lwork = new int[]{2*n[0]};
         double[] work = new double[lwork[0]];
 
         // LU decomposition

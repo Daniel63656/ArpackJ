@@ -1,10 +1,13 @@
 package net.scoreworks.arpackj;
 
 import net.scoreworks.arpackj.eig.MatrixDecomposition;
+import org.bytedeco.openblas.global.openblas;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.la4j.Matrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
+
+import java.util.Arrays;
 
 import static net.scoreworks.arpackj.MatrixOperations.*;
 import static net.scoreworks.arpackj.eig.MatrixDecomposition.LU;
@@ -103,29 +106,20 @@ public class MatrixOperationTests {
     }
 
     @Test
-    public void testCompleverse() {
-        double[] Z = new double[]{
-                1,2, 3,4,
-                11,12, 13,14
-        };
-
-        invertComplex(2, Z);
-        System.out.println("eee");
-    }
-
-    @Test
     public void testComplexInverse() {
         //3x3 complex matrix (real, imaginary as 2 consecutive double values)
         double[] Z = new double[]{
                 1,2, 3,4, 5,6,
-                7,8, 9,10, 11,12,
-                13,14, 15,16, 16,17};
-        double[] inv = {
-                5.2983525e+13, 2.38425863e+14, -1.0596705e+14, -4.76851725e+14, 5.2983525e+13, 2.38425863e+14,
-                -1.0596705e+14, -4.76851725e+14, 2.1193410e+14, 9.53703451e+14, -1.0596705e+14, -4.76851725e+14,
-                5.2983525e+13, 2.38425863e+14, -1.0596705e+14, -4.76851725e+14, 5.2983525e+13, 2.38425863e+14};
-
+                1,0, 4,3, 5,6,
+                5,6, 1,1, 1,1};
+        double[] Z_inv = {
+                0.03161398, 0.04825291, -0.04459235, -0.02595674, 0.08252912, -0.11613977,
+                -0.57986689, -0.51663894, 0.57054908, 0.48136439, 0.03361065, 0.19866889,
+                0.43011647, 0.23544093, -0.33826955, -0.31630616, -0.04559068, -0.10116473
+        };
         invertComplex(3, Z);
-        System.out.println("eee");
+        for (int i=0; i<9; i++) {
+            Assertions.assertEquals(Z_inv[i], Z[i], epsilon);
+        }
     }
 }
