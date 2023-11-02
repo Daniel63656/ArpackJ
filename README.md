@@ -6,7 +6,7 @@ This library is essentially a wrapper function for the ARPACK library, written i
 ## Features
 
 - Solve eigenvalue problems for square and symmetric matrices using `eigsh()` (returns real eigenvectors/eigenvalues)
-  or no- symmetric matrices using `eigs()` (which returns complex eigenvalues/eigenvectors).
+  or non-symmetric matrices using `eigs()` (which returns complex eigenvalues/eigenvectors).
 - Solve standard and general eigenvalue problems.
 - Support for different modes and options such as shift-invert, buckling or cayley-transform
 - LU decomposition
