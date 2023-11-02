@@ -120,9 +120,9 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
 
     protected void extract() {
         //There is negligible additional cost to obtain eigenvectors so always get them
-        int rvec = 1;                   //0 would mean no eigenvectors
-        byte[] howmy = "A".getBytes();  //get all nev eigenvalues/eigenvectors
-        int[] select = new int[ncv];    //unused
+        int rvec = 1;                               //0 would mean no eigenvectors
+        byte[] howmy = "A".getBytes();              //get all nev eigenvalues/eigenvectors
+        int[] select = new int[ncv];                //unused
         double[] workev = new double[3 * ncv];
         //ATTENTION: the +1 is needed for a potential complex conjugate that needs to be sorted out later in the routine
         double[] d_r = new double[nev+1];           //eigenvalues in ascending order
@@ -151,7 +151,7 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
                         }
                         i++;
                     }
-                    else {
+                    else { //TODO how to handle this case
                         System.out.println("rnret");
                     }
                 }
@@ -199,7 +199,7 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
                         eigenPair[i+1].d = eigenPair[i].d.conjugate();
                         i++;
                     }
-                    else {}
+                    else {} //TODO how to handle this case
                 }
                 i++;
             }

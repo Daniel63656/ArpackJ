@@ -175,15 +175,21 @@ public class SymmetricArpackSolver extends ArpackSolver {
 
     protected void extract() {
         //There is negligible additional cost to obtain eigenvectors so always get them
-        int rvec = 1;                   //0 would mean no eigenvectors
-        byte[] howmy = "A".getBytes();  //get all nev eigenvalues/eigenvectors
-        int[] select = new int[ncv];    //unused
-        d = new double[nev];            //eigenvalues in ascending order
-        z = new double[n * nev];        //eigenvectors
+        int rvec = 1;                           //0 would mean no eigenvectors
+        byte[] howmy = "A".getBytes();          //get all nev eigenvalues/eigenvectors
+        int[] select = new int[ncv];            //unused
+        double[] d = new double[nev];           //eigenvalues in ascending order
+        double[] z = new double[n * nev];       //eigenvectors
 
         arpack.dseupd_c(rvec, howmy, select, d, z, ncv, sigma, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
         if (info[0] != 0)
             throw new ArpackException(getExtractionErrorCode(info[0]));
+
+        int nReturned = iparam[4];  // number of returned eigenvalues might be less than nev
+        this.d = new double[nReturned];
+        this.z = new double[n * nReturned];
+        System.arraycopy(d, 0, this.d, 0, nReturned);
+        System.arraycopy(z, 0, this.z, 0, n*nReturned);
     }
 
     public double[] getEigenvalues() {
