@@ -120,9 +120,9 @@ public final class MatrixDecomposition {
         if (A.rows() != A.columns())
             throw new IllegalArgumentException("A is not a square matrix");
         if (M == null)
-            return new SymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, getOP_inv(A, null, sigma, 0));
+            return new SymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, getOP_inv(A, null, sigma));
         else
-            return new SymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), getOP_inv(A, M, sigma, 0));
+            return new SymmetricArpackSolver(null, A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), getOP_inv(A, M, sigma));
     }
 
     /**
@@ -155,7 +155,7 @@ public final class MatrixDecomposition {
      * @param tolerance iteration is terminated when this relative tolerance is reached
      */
     public static SymmetricArpackSolver eigsh_buckling(Matrix A, Matrix M, int nev, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
-        return new SymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, getOP_inv(A, M, sigma, 0));
+        return new SymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, getOP_inv(A, M, sigma));
     }
 
     /**
@@ -257,7 +257,42 @@ public final class MatrixDecomposition {
     public static UnsymmetricArpackSolver eigs_shiftInvertReal(Matrix A, Matrix M, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
         if (A.rows() != A.columns())
             throw new IllegalArgumentException("A is not a square matrix");
-        return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, getOP_inv(A, M, sigma.getReal(), sigma.getImaginary()));
+        if (sigma.getReal() == 0 && sigma.getImaginary() == 0) {
+            return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(invert(A)));
+        }
+
+
+        if (M == null) {    //calculate real((A - sigma*I)^-1)
+            Complex z;
+            double[] res = flattenRowMajor(A);
+            //subtract sigma on the trace and take real part
+            for(int i=0; i<A.rows(); i++) {
+                z = new Complex(res[i*A.columns()+i], 0).subtract(sigma);
+                res[i*A.columns()+i] = z.getReal();
+            }
+            invert(A.rows(), res);
+            LinearOperation OPinv = asLinearOperation(A.rows(), A.columns(), res);
+            return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, OPinv);
+
+
+            /*double[] Z = new double[2*A.rows()*A.columns()];
+            double sigma_r = sigma.getReal();
+            double sigma_i = sigma.getImaginary();
+            int cols = A.columns();
+            for (int i=0; i<A.rows(); i++) {
+                for (int j=0; j<A.columns(); j++) {
+                    Z[2*(i*cols + j)] = A.get(i, j);
+                }
+                //subtract sigma on trace
+                Z[2*(i*cols + i)] -= sigma_r;
+                Z[2*(i*cols + i) + 1] = -sigma_i;
+            }
+            invertComplex(cols, Z);
+            LinearOperation OPinv = asLinearOperationReal(A.rows(), A.columns(), Z);
+            return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, OPinv);*/
+        }
+        //TODO M != null
+        return null;
     }
 
     /**
@@ -348,59 +383,20 @@ public final class MatrixDecomposition {
     /**
      * @return (A -sigma*M)^-1
      */
-    private static LinearOperation getOP_inv(Matrix A, Matrix M, double sigma_r, double sigma_i) {
-        if (sigma_r == 0 && sigma_i == 0) {
+    private static LinearOperation getOP_inv(Matrix A, Matrix M, double sigma) {
+        if (sigma == 0) {
             return asLinearOperation(invert(A));
         }
-        //sigma is real number
-        if (sigma_i == 0) {
-            if (M == null) {     //calculate (A - sigma*I)^-1
-                //deepcopy and convert to dense for later invert
-                double[] res = flattenRowMajor(A);
-                //subtract sigma on the trace
-                for(int i=0; i<A.rows(); i++) {
-                    res[i*A.columns()+i] -= sigma_r;
-                }
-                invert(A.rows(), res);
-                return asLinearOperation(A.rows(), A.columns(), res);
-            }
-            return asLinearOperation(invert(A.subtract(M.multiply(sigma_r))));
-        }
-
-        //sigma is complex
-        if (M == null) {    //calculate real((A - sigma*I)^-1)
-            //Option 1 TODO why does this work?
-            /*Complex z;
+        if (M == null) {     //calculate (A - sigma*I)^-1
             //deepcopy and convert to dense for later invert
             double[] res = flattenRowMajor(A);
-            //subtract sigma on the trace and take real part
+            //subtract sigma on the trace
             for(int i=0; i<A.rows(); i++) {
-                z = new Complex(res[i*A.columns()+i], 0).subtract(sigma);
-                res[i*A.columns()+i] = z.getReal();
+                res[i*A.columns()+i] -= sigma;
             }
             invert(A.rows(), res);
-            return asLinearOperation(A.rows(), A.columns(), res);*/
-
-
-
-            //create complex matrix Z=A-sigma*I
-            double[] Z = new double[2*A.rows()*A.columns()];
-            int cols = A.columns();
-            for (int i=0; i<A.rows(); i++) {
-                for (int j=0; j<A.columns(); j++) {
-                    Z[2*(i*cols + j)] = A.get(i, j);
-                }
-                //subtract sigma on trace
-                Z[2*(i*cols + i)] -= sigma_r;
-                Z[2*(i*cols + i) + 1] = -sigma_i;
-            }
-            invertComplex(cols, Z);
-            return asLinearOperationReal(A.rows(), A.columns(), Z);
+            return asLinearOperation(A.rows(), A.columns(), res);
         }
-
-
-
-
-        return null;
+        return asLinearOperation(invert(A.subtract(M.multiply(sigma))));
     }
 }

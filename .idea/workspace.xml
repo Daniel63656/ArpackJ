@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="unsymmetric d selection works, all tests pass">
+    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="allow complex cases in getOPinv">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricStandardEigTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricStandardEigTests.java" afterDir="false" />
@@ -139,29 +139,6 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemSM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemSM&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="UnsymmetricStandardEigTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -231,6 +208,29 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealSM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealSM&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="Test" type="JUnit" factoryName="JUnit">
       <module name="ArpackJ.test" />
       <option name="METHOD_NAME" value="" />
@@ -242,19 +242,19 @@
     <list>
       <item itemvalue="Gradle.Test all" />
       <item itemvalue="Gradle.UnsymmetricGeneralEigTests" />
-      <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemSM" />
       <item itemvalue="Gradle.UnsymmetricStandardEigTests" />
       <item itemvalue="Gradle.UnsymmetricStandardEigTests.foo" />
+      <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealSM" />
       <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealLM" />
       <item itemvalue="JUnit.Test" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealSM" />
         <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealLM" />
         <item itemvalue="Gradle.UnsymmetricStandardEigTests.foo" />
         <item itemvalue="Gradle.UnsymmetricGeneralEigTests" />
         <item itemvalue="Gradle.UnsymmetricStandardEigTests" />
-        <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemSM" />
       </list>
     </recent_temporary>
   </component>
@@ -271,7 +271,7 @@
       <workItem from="1698503319621" duration="117000" />
       <workItem from="1698575156347" duration="76838000" />
       <workItem from="1698837123360" duration="1123000" />
-      <workItem from="1698838623740" duration="28293000" />
+      <workItem from="1698838623740" duration="29449000" />
     </task>
     <task id="LOCAL-00001" summary="asdas">
       <created>1698578035328</created>
@@ -448,7 +448,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698913412849</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="allow complex cases in getOPinv">
+      <created>1698915152113</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1698915152113</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -466,7 +473,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="asdas" />
     <MESSAGE value="completed symmetric std eigenvalue problem + tests" />
     <MESSAGE value="cayley fails as well as general" />
     <MESSAGE value="checked and corrected res initialization in MatrixOperations" />
@@ -491,20 +497,26 @@
     <MESSAGE value="added EigenPair" />
     <MESSAGE value="all tests working" />
     <MESSAGE value="unsymmetric d selection works, all tests pass" />
-    <option name="LAST_COMMIT_MESSAGE" value="unsymmetric d selection works, all tests pass" />
+    <MESSAGE value="allow complex cases in getOPinv" />
+    <option name="LAST_COMMIT_MESSAGE" value="allow complex cases in getOPinv" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricStandardEigTests.java</url>
-          <line>99</line>
-          <option name="timeStamp" value="219" />
+          <line>107</line>
+          <option name="timeStamp" value="224" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricStandardEigTests.java</url>
+          <line>97</line>
+          <option name="timeStamp" value="229" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java</url>
           <line>208</line>
-          <option name="timeStamp" value="223" />
+          <option name="timeStamp" value="230" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -78,7 +78,6 @@ public class UnsymmetricStandardEigTests {
         checkSolution(eigenvalues, eigenvectors, new int[]{0, 1, 2}, d, z);
     }
 
-    //SORTING TRIGGERED
     @Test
     public void testStandardEigenvalueProblemSM() {
         UnsymmetricArpackSolver solver = MatrixDecomposition.eigs(asLinearOperation(A), A.rows(), 3, "SM", null, 100, 1e-5);
@@ -89,7 +88,6 @@ public class UnsymmetricStandardEigTests {
         checkSolution(eigenvalues, eigenvectors, new int[]{3, 4, 1}, d, z);
     }
 
-    //SORTING TRIGGERED
     @Test
     public void testStandardEigenvalueProblemShiftInvertRealLM() {
         UnsymmetricArpackSolver solver = MatrixDecomposition.eigs_shiftInvertReal(A, null, 3, "LM", new Complex(1, 1), null, 100, 1e-15);
@@ -98,6 +96,16 @@ public class UnsymmetricStandardEigTests {
         Complex[] d = solver.getEigenvalues();
         Complex[] z = solver.getEigenvectors();
         checkSolution(eigenvalues, eigenvectors, new int[]{3, 4, 1}, d, z);
+    }
+
+    @Test
+    public void testStandardEigenvalueProblemShiftInvertRealSM() {
+        UnsymmetricArpackSolver solver = MatrixDecomposition.eigs_shiftInvertReal(A, null, 3, "SM", new Complex(1, 1), null, 100, 1e-15);
+        Assertions.assertSame(3, solver.mode);
+        solver.solve();
+        Complex[] d = solver.getEigenvalues();
+        Complex[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues, eigenvectors, new int[]{2, 1, 0}, d, z);
     }
 
 
