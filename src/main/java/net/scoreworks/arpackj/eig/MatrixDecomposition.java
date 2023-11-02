@@ -143,10 +143,9 @@ public final class MatrixDecomposition {
     }
 
     /**
-     * Solve the general eigenvalue problem A*x = lambda*M*x for a square, symmetric and positive-definite matrix A in buckling mode to find eigenvalues near sigma.
-     * If M is null, the standard eigenvalue problem will be solved instead
+     * Solve the general eigenvalue problem A*x = lambda*AG*x for a square, symmetric and positive-definite matrix A in buckling mode to find eigenvalues near sigma.
      * @param A square, symmetric and positive-definite {@link Matrix}
-     * @param M square, symmetric indefinite {@link Matrix}. Must have same dimensions as A
+     * @param AG square, symmetric indefinite {@link Matrix}. Must have same dimensions as A
      * @param nev number of eigenvalues to compute
      * @param which select which eigenvalues to compute. Refers to the shifted eigenvalues d'[i] = d[i] / (d[i] - sigma)
      * @param sigma shift applied to A
@@ -154,15 +153,14 @@ public final class MatrixDecomposition {
      * @param maxIter maximal number of iterations
      * @param tolerance iteration is terminated when this relative tolerance is reached
      */
-    public static SymmetricArpackSolver eigsh_buckling(Matrix A, Matrix M, int nev, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
-        return new SymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, getOP_inv(A, M, sigma));
+    public static SymmetricArpackSolver eigsh_buckling(Matrix A, Matrix AG, int nev, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
+        return new SymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, getOP_inv(A, AG, sigma));
     }
 
     /**
-     * Solve the general eigenvalue problem A*x = lambda*M*x for a square, symmetric and positive-definite matrix A in buckling mode to find eigenvalues near sigma.
-     * If M is null, the standard eigenvalue problem will be solved instead
+     * Solve the general eigenvalue problem A*x = lambda*AG*x for a square, symmetric and positive-definite matrix A in buckling mode to find eigenvalues near sigma.
      * @param A Left multiplication by square, symmetric and positive-definite matrix A
-     * @param OP_inv Left multiplication by (A -sigma*M)^-1, where M is square and symmetric indefinite
+     * @param OP_inv Left multiplication by (A - sigma*AG)^-1, where AG is square and symmetric indefinite
      * @param n shape (rows, or columns) of A
      * @param nev number of eigenvalues to compute
      * @param which select which eigenvalues to compute. Refers to the shifted eigenvalues d'[i] = d[i] / (d[i] - sigma)

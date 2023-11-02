@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="javadocs, added nReturned can be smaller nev to SymmetricArpackSolver" />
+    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="added nReturn = nev case">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricGeneralEigTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricGeneralEigTests.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -89,6 +93,98 @@
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Test all">
+    <configuration name="SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingLM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;net.scoreworks.arpackj.eig.SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingLM&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingLM2" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;net.scoreworks.arpackj.eig.SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingLM2&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingSM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;net.scoreworks.arpackj.eig.SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingSM&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingSM2" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;net.scoreworks.arpackj.eig.SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingSM2&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="Test all" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -103,75 +199,6 @@
             <option value=":test" />
             <option value="--tests" />
             <option value="&quot;net.scoreworks.arpackj.*&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM2" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM2&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -204,29 +231,6 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="UnsymmetricStandardEigTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricStandardEigTests&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="Test" type="JUnit" factoryName="JUnit">
       <module name="ArpackJ.test" />
       <option name="METHOD_NAME" value="" />
@@ -237,20 +241,20 @@
     </configuration>
     <list>
       <item itemvalue="Gradle.Test all" />
-      <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM" />
-      <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM2" />
-      <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM" />
+      <item itemvalue="Gradle.SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingLM" />
+      <item itemvalue="Gradle.SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingLM2" />
+      <item itemvalue="Gradle.SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingSM" />
+      <item itemvalue="Gradle.SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingSM2" />
       <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM2" />
-      <item itemvalue="Gradle.UnsymmetricStandardEigTests" />
       <item itemvalue="JUnit.Test" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingSM2" />
+        <item itemvalue="Gradle.SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingSM" />
+        <item itemvalue="Gradle.SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingLM2" />
+        <item itemvalue="Gradle.SymmetricGeneralEigTests.testGeneralEigenvalueProblemBucklingLM" />
         <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM2" />
-        <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM" />
-        <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM2" />
-        <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM" />
-        <item itemvalue="Gradle.UnsymmetricStandardEigTests" />
       </list>
     </recent_temporary>
   </component>
@@ -267,7 +271,7 @@
       <workItem from="1698503319621" duration="117000" />
       <workItem from="1698575156347" duration="76838000" />
       <workItem from="1698837123360" duration="1123000" />
-      <workItem from="1698838623740" duration="35236000" />
+      <workItem from="1698838623740" duration="38027000" />
     </task>
     <task id="LOCAL-00001" summary="asdas">
       <created>1698578035328</created>
@@ -479,7 +483,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698921724143</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="added nReturn = nev case">
+      <created>1698922337566</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1698922337566</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -497,7 +508,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added buckling mode test" />
     <MESSAGE value="removed trickle down eigs()" />
     <MESSAGE value="major improvements, tests, LU decomposition" />
     <MESSAGE value="minor refinements" />
@@ -522,7 +532,8 @@
     <MESSAGE value="unsym mode 4 nd a lot of tests" />
     <MESSAGE value="all modes for unsymmetric implemented and tested" />
     <MESSAGE value="javadocs, added nReturned can be smaller nev to SymmetricArpackSolver" />
-    <option name="LAST_COMMIT_MESSAGE" value="javadocs, added nReturned can be smaller nev to SymmetricArpackSolver" />
+    <MESSAGE value="added nReturn = nev case" />
+    <option name="LAST_COMMIT_MESSAGE" value="added nReturn = nev case" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -531,6 +542,11 @@
           <url>file://$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricGeneralEigTests.java</url>
           <line>137</line>
           <option name="timeStamp" value="256" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricGeneralEigTests.java</url>
+          <line>147</line>
+          <option name="timeStamp" value="258" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

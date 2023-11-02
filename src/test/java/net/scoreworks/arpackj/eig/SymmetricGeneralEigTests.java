@@ -13,9 +13,7 @@ import static net.scoreworks.arpackj.TestUtils.checkSolution;
 import static net.scoreworks.arpackj.eig.MatrixDecomposition.*;
 
 public class SymmetricGeneralEigTests {
-    //TODO test buckling mode
-    //TODO implement and test cayley
-    private static final Matrix A, A_sparse, M, M_sparse;
+    private static final Matrix A, A_sparse, M, M_sparse, B, B_sparse, Mb, Mb_sparse;
     static {
         double[][] data = {
                 {0, 9, 0, 1, 0},
@@ -34,14 +32,39 @@ public class SymmetricGeneralEigTests {
                 {5, 3, 1, 2, 5}};
         M = new Basic2DMatrix(dataM);
         M_sparse = CRSMatrix.from2DArray(dataM);
+        //B is symmetric, positive-definite
+        double[][] dataB = {
+                {1.5, 0.2,-0.1,-0.3,-0.4},
+                {0.2, 1.6,-0.2,-0.4,-0.5},
+                {-0.1,-0.2, 1.7,-0.5,-0.6},
+                {-0.3,-0.4,-0.5, 1.8,-0.7},
+                {-0.4,-0.5,-0.6,-0.7, 1.9}};
+        B = new Basic2DMatrix(dataB);
+        B_sparse = CRSMatrix.from2DArray(dataB);
+        //Mb is symmetric indefinite
+        double[][] dataMb = {
+                {2.3,-1.2,-1.4,-1.6,-1.8},
+                {-1.2,-2.4,-1.6,-1.8,-2.0},
+                {-1.4,-1.6, 2.5,-1.9,-2.2},
+                {-1.6,-1.8,-1.9,-2.6,-2.4},
+                {-1.8,-2.0,-2.2,-2.4, 2.7}};
+        Mb = new Basic2DMatrix(dataMb);
+        Mb_sparse = CRSMatrix.from2DArray(dataMb);
     }
-    private static final double[] eigenvalues = {-1.7666, -0.81, 0.7156, 1.5177, 9.1618};
-    private static final double[] eigenvectors = {  //each row is one eigenvector
+    private static final double[] eigenvalues_A = {-1.7666, -0.81, 0.7156, 1.5177, 9.1618};
+    private static final double[] eigenvectors_A = {  //each row is one eigenvector
             -0.2709963, 0.21255562, -0.13496624, 0.18759745, 0.09585369,
             0.15097938, -0.16383273, -0.21687804, 0.21463843, 0.06325637,
             0.1432534, 0.18610294, 0.05259292, -0.10265756, 0.15772811,
             0.03555523, -0.04953955, -0.24544191, -0.35011594, 0.27828486,
             0.58091305, 0.28752617, -0.26688309, -0.27229615, -0.7321415};
+    private static final double[] eigenvalues_B = {-2.75737884, 0.43884819, 0.50518823, 0.92988871, -0.02900193};
+    private static final double[] eigenvectors_B = {  //each row is one eigenvector
+            -0.06975583, 0.56816724, -0.03562472, -0.42445665, -0.03213135,
+            0.65900697, -0.0841094, -0.4292224, -0.01995139, -0.08569716,
+            0.198436, -0.0462395, 0.36077647, 0.00276442, -0.49141503,
+            0.35982939, -0.29633667, 0.38990511, -0.2601493, 0.36126889,
+            -0.61085061, -0.89190993, -1.00227489, -1.21469481, -1.20005095};
 
     @Test
     public void testGeneralEigenvalueProblemLM() {
@@ -50,7 +73,7 @@ public class SymmetricGeneralEigTests {
         solver.solve();
         double[] d = solver.getEigenvalues();
         double[] z = solver.getEigenvectors();
-        checkSolution(eigenvalues, eigenvectors, new int[]{0, 1, 3, 4}, d, z);
+        checkSolution(eigenvalues_A, eigenvectors_A, new int[]{0, 1, 3, 4}, d, z);
     }
 
     @Test
@@ -60,7 +83,7 @@ public class SymmetricGeneralEigTests {
         solver.solve();
         double[] d = solver.getEigenvalues();
         double[] z = solver.getEigenvectors();
-        checkSolution(eigenvalues, eigenvectors, new int[]{0, 1, 3, 4}, d, z);
+        checkSolution(eigenvalues_A, eigenvectors_A, new int[]{0, 1, 3, 4}, d, z);
     }
 
     @Test
@@ -71,7 +94,7 @@ public class SymmetricGeneralEigTests {
         solver.solve();
         double[] d = solver.getEigenvalues();
         double[] z = solver.getEigenvectors();
-        checkSolution(eigenvalues, eigenvectors, new int[]{0, 1, 2, 3}, d, z);
+        checkSolution(eigenvalues_A, eigenvectors_A, new int[]{0, 1, 2, 3}, d, z);
     }
 
     @Test
@@ -81,7 +104,7 @@ public class SymmetricGeneralEigTests {
         solver.solve();
         double[] d = solver.getEigenvalues();
         double[] z = solver.getEigenvectors();
-        checkSolution(eigenvalues, eigenvectors, new int[]{0, 1, 2, 3}, d, z);
+        checkSolution(eigenvalues_A, eigenvectors_A, new int[]{0, 1, 2, 3}, d, z);
     }
 
     @Test
@@ -91,7 +114,7 @@ public class SymmetricGeneralEigTests {
         solver.solve();
         double[] d = solver.getEigenvalues();
         double[] z = solver.getEigenvectors();
-        checkSolution(eigenvalues, eigenvectors, new int[]{0, 1, 2, 3}, d, z);
+        checkSolution(eigenvalues_A, eigenvectors_A, new int[]{0, 1, 2, 3}, d, z);
     }
 
     @Test
@@ -103,6 +126,35 @@ public class SymmetricGeneralEigTests {
         solver.solve();
         double[] d = solver.getEigenvalues();
         double[] z = solver.getEigenvectors();
-        checkSolution(eigenvalues, eigenvectors, new int[]{0, 1, 3, 4}, d, z);
+        checkSolution(eigenvalues_A, eigenvectors_A, new int[]{0, 1, 3, 4}, d, z);
+    }
+
+    @Test
+    public void testGeneralEigenvalueProblemBucklingLM() {
+        SymmetricArpackSolver solver = MatrixDecomposition.eigsh_buckling(B, Mb, 3, "LM", 1, null, 100, 1e-5);
+        Assertions.assertSame(4, solver.mode);
+        solver.solve();
+        double[] d = solver.getEigenvalues();
+        double[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues_B, eigenvectors_B, new int[]{1, 2, 3}, d, z);
+    }
+    @Test
+    public void testGeneralEigenvalueProblemBucklingSM() {
+        SymmetricArpackSolver solver = MatrixDecomposition.eigsh_buckling(B, Mb, 3, "SM", 1, null, 100, 1e-5);
+        Assertions.assertSame(4, solver.mode);
+        solver.solve();
+        double[] d = solver.getEigenvalues();
+        double[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues_B, eigenvectors_B, new int[]{0, 4, 1}, d, z);
+    }
+
+    @Test
+    public void testGeneralEigenvalueProblemBucklingSM2() {
+        SymmetricArpackSolver solver = MatrixDecomposition.eigsh_buckling(B, Mb, 3, "SM", 0.1, null, 100, 1e-5);
+        Assertions.assertSame(4, solver.mode);
+        solver.solve();
+        double[] d = solver.getEigenvalues();
+        double[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues_B, eigenvectors_B, new int[]{0, 4, 3}, d, z);
     }
 }
