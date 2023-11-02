@@ -97,4 +97,64 @@ public class UnsymmetricGeneralEigTests {
         Complex[] z = solver.getEigenvectors();
         checkSolution(eigenvalues, eigenvectors, new int[]{2, 3, 4}, d, z);
     }
+
+    //@Test
+    public void testGeneralEigenvalueProblemShiftInvertRealLM() {
+        UnsymmetricArpackSolver solver = MatrixDecomposition.eigs_shiftInvertReal(A, M, 3, "LM", new Complex(1, 1), null, 100, 1e-15);
+        Assertions.assertSame(3, solver.mode);
+        solver.solve();
+        Complex[] d = solver.getEigenvalues();
+        Complex[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues, eigenvectors, new int[]{3, 4, 1}, d, z);
+    }
+
+    //@Test
+    public void testGeneralEigenvalueProblemShiftInvertRealSM() {
+        UnsymmetricArpackSolver solver = MatrixDecomposition.eigs_shiftInvertReal(A, M, 3, "SM", new Complex(1, 1), null, 100, 1e-15);
+        Assertions.assertSame(3, solver.mode);
+        solver.solve();
+        Complex[] d = solver.getEigenvalues();
+        Complex[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues, eigenvectors, new int[]{2, 1, 0}, d, z);
+    }
+
+    @Test
+    public void testGeneralEigenvalueProblemShiftInvertImagLM() {
+        UnsymmetricArpackSolver solver = MatrixDecomposition.eigs_shiftInvertImag(A, M, 3, "LM", new Complex(1, 1), null, 100, 1e-15);
+        Assertions.assertSame(4, solver.mode);
+        solver.solve();
+        Complex[] d = solver.getEigenvalues();
+        Complex[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues, eigenvectors, new int[]{1, 0, 2}, d, z);
+    }
+
+    @Test
+    public void testGeneralEigenvalueProblemShiftInvertImagLM2() {
+        UnsymmetricArpackSolver solver = MatrixDecomposition.eigs_shiftInvertImag(A_sparse, M_sparse, 3, "LM", new Complex(0, 1), null, 100, 1e-15);
+        Assertions.assertSame(4, solver.mode);
+        solver.solve();
+        Complex[] d = solver.getEigenvalues();
+        Complex[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues, eigenvectors, new int[]{3, 2, 4}, d, z);
+    }
+
+    @Test
+    public void testGeneralEigenvalueProblemShiftInvertImagSM() {
+        UnsymmetricArpackSolver solver = MatrixDecomposition.eigs_shiftInvertImag(A, M, 3, "SM", new Complex(1, 1), null, 100, 1e-15);
+        Assertions.assertSame(4, solver.mode);
+        solver.solve();
+        Complex[] d = solver.getEigenvalues();
+        Complex[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues, eigenvectors, new int[]{3, 1, 4}, d, z);
+    }
+
+    @Test
+    public void testGeneralEigenvalueProblemShiftInvertImagSM2() {
+        UnsymmetricArpackSolver solver = MatrixDecomposition.eigs_shiftInvertImag(A, M, 3, "SM", new Complex(0, 1), null, 100, 1e-15);
+        Assertions.assertSame(4, solver.mode);
+        solver.solve();
+        Complex[] d = solver.getEigenvalues();
+        Complex[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues, eigenvectors, new int[]{1, 0, 3}, d, z);
+    }
 }

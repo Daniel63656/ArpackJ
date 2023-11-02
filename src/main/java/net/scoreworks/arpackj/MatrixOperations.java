@@ -76,18 +76,37 @@ public final class MatrixOperations {
 
     /**
      * @return left multiplication by real(matrix) given as input array. Dense by definition.
-     * @param a double array holding complex numbers (real, imag) in row-major order
+     * @param z double array holding complex numbers (real, imag) in row-major order
      */
-    public static LinearOperation asLinearOperationReal(int rows, int cols, double[] a) {
+    public static LinearOperation asLinearOperationReal(int rows, int cols, double[] z) {
         return (b, off) -> {
             double[] result = new double[cols];
             double real;
             for (int i=0; i<rows; i++) {
                 real = 0.0;
                 for (int j=0; j<cols; j++) {
-                    real += a[2*(i*cols + j)] * b[j + off];
+                    real += z[2*(i*cols + j)] * b[j + off];
                 }
                 result[i] = real;
+            }
+            return result;
+        };
+    }
+
+    /**
+     * @return left multiplication by real(matrix) given as input array. Dense by definition.
+     * @param z double array holding complex numbers (real, imag) in row-major order
+     */
+    public static LinearOperation asLinearOperationImag(int rows, int cols, double[] z) {
+        return (b, off) -> {
+            double[] result = new double[cols];
+            double imag;
+            for (int i=0; i<rows; i++) {
+                imag = 0.0;
+                for (int j=0; j<cols; j++) {
+                    imag += z[2*(i*cols + j) + 1] * b[j + off];
+                }
+                result[i] = imag;
             }
             return result;
         };

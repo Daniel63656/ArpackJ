@@ -263,6 +263,7 @@ public final class MatrixDecomposition {
 
 
         if (M == null) {    //calculate real((A - sigma*I)^-1)
+            //TODO why the fuck does this work???
             Complex z;
             double[] res = flattenRowMajor(A);
             //subtract sigma on the trace and take real part
@@ -327,36 +328,40 @@ public final class MatrixDecomposition {
      */
     public static UnsymmetricArpackSolver eigs_shiftInvertImag(Matrix A, Matrix M, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
         if (sigma.getImaginary() == 0)
-            throw new IllegalArgumentException("sigma must be complex in this mode");
+            throw new IllegalArgumentException("sigma must be a complex number in mode=4");
         if (A.rows() != A.columns())
             throw new IllegalArgumentException("A is not a square matrix");
-        if (sigma.getReal() == 0 && sigma.getImaginary() == 0) {
-            return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(invert(A)));
-        }
 
-        Complex z;
-        //deepcopy and convert to dense for later invert
-        double[] res = flattenRowMajor(A);
-        if (M == null) {    //calculate real((A - sigma*I)^-1)
-            //subtract sigma on the trace and take real part
-            for(int i=0; i<A.rows(); i++) {
-                z = new Complex(res[i*A.columns()+i], 0).subtract(sigma);
-                res[i*A.columns()+i] = z.getImaginary();
+        double[] Z = new double[2*A.rows()*A.columns()];
+        double sigma_r = sigma.getReal();
+        double sigma_i = sigma.getImaginary();
+        int cols = A.columns();
+        if (M == null) {
+            //calculate imag((A - sigma*I)^-1)
+            for (int i=0; i<A.rows(); i++) {
+                for (int j=0; j<A.columns(); j++) {
+                    Z[2*(i*cols + j)] = A.get(i, j);
+                }
+                //subtract sigma on trace
+                Z[2*(i*cols + i)] -= sigma_r;
+                Z[2*(i*cols + i) + 1] = -sigma_i;
             }
+            invertComplex(cols, Z);
+            LinearOperation OPinv = asLinearOperationImag(cols, cols, Z);
+            return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, OPinv);
         }
-        else {      //calculate real((A - sigma*M)^-1)
-            //can't use la4j's operations as it does not support complex type
-            for(int i=0; i<A.rows(); i++) {
-                for(int j=0; i<A.columns(); j++) {
-                    z = sigma.multiply(M.get(i, j));
-                    z = new Complex(res[i*A.columns()+i], 0).subtract(z);
-                    res[i*A.columns()+i] = z.getImaginary();
+        else {
+            //calculate imag((A - sigma*M)^-1)
+            for (int i=0; i<A.rows(); i++) {
+                for (int j=0; j<A.columns(); j++) {
+                    Z[2*(i*cols + j)] = A.get(i, j) - sigma_r*M.get(i, j);
+                    Z[2*(i*cols + j) + 1] = -sigma_i*M.get(i, j);
                 }
             }
+            invertComplex(cols, Z);
+            LinearOperation OPinv = asLinearOperationImag(cols, cols, Z);
+            return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), OPinv);
         }
-        invert(A.rows(), res);
-        LinearOperation OPinv = asLinearOperation(A.rows(), A.columns(), res);
-        return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 4, which, ncv, sigma, maxIter, tolerance, null, OPinv);
     }
 
     /**
@@ -364,7 +369,7 @@ public final class MatrixDecomposition {
      * If M is null, the standard eigenvalue problem will be solved instead
      * @param A Left multiplication by square A
      * @param M Left multiplication by square and positive semi-definite matrix M with same dimensions as A
-     * @param OP_inv Linear operation representing left multiplication by imag((A - sigma*M)^-1)
+     * @param OP_inv Linear operation representing left multiplication by real((A - sigma*M)^-1)
      * @param n shape (rows, or columns) of A
      * @param nev number of eigenvalues to compute
      * @param which select which eigenvalues to compute
@@ -375,10 +380,9 @@ public final class MatrixDecomposition {
      */
     public static UnsymmetricArpackSolver eigsh_shiftInvertImag(LinearOperation A, LinearOperation M, LinearOperation OP_inv, int n, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
         if (sigma.getImaginary() == 0)
-            throw new IllegalArgumentException("sigma must be complex in this mode");
+            throw new IllegalArgumentException("sigma must be a complex number in mode=4");
         return new UnsymmetricArpackSolver(A, n, nev, 4, which, ncv, sigma, maxIter, tolerance, M, OP_inv);
     }
-
 
     /**
      * @return (A -sigma*M)^-1
