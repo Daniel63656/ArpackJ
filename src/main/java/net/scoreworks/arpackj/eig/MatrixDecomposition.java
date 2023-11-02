@@ -303,19 +303,7 @@ public final class MatrixDecomposition {
                 return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(invert(A)));
             }
             //calculate real((A - sigma*I)^-1)
-            //TODO why the fuck does this work???
-            Complex z;
-            double[] res = flattenRowMajor(A);
-            //subtract sigma on the trace and take real part
-            for(int i=0; i<A.rows(); i++) {
-                z = new Complex(res[i*A.columns()+i], 0).subtract(sigma);
-                res[i*A.columns()+i] = z.getReal();
-            }
-            invert(A.rows(), res);
-            LinearOperation OPinv = asLinearOperation(A.rows(), A.columns(), res);
-            return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, OPinv);
-
-            /*for (int i=0; i<A.rows(); i++) {
+            for (int i=0; i<A.rows(); i++) {
                 for (int j=0; j<A.columns(); j++) {
                     Z[2*(i*cols + j)] = A.get(i, j);
                 }
@@ -325,7 +313,7 @@ public final class MatrixDecomposition {
             }
             invertComplex(cols, Z);
             LinearOperation OPinv = asLinearOperationReal(A.rows(), A.columns(), Z);
-            return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, OPinv);*/
+            return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, OPinv);
         }
         else {
             if (sigma.getReal() == 0 && sigma.getImaginary() == 0) {

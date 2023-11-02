@@ -171,43 +171,4 @@ public class UnsymmetricStandardEigTests {
         Complex[] z = solver.getEigenvectors();
         checkSolution(eigenvalues, eigenvectors, new int[]{2, 1}, d, z);
     }
-
-
-
-
-    //TODO remove this test
-    @Test
-    public void foo() {
-        //create complex matrix Z=A-sigma*M
-        double[] Z = new double[2*A.rows()*A.columns()];
-        double[] x = new double[]{1,2,3,4,5};
-        Complex sigma = new Complex(1, 1);
-        int cols = A.columns();
-
-        for (int i=0; i<A.rows(); i++) {
-            for (int j=0; j<A.columns(); j++) {
-                Z[2*(i*cols + j)] = A.get(i, j);
-            }
-            //subtract sigma on trace
-            Z[2*(i*cols + i)] -= sigma.getReal();
-            Z[2*(i*cols + i) + 1] = -sigma.getImaginary();
-        }
-        invertComplex(cols, Z);
-        LinearOperation OPinv = asLinearOperationReal(A.rows(), A.columns(), Z);
-        System.out.println(Arrays.toString(OPinv.apply(x, 0)));
-
-
-        Complex z;
-        //deepcopy and convert to dense for later invert
-        double[] res = flattenRowMajor(A);
-        //calculate real((A - sigma*I)^-1)
-        //subtract sigma on the trace and take real part
-        for(int i=0; i<A.rows(); i++) {
-            z = new Complex(res[i*A.columns()+i], 0).subtract(sigma);
-            res[i*A.columns()+i] = z.getReal();
-        }
-        invert(A.rows(), res);
-        LinearOperation OPinv2 = asLinearOperation(A.rows(), A.columns(), res);
-        System.out.println(Arrays.toString(OPinv2.apply(x, 0)));
-    }
 }
