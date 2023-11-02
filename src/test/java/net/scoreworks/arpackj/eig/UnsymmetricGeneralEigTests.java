@@ -68,7 +68,7 @@ public class UnsymmetricGeneralEigTests {
     };
 
     @Test
-    public void testStandardEigenvalueProblemLM() {
+    public void testGeneralEigenvalueProblemLM() {
         UnsymmetricArpackSolver solver = MatrixDecomposition.eigs(A, M, 3, "LM", null, 100, 1e-15);
         Assertions.assertSame(2, solver.mode);
         solver.solve();
@@ -78,7 +78,7 @@ public class UnsymmetricGeneralEigTests {
     }
 
     @Test
-    public void testStandardEigenvalueProblemLM_CRS() {
+    public void testGeneralEigenvalueProblemLM_CRS() {
         UnsymmetricArpackSolver solver = MatrixDecomposition.eigs(A_sparse, M_sparse, 3, "LM", null, 100, 1e-15);
         Assertions.assertSame(2, solver.mode);
         solver.solve();
@@ -87,14 +87,14 @@ public class UnsymmetricGeneralEigTests {
         checkSolution(eigenvalues, eigenvectors, new int[]{0, 1, 3}, d, z);
     }
 
-    //@Test
-    public void testStandardEigenvalueProblemSM() {
+    @Test
+    public void testGeneralEigenvalueProblemSM() {
         Matrix M_inv = invert(M);
         UnsymmetricArpackSolver solver = MatrixDecomposition.eigs(asLinearOperation(A), asLinearOperation(M), asLinearOperation(M_inv), A.rows(), 3, "SM", null, 100, 1e-5);
         Assertions.assertSame(2, solver.mode);
         solver.solve();
         Complex[] d = solver.getEigenvalues();
         Complex[] z = solver.getEigenvectors();
-        checkSolution(eigenvalues, eigenvectors, new int[]{3, 4, 2}, d, z);
+        checkSolution(eigenvalues, eigenvectors, new int[]{2, 3, 4}, d, z);
     }
 }

@@ -132,6 +132,7 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
         arpack.dneupd_c(rvec, howmy, select, d_r, d_i, z_r, ncv, sigma.getReal(), sigma.getImaginary(), workev, bmat, n, which, nev, tol, resid, ncv, v, n, iparam, ipntr, workd, workl, lworkl, info);
         if (info[0] != 0)
             throw new ArpackException(getExtractionErrorCode(info[0]));
+        int nReturned = iparam[4];  // number of good eigenvalues returned (might be less than nev+1)
 
         //calculate eigenvalues and eigenvalues and store them as pairs to allow for easy sorting afterwards
         EigenPair[] eigenPair = new EigenPair[nev+1];
@@ -150,7 +151,9 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
                         }
                         i++;
                     }
-                    else {}     //nreturned
+                    else {
+                        System.out.println("rnret");
+                    }
                 }
                 else {
                     //this is a real eigenvector (1 column in z_r)
@@ -196,17 +199,26 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
                         eigenPair[i+1].d = eigenPair[i].d.conjugate();
                         i++;
                     }
-                    else {} //nreturned
+                    else {}
                 }
                 i++;
             }
         }
 
-
+        //got less than or equal eigenpairs to specified number nev
+        if (nReturned <= nev) {
+            this.d = new Complex[nReturned];
+            this.z = new Complex[n * nReturned];
+            //copy first nReturned values to solution arrays and return
+            for (int i=0; i<nReturned; i++) {
+                d[i] = eigenPair[i].d;
+                System.arraycopy(eigenPair[i].z, 0, this.z, i*n, n);
+            }
+            return;
+        }
         //at this point there are nev+1 possible eigenvector/eigenvalue pairs. Filter one out based on "which"
         this.d = new Complex[nev];
         this.z = new Complex[n * nev];
-        //TODO check if this is true with nreturned
 
         if (mode == 1 || mode == 2) {   //no shift
             if (which[1] == 'R')
@@ -216,7 +228,7 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
             else    //sort by magnitude
                 Arrays.sort(eigenPair, Comparator.comparing(eig -> eig.d.abs()));
         }
-        else {   //no shift
+        else {   //sort by 1 / (d-sigma)
             Complex one = new Complex(1, 0);
             if (which[1] == 'R')
                 Arrays.sort(eigenPair, Comparator.comparing(eig -> one.divide(eig.d.subtract(sigma)).getReal()));
