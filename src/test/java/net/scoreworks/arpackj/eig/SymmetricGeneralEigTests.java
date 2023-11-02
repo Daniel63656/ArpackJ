@@ -140,7 +140,8 @@ public class SymmetricGeneralEigTests {
     }
     @Test
     public void testGeneralEigenvalueProblemBucklingSM() {
-        SymmetricArpackSolver solver = MatrixDecomposition.eigsh_buckling(B, Mb, 3, "SM", 1, null, 100, 1e-5);
+        LinearOperation OPinv = asLinearOperation(invert(B.subtract(Mb.multiply(1))));
+        SymmetricArpackSolver solver = MatrixDecomposition.eigsh_buckling(asLinearOperation(B_sparse), OPinv, B.rows(), 3, "SM", 1, null, 100, 1e-5);
         Assertions.assertSame(4, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
@@ -150,11 +151,31 @@ public class SymmetricGeneralEigTests {
 
     @Test
     public void testGeneralEigenvalueProblemBucklingSM2() {
-        SymmetricArpackSolver solver = MatrixDecomposition.eigsh_buckling(B, Mb, 3, "SM", 0.1, null, 100, 1e-5);
+        SymmetricArpackSolver solver = MatrixDecomposition.eigsh_buckling(B_sparse, Mb_sparse, 3, "SM", 0.1, null, 100, 1e-5);
         Assertions.assertSame(4, solver.mode);
         solver.solve();
         double[] d = solver.getEigenvalues();
         double[] z = solver.getEigenvectors();
         checkSolution(eigenvalues_B, eigenvectors_B, new int[]{0, 4, 3}, d, z);
+    }
+
+    @Test
+    public void testGeneralEigenvalueProblemCayleyLM() {
+        SymmetricArpackSolver solver = MatrixDecomposition.eigsh_cayley(A, M, 3, "LM", 1, null, 100, 1e-5);
+        Assertions.assertSame(5, solver.mode);
+        solver.solve();
+        double[] d = solver.getEigenvalues();
+        double[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues_A, eigenvectors_A, new int[]{2, 3, 4}, d, z);
+    }
+
+    @Test
+    public void testGeneralEigenvalueProblemCayleySM() {
+        SymmetricArpackSolver solver = MatrixDecomposition.eigsh_cayley(A, M, 3, "SM", 1, null, 100, 1e-5);
+        Assertions.assertSame(5, solver.mode);
+        solver.solve();
+        double[] d = solver.getEigenvalues();
+        double[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues_A, eigenvectors_A, new int[]{0, 1, 4}, d, z);
     }
 }

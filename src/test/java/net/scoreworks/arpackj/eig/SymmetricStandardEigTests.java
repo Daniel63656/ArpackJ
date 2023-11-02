@@ -12,7 +12,6 @@ import static net.scoreworks.arpackj.TestUtils.checkSolution;
 import static net.scoreworks.arpackj.eig.MatrixDecomposition.*;
 
 public class SymmetricStandardEigTests {
-    //TODO test buckling mode
     private static final Matrix A, A_sparse;
     static {
         double[][] data = {
@@ -92,5 +91,32 @@ public class SymmetricStandardEigTests {
         double[] d = solver.getEigenvalues();
         double[] z = solver.getEigenvectors();
         checkSolution(eigenvalues, eigenvectors, new int[]{0, 1, 3, 4}, d, z);
+    }
+
+    @Test
+    public void testStandardEigenvalueProblemCayleyLM() {
+        SymmetricArpackSolver solver = eigsh_cayley(A, null, 3, "LM", 1, null, 100, 1e-5);
+        Assertions.assertSame(5, solver.mode);
+        solver.solve();
+        double[] d = solver.getEigenvalues();
+        double[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues, eigenvectors, new int[]{2, 3, 4}, d, z);
+    }
+
+    @Test
+    public void testStandardEigenvalueProblemCayleySM() {
+        double[] res = flattenRowMajor(A);
+        //subtract sigma on the trace
+        for(int i=0; i<A.rows(); i++) {
+            res[i*A.columns()+i] -= 1;
+        }
+        invert(A.rows(), res);
+        LinearOperation OPinv = asLinearOperation(A.rows(), A.columns(), res);
+        SymmetricArpackSolver solver = eigsh_cayley(asLinearOperation(A), null, OPinv, A.rows(), 3, "SM", 1, null, 100, 1e-5);
+        Assertions.assertSame(5, solver.mode);
+        solver.solve();
+        double[] d = solver.getEigenvalues();
+        double[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues, eigenvectors, new int[]{0, 1, 4}, d, z);
     }
 }

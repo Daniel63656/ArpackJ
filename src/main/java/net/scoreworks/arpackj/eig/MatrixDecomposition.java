@@ -129,7 +129,7 @@ public final class MatrixDecomposition {
      * Solve the general eigenvalue problem A*x = lambda*M*x for a square, symmetric matrix A in shift-invert mode to find eigenvalues near sigma.
      * If M is null, the standard eigenvalue problem will be solved instead
      * @param M Left multiplication by square, symmetric and positive semi-definite matrix M with same dimensions as A
-     * @param OP_inv Linear operation representing left multiplication by (A - sigma*M)^-1
+     * @param OP_inv Left multiplication by (A - sigma*M)^-1
      * @param n shape (rows, or columns) of A
      * @param nev number of eigenvalues to compute
      * @param which select which eigenvalues to compute. Refers to the shifted eigenvalues d'[i] = 1 / (d[i] - sigma)
@@ -173,7 +173,45 @@ public final class MatrixDecomposition {
         return new SymmetricArpackSolver(A, n, nev, 4, which, ncv, sigma, maxIter, tolerance, null, OP_inv);
     }
 
-    //TODO add cayley? d'[i] = (d[i] + sigma) / (d[i] - sigma)
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x for a square, symmetric matrix A in Cayley-transformed mode to find eigenvalues near sigma.
+     * If M is null, the standard eigenvalue problem will be solved instead
+     * @param A square, symmetric {@link Matrix}
+     * @param M square, symmetric and positive semi-definite {@link Matrix}. Must have same dimensions as A
+     * @param nev number of eigenvalues to compute
+     * @param which select which eigenvalues to compute. Refers to the shifted eigenvalues d'[i] = (d[i] + sigma) / (d[i] - sigma)
+     * @param sigma shift applied to A
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static SymmetricArpackSolver eigsh_cayley(Matrix A, Matrix M, int nev, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
+        if (A.rows() != A.columns())
+            throw new IllegalArgumentException("A is not a square matrix");
+        if (M == null)
+            return new SymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 5, which, ncv, sigma, maxIter, tolerance, null, getOP_inv(A, null, sigma));
+        else
+            return new SymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 5, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), getOP_inv(A, M, sigma));
+    }
+
+
+    /**
+     * Solve the general eigenvalue problem A*x = lambda*M*x for a square, symmetric matrix A in Cayley-transformed mode to find eigenvalues near sigma.
+     * If M is null, the standard eigenvalue problem will be solved instead
+     * @param A Left multiplication by square, symmetric matrix A
+     * @param M Left multiplication by square, symmetric and positive semi-definite matrix M with same dimensions as A
+     * @param OP_inv Left multiplication by (A - sigma*M)^-1
+     * @param n shape (rows, or columns) of A
+     * @param nev number of eigenvalues to compute
+     * @param which select which eigenvalues to compute. Refers to the shifted eigenvalues d'[i] = (d[i] + sigma) / (d[i] - sigma)
+     * @param sigma shift applied to A
+     * @param ncv number of Arnoldi vectors. Use null to let them be chosen automatically
+     * @param maxIter maximal number of iterations
+     * @param tolerance iteration is terminated when this relative tolerance is reached
+     */
+    public static SymmetricArpackSolver eigsh_cayley(LinearOperation A, LinearOperation M, LinearOperation OP_inv, int n, int nev, String which, double sigma, Integer ncv, int maxIter, double tolerance) {
+        return new SymmetricArpackSolver(A, n, nev, 5, which, ncv, sigma, maxIter, tolerance, M, OP_inv);
+    }
 
     /**
      * Solve the standard eigenvalue problem A*x = lambda*x for a square matrix A
@@ -311,7 +349,7 @@ public final class MatrixDecomposition {
      * If M is null, the standard eigenvalue problem will be solved instead
      * @param A Left multiplication by square A
      * @param M Left multiplication by square and positive semi-definite matrix M with same dimensions as A
-     * @param OP_inv Linear operation representing left multiplication by real((A - sigma*M)^-1)
+     * @param OP_inv Left multiplication by real((A - sigma*M)^-1)
      * @param n shape (rows, or columns) of A
      * @param nev number of eigenvalues to compute
      * @param which select which eigenvalues to compute. Refers to the shifted eigenvalues d'[i] = 1/2 * [1/(d[i]-sigma) + 1/(d[i]-conj(sigma))]
@@ -320,7 +358,7 @@ public final class MatrixDecomposition {
      * @param maxIter maximal number of iterations
      * @param tolerance iteration is terminated when this relative tolerance is reached
      */
-    public static UnsymmetricArpackSolver eigsh_shiftInvertReal(LinearOperation A, LinearOperation M, LinearOperation OP_inv, int n, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
+    public static UnsymmetricArpackSolver eigs_shiftInvertReal(LinearOperation A, LinearOperation M, LinearOperation OP_inv, int n, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
         return new UnsymmetricArpackSolver(A, n, nev, 3, which, ncv, sigma, maxIter, tolerance, M, OP_inv);
     }
 
@@ -379,7 +417,7 @@ public final class MatrixDecomposition {
      * If M is null, the standard eigenvalue problem will be solved instead
      * @param A Left multiplication by square A
      * @param M Left multiplication by square and positive semi-definite matrix M with same dimensions as A
-     * @param OP_inv Linear operation representing left multiplication by real((A - sigma*M)^-1)
+     * @param OP_inv Left multiplication by real((A - sigma*M)^-1)
      * @param n shape (rows, or columns) of A
      * @param nev number of eigenvalues to compute
      * @param which select which eigenvalues to compute. Refers to the shifted eigenvalues d'[i] = 1/2i * [1/(d[i]-sigma) - 1/(d[i]-conj(sigma))]
@@ -388,7 +426,7 @@ public final class MatrixDecomposition {
      * @param maxIter maximal number of iterations
      * @param tolerance iteration is terminated when this relative tolerance is reached
      */
-    public static UnsymmetricArpackSolver eigsh_shiftInvertImag(LinearOperation A, LinearOperation M, LinearOperation OP_inv, int n, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
+    public static UnsymmetricArpackSolver eigs_shiftInvertImag(LinearOperation A, LinearOperation M, LinearOperation OP_inv, int n, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
         if (sigma.getImaginary() == 0)
             throw new IllegalArgumentException("sigma must be a complex number in mode=4");
         return new UnsymmetricArpackSolver(A, n, nev, 4, which, ncv, sigma, maxIter, tolerance, M, OP_inv);

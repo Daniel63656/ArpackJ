@@ -28,8 +28,7 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
     /** shift parameter when used in shift-invert mode (3,4,5) */
     private final Complex sigma;
     private final LinearOperation OP, B;
-    private LinearOperation OPa, OPb;
-    private LinearOperation A;  //needed for modes 3,4 to transform eigenvalues/eigenvectors back into original system
+    private LinearOperation OPa, A_matvec;
 
     UnsymmetricArpackSolver(LinearOperation A_matvec, int n, int nev, int mode, String which, Integer ncv, Complex sigma,
                             int maxIter, double tol, LinearOperation M_matvec, LinearOperation Minv_matvec) {
@@ -63,7 +62,6 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
 
             this.OP = (x, off) -> Minv_matvec.apply(A_matvec.apply(x, off), 0);
             this.OPa = Minv_matvec;
-            this.OPb = A_matvec;
             this.B = M_matvec;
             this.bmat = "G".getBytes();
         }
@@ -72,7 +70,7 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
                 throw new IllegalArgumentException("matvec must not be specified for mode=3,4");
             if (Minv_matvec == null)
                 throw new IllegalArgumentException("Minv_matvec must be specified for mode=3,4");
-            this.A = A_matvec;
+            this.A_matvec = A_matvec;
 
             if (M_matvec == null) {
                 this.OP = Minv_matvec;
@@ -175,7 +173,7 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
                 if (Math.abs(d_i[i]) == 0) {
                     eigenPair[i] = new EigenPair(n);
                     // d = z_r * A(z_r)
-                    double[] Az = A.apply(z_r, i*n);
+                    double[] Az = A_matvec.apply(z_r, i*n);
                     double real = 0;
                     for (int j=0; j<n; j++) {
                         real += z_r[i*n + j] * Az[j];
@@ -187,8 +185,8 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
                     if (i < nev) {
                         eigenPair[i] = new EigenPair(n);
                         eigenPair[i+1] = new EigenPair(n);
-                        double[] Az    = A.apply(z_r, i*n);
-                        double[] Az_cc = A.apply(z_r, (i+1)*n);
+                        double[] Az    = A_matvec.apply(z_r, i*n);
+                        double[] Az_cc = A_matvec.apply(z_r, (i+1)*n);
                         double real = 0;
                         double imag = 0;
                         for (int j=0; j<n; j++) {

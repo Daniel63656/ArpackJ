@@ -109,6 +109,28 @@ public class UnsymmetricStandardEigTests {
     }
 
     @Test
+    public void testStandardEigenvalueProblemShiftInvertRealLI() {
+        double[] Z = new double[2*A.rows()*A.columns()];
+        for (int i=0; i<A.rows(); i++) {
+            for (int j=0; j<A.columns(); j++) {
+                Z[2*(i*A.columns() + j)] = A.get(i, j);
+            }
+            //subtract sigma on trace
+            Z[2*(i*A.columns() + i)] -= 1;
+            Z[2*(i*A.columns() + i) + 1] = -1;
+        }
+        invertComplex(A.columns(), Z);
+        LinearOperation OPinv = asLinearOperationReal(A.rows(), A.columns(), Z);
+        UnsymmetricArpackSolver solver = MatrixDecomposition.eigs_shiftInvertReal(asLinearOperation(A), null,
+                OPinv, A.rows(), 2, "LI", new Complex(1, 1), null, 100, 1e-15);
+        Assertions.assertSame(3, solver.mode);
+        solver.solve();
+        Complex[] d = solver.getEigenvalues();
+        Complex[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues, eigenvectors, new int[]{2, 1}, d, z);
+    }
+
+    @Test
     public void testStandardEigenvalueProblemShiftInvertImagLM() {
         UnsymmetricArpackSolver solver = MatrixDecomposition.eigs_shiftInvertImag(A, null, 3, "LM", new Complex(1, 1), null, 100, 1e-15);
         Assertions.assertSame(4, solver.mode);
@@ -128,12 +150,32 @@ public class UnsymmetricStandardEigTests {
         checkSolution(eigenvalues, eigenvectors, new int[]{2, 1, 0}, d, z);
     }
 
+    @Test
+    public void testStandardEigenvalueProblemShiftInvertImagLI() {
+        double[] Z = new double[2*A.rows()*A.columns()];
+        for (int i=0; i<A.rows(); i++) {
+            for (int j=0; j<A.columns(); j++) {
+                Z[2*(i*A.columns() + j)] = A.get(i, j);
+            }
+            //subtract sigma on trace
+            Z[2*(i*A.columns() + i)] -= 1;
+            Z[2*(i*A.columns() + i) + 1] = -1;
+        }
+        invertComplex(A.columns(), Z);
+        LinearOperation OPinv = asLinearOperationImag(A.rows(), A.columns(), Z);
+        UnsymmetricArpackSolver solver = MatrixDecomposition.eigs_shiftInvertImag(asLinearOperation(A), null,
+                OPinv, A.rows(), 2, "LI", new Complex(1, 1), null, 100, 1e-15);
+        Assertions.assertSame(4, solver.mode);
+        solver.solve();
+        Complex[] d = solver.getEigenvalues();
+        Complex[] z = solver.getEigenvectors();
+        checkSolution(eigenvalues, eigenvectors, new int[]{2, 1}, d, z);
+    }
 
 
 
 
-
-
+    //TODO remove this test
     @Test
     public void foo() {
         //create complex matrix Z=A-sigma*M
