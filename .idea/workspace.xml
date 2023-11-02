@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="why is easier formula also working?!?!">
+    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="unsym mode 4 nd a lot of tests">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricGeneralEigTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricGeneralEigTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricStandardEigTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricStandardEigTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +116,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagLM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -131,7 +129,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagLM&quot;" />
+            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -141,7 +139,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagLM2" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM2" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -154,7 +152,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagLM2&quot;" />
+            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM2&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -164,7 +162,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagSM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -177,7 +175,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagSM&quot;" />
+            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -187,7 +185,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagSM2" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM2" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -200,7 +198,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagSM2&quot;" />
+            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM2&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -243,20 +241,20 @@
     </configuration>
     <list>
       <item itemvalue="Gradle.Test all" />
-      <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagLM" />
-      <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagLM2" />
-      <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagSM" />
-      <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagSM2" />
+      <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM" />
+      <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM2" />
+      <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM" />
+      <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM2" />
       <item itemvalue="Gradle.UnsymmetricStandardEigTests" />
       <item itemvalue="JUnit.Test" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM2" />
+        <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealSM" />
+        <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM2" />
+        <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertRealLM" />
         <item itemvalue="Gradle.UnsymmetricStandardEigTests" />
-        <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagSM2" />
-        <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagSM" />
-        <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagLM2" />
-        <item itemvalue="Gradle.UnsymmetricGeneralEigTests.testGeneralEigenvalueProblemShiftInvertImagLM" />
       </list>
     </recent_temporary>
   </component>
@@ -273,7 +271,7 @@
       <workItem from="1698503319621" duration="117000" />
       <workItem from="1698575156347" duration="76838000" />
       <workItem from="1698837123360" duration="1123000" />
-      <workItem from="1698838623740" duration="33233000" />
+      <workItem from="1698838623740" duration="33882000" />
     </task>
     <task id="LOCAL-00001" summary="asdas">
       <created>1698578035328</created>
@@ -464,7 +462,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698916556809</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="unsym mode 4 nd a lot of tests">
+      <created>1698920096258</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1698920096259</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -482,7 +487,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="cayley fails as well as general" />
     <MESSAGE value="checked and corrected res initialization in MatrixOperations" />
     <MESSAGE value="working general eigenvalue problem" />
     <MESSAGE value="added buckling mode test" />
@@ -507,6 +511,18 @@
     <MESSAGE value="unsymmetric d selection works, all tests pass" />
     <MESSAGE value="allow complex cases in getOPinv" />
     <MESSAGE value="why is easier formula also working?!?!" />
-    <option name="LAST_COMMIT_MESSAGE" value="why is easier formula also working?!?!" />
+    <MESSAGE value="unsym mode 4 nd a lot of tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="unsym mode 4 nd a lot of tests" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricGeneralEigTests.java</url>
+          <line>127</line>
+          <option name="timeStamp" value="255" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

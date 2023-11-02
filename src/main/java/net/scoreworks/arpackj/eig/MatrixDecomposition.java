@@ -257,12 +257,16 @@ public final class MatrixDecomposition {
     public static UnsymmetricArpackSolver eigs_shiftInvertReal(Matrix A, Matrix M, int nev, String which, Complex sigma, Integer ncv, int maxIter, double tolerance) {
         if (A.rows() != A.columns())
             throw new IllegalArgumentException("A is not a square matrix");
-        if (sigma.getReal() == 0 && sigma.getImaginary() == 0) {
-            return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(invert(A)));
-        }
 
-
-        if (M == null) {    //calculate real((A - sigma*I)^-1)
+        double[] Z = new double[2*A.rows()*A.columns()];
+        double sigma_r = sigma.getReal();
+        double sigma_i = sigma.getImaginary();
+        int cols = A.columns();
+        if (M == null) {
+            if (sigma.getReal() == 0 && sigma.getImaginary() == 0) {
+                return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, asLinearOperation(invert(A)));
+            }
+            //calculate real((A - sigma*I)^-1)
             //TODO why the fuck does this work???
             Complex z;
             double[] res = flattenRowMajor(A);
@@ -275,12 +279,7 @@ public final class MatrixDecomposition {
             LinearOperation OPinv = asLinearOperation(A.rows(), A.columns(), res);
             return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, OPinv);
 
-
-            /*double[] Z = new double[2*A.rows()*A.columns()];
-            double sigma_r = sigma.getReal();
-            double sigma_i = sigma.getImaginary();
-            int cols = A.columns();
-            for (int i=0; i<A.rows(); i++) {
+            /*for (int i=0; i<A.rows(); i++) {
                 for (int j=0; j<A.columns(); j++) {
                     Z[2*(i*cols + j)] = A.get(i, j);
                 }
@@ -292,8 +291,21 @@ public final class MatrixDecomposition {
             LinearOperation OPinv = asLinearOperationReal(A.rows(), A.columns(), Z);
             return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, null, OPinv);*/
         }
-        //TODO M != null
-        return null;
+        else {
+            if (sigma.getReal() == 0 && sigma.getImaginary() == 0) {
+                return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), asLinearOperation(invert(A)));
+            }
+            //calculate imag((A - sigma*M)^-1)
+            for (int i=0; i<A.rows(); i++) {
+                for (int j=0; j<A.columns(); j++) {
+                    Z[2*(i*cols + j)] = A.get(i, j) - sigma_r*M.get(i, j);
+                    Z[2*(i*cols + j) + 1] = -sigma_i*M.get(i, j);
+                }
+            }
+            invertComplex(cols, Z);
+            LinearOperation OPinv = asLinearOperationReal(cols, cols, Z);
+            return new UnsymmetricArpackSolver(asLinearOperation(A), A.rows(), nev, 3, which, ncv, sigma, maxIter, tolerance, asLinearOperation(M), OPinv);
+        }
     }
 
     /**
@@ -384,8 +396,10 @@ public final class MatrixDecomposition {
         return new UnsymmetricArpackSolver(A, n, nev, 4, which, ncv, sigma, maxIter, tolerance, M, OP_inv);
     }
 
+
     /**
-     * @return (A -sigma*M)^-1
+     * Helper function used by eigsh() to calculate OP_inv
+     * @return (A -sigma*M)^-1 as {@link LinearOperation}
      */
     private static LinearOperation getOP_inv(Matrix A, Matrix M, double sigma) {
         if (sigma == 0) {
