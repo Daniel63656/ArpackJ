@@ -151,8 +151,10 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
                         }
                         i++;
                     }
-                    else { //TODO how to handle this case
-                        System.out.println("rnret");
+                    else {
+                        //last eigenvalue is complex but only one slot is free. Ignore this case and return all nev
+                        //previously discovered eigenPairs by setting nReturn to nev
+                        nReturned = nev;
                     }
                 }
                 else {
@@ -199,13 +201,17 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
                         eigenPair[i+1].d = eigenPair[i].d.conjugate();
                         i++;
                     }
-                    else {} //TODO how to handle this case
+                    else {
+                        //last eigenvalue is complex but only one slot is free. Ignore this case and return all nev
+                        //previously discovered eigenPairs by setting nReturn to nev
+                        nReturned = nev;
+                    }
                 }
                 i++;
             }
         }
 
-        //got less than or equal eigenpairs to specified number nev
+        //got less than or equal eigenPairs to specified number nev
         if (nReturned <= nev) {
             this.d = new Complex[nReturned];
             this.z = new Complex[n * nReturned];

@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="all modes for unsymmetric implemented and tested">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/SymmetricArpackSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/SymmetricArpackSolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java" afterDir="false" />
-    </list>
+    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="javadocs, added nReturned can be smaller nev to SymmetricArpackSolver" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -272,7 +267,7 @@
       <workItem from="1698503319621" duration="117000" />
       <workItem from="1698575156347" duration="76838000" />
       <workItem from="1698837123360" duration="1123000" />
-      <workItem from="1698838623740" duration="34847000" />
+      <workItem from="1698838623740" duration="35236000" />
     </task>
     <task id="LOCAL-00001" summary="asdas">
       <created>1698578035328</created>
@@ -477,7 +472,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698920839926</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="javadocs, added nReturned can be smaller nev to SymmetricArpackSolver">
+      <created>1698921724143</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1698921724143</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -495,7 +497,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="working general eigenvalue problem" />
     <MESSAGE value="added buckling mode test" />
     <MESSAGE value="removed trickle down eigs()" />
     <MESSAGE value="major improvements, tests, LU decomposition" />
@@ -520,7 +521,8 @@
     <MESSAGE value="why is easier formula also working?!?!" />
     <MESSAGE value="unsym mode 4 nd a lot of tests" />
     <MESSAGE value="all modes for unsymmetric implemented and tested" />
-    <option name="LAST_COMMIT_MESSAGE" value="all modes for unsymmetric implemented and tested" />
+    <MESSAGE value="javadocs, added nReturned can be smaller nev to SymmetricArpackSolver" />
+    <option name="LAST_COMMIT_MESSAGE" value="javadocs, added nReturned can be smaller nev to SymmetricArpackSolver" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
