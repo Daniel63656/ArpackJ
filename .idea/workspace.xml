@@ -4,9 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="all modes implemented, all tests working">
+    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="removed all TODOs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/LinearOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/LinearOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/ArpackException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/ArpackException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/ArpackSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/ArpackSolver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/MatrixDecomposition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/SymmetricArpackSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/SymmetricArpackSolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/MatrixOperationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/MatrixOperationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/TestUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/TestUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricGeneralEigTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricGeneralEigTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricStandardEigTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/SymmetricStandardEigTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricGeneralEigTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricGeneralEigTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricStandardEigTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricStandardEigTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -271,7 +282,7 @@
       <workItem from="1698503319621" duration="117000" />
       <workItem from="1698575156347" duration="76838000" />
       <workItem from="1698837123360" duration="1123000" />
-      <workItem from="1698838623740" duration="41529000" />
+      <workItem from="1698838623740" duration="43138000" />
     </task>
     <task id="LOCAL-00001" summary="asdas">
       <created>1698578035328</created>
@@ -504,7 +515,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698937863570</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="removed all TODOs">
+      <created>1698938677902</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1698938677902</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -522,7 +540,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="minor refinements" />
     <MESSAGE value="before modifications to solver regarding complex" />
     <MESSAGE value="unsymmetric working sometimes, sometimes bug?!?" />
     <MESSAGE value="made lworkl solver specific" />
@@ -547,14 +564,15 @@
     <MESSAGE value="added nReturn = nev case" />
     <MESSAGE value="tested buckling mode successfully" />
     <MESSAGE value="all modes implemented, all tests working" />
-    <option name="LAST_COMMIT_MESSAGE" value="all modes implemented, all tests working" />
+    <MESSAGE value="removed all TODOs" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed all TODOs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/eig/UnsymmetricGeneralEigTests.java</url>
-          <line>137</line>
+          <line>147</line>
           <option name="timeStamp" value="256" />
         </line-breakpoint>
       </breakpoints>
