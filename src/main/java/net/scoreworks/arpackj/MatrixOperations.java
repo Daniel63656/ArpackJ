@@ -10,14 +10,11 @@ https://opensource.org/licenses/MIT.
 
 package net.scoreworks.arpackj;
 
-import org.apache.commons.math3.complex.Complex;
 import org.bytedeco.openblas.global.openblas;
 import org.la4j.Matrix;
 import org.la4j.iterator.MatrixIterator;
 import org.la4j.matrix.SparseMatrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
-
-import java.util.Arrays;
 
 /**
  * Helper class for various general functions and operations regarding matrices
@@ -86,7 +83,7 @@ public final class MatrixOperations {
 
     /**
      * @return left multiplication by real(matrix) given as input array. Dense by definition.
-     * @param z double array holding complex numbers (real, imag) in row-major order
+     * @param z double array holding real part in row-major order
      */
     public static LinearOperation asLinearOperationReal(int rows, int cols, double[] z) {
         return (b, off) -> {
@@ -105,7 +102,7 @@ public final class MatrixOperations {
 
     /**
      * @return left multiplication by real(matrix) given as input array. Dense by definition.
-     * @param z double array holding complex numbers (real, imag) in row-major order
+     * @param z double array holding imaginary part in row-major order
      */
     public static LinearOperation asLinearOperationImag(int rows, int cols, double[] z) {
         return (b, off) -> {

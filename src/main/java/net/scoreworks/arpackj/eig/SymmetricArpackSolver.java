@@ -39,6 +39,7 @@ public class SymmetricArpackSolver extends ArpackSolver {
     private final LinearOperation OP, B;
     private LinearOperation OPa, OPb, A_matvec;
 
+    //Instantiation is handled from within package!
     SymmetricArpackSolver(LinearOperation A_matvec, int n, int nev, int mode, String which, Integer ncv, double sigma,
                           int maxIter, double tol, LinearOperation M_matvec, LinearOperation Minv_matvec) {
         super(n, nev, mode, which.getBytes(), ncv, maxIter, tol);

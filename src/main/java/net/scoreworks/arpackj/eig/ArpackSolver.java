@@ -102,7 +102,7 @@ public abstract class ArpackSolver {
     public void solve() {
         while (true) {
             iterate();
-            if (ido[0] == 99) {
+            if (ido[0] == 99) {     //done
                 if (info[0] == 0) {
                     extract();
                     break;

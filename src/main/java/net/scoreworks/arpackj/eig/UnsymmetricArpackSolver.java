@@ -40,6 +40,7 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
     private final LinearOperation OP, B;
     private LinearOperation OPa, A_matvec;
 
+    //Instantiation is handled from within package!
     UnsymmetricArpackSolver(LinearOperation A_matvec, int n, int nev, int mode, String which, Integer ncv, Complex sigma,
                             int maxIter, double tol, LinearOperation M_matvec, LinearOperation Minv_matvec) {
         super(n, nev, mode, which.getBytes(), ncv, maxIter, tol);
@@ -251,7 +252,6 @@ public class UnsymmetricArpackSolver extends ArpackSolver {
             else    //sort by magnitude
                 Arrays.sort(eigenPair, Comparator.comparing(eig -> one.divide(eig.d.subtract(sigma)).abs()));
         }
-
 
         if (which[0] == 'S') {
             //copy first nev values to solution arrays
