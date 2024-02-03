@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="added file headers">
+    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="added local publish">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/LinearOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/LinearOperation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/MatrixOperations.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/ArpackSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/ArpackSolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/UnsymmetricArpackSolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/TestUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/TestUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +100,7 @@
       <recent name="net.scoreworks.arpackj" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.ArpackJ [publishToMavenLocal]">
+  <component name="RunManager" selected="Gradle.Test all">
     <configuration name="ArpackJ [publishToMavenLocal]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -286,7 +284,15 @@
       <workItem from="1704474816931" duration="5341000" />
       <workItem from="1704620237379" duration="8510000" />
       <workItem from="1704722190122" duration="694000" />
-      <workItem from="1704722902730" duration="206000" />
+      <workItem from="1704722902730" duration="1906000" />
+      <workItem from="1704796341682" duration="1040000" />
+      <workItem from="1704829301089" duration="13000" />
+      <workItem from="1705924553303" duration="2949000" />
+      <workItem from="1705958129346" duration="5157000" />
+      <workItem from="1706005600495" duration="1486000" />
+      <workItem from="1706886673117" duration="6462000" />
+      <workItem from="1706963749305" duration="2109000" />
+      <workItem from="1706981355429" duration="1963000" />
     </task>
     <task id="LOCAL-00001" summary="asdas">
       <created>1698578035328</created>
@@ -533,7 +539,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698942411970</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="added local publish">
+      <created>1704723182581</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1704723182581</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -551,7 +564,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="unsymmetric working sometimes, sometimes bug?!?" />
     <MESSAGE value="made lworkl solver specific" />
     <MESSAGE value="found problem: ipntr must be bigger in unsymmetrical case!" />
     <MESSAGE value="added complex return functions" />
@@ -576,7 +588,8 @@
     <MESSAGE value="all modes implemented, all tests working" />
     <MESSAGE value="removed all TODOs" />
     <MESSAGE value="added file headers" />
-    <option name="LAST_COMMIT_MESSAGE" value="added file headers" />
+    <MESSAGE value="added local publish" />
+    <option name="LAST_COMMIT_MESSAGE" value="added local publish" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

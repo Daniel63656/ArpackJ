@@ -61,7 +61,7 @@ public abstract class ArpackSolver {
     protected int[] info = new int[1];
 
 
-    public ArpackSolver(int n, int nev, int mode, byte[] which, Integer ncv, int maxIter, double tol) {
+    ArpackSolver(int n, int nev, int mode, byte[] which, Integer ncv, int maxIter, double tol) {
         if (nev <= 0)
             throw new IllegalArgumentException("nev must be positive, nev="+nev);
         if (nev >= n)

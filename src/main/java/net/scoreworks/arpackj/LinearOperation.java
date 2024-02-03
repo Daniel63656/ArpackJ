@@ -11,7 +11,7 @@ https://opensource.org/licenses/MIT.
 package net.scoreworks.arpackj;
 
 /**
- * Interface for matrix vector operations. This function is ++intended to return a new result array while leaving the
+ * Interface for matrix vector operations. This function is intended to return a new result array while leaving the
  * passed one untouched. Supports the case that x is saved as part of a bigger array.
  * See {@link MatrixOperations} for example implementations
  */

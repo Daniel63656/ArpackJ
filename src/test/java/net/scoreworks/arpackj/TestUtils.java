@@ -12,6 +12,11 @@ package net.scoreworks.arpackj;
 
 import org.apache.commons.math3.complex.Complex;
 import org.junit.jupiter.api.Assertions;
+import org.la4j.iterator.MatrixIterator;
+import org.la4j.matrix.SparseMatrix;
+import org.la4j.matrix.sparse.CRSMatrix;
+
+import java.util.Random;
 
 public final class TestUtils {
     private static final double epsilon = 0.0001;
@@ -42,7 +47,6 @@ public final class TestUtils {
         }
         System.out.println("All eigenvalues correct");
 
-        //check eigenvectors match up to sign flip
         Complex rotation = null;
         for (int i=0; i<slice.length; i++) {
             if (i > 0) System.out.println("eigenvector "+i+" correct");
@@ -54,5 +58,26 @@ public final class TestUtils {
             }
         }
         System.out.println("eigenvector "+slice.length+" correct");
+    }
+
+    public static CRSMatrix generateRandomSparseMatrix(int rows, int columns, double sparsity) {
+        Random random = new Random();
+        CRSMatrix matrix = new CRSMatrix(rows, columns);
+        //generate random non-zero elements and insert them into the matrix
+        for (int i=0; i<rows*columns; i++) {
+            if (random.nextDouble() < sparsity)
+                matrix.set(i/columns, i%columns, Math.random());
+        }
+        return matrix;
+    }
+
+    public static float checkSparsity(SparseMatrix A) {
+        MatrixIterator it = A.nonZeroIterator();
+        int count = 0;
+        while (it.hasNext()) {
+            count++;
+            it.next();
+        }
+        return count/(float)(A.rows()*A.columns());
     }
 }
