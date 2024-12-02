@@ -23,6 +23,7 @@ dependencies {
     implementation 'org.bytedeco:arpack-ng-platform:3.9.0-1.5.9'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testImplementation files('openCV/opencv-460.jar')   // for performance comparison
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 

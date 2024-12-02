@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="added local publish">
+    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="minor changes">
+      <change afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/PerformanceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/LinearOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/LinearOperation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/ArpackSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/eig/ArpackSolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/TestUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/TestUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +64,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 4
+}]]></component>
   <component name="ProjectId" id="2XOX1FEwb1T6Rioh7pps0pOjhGM" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -72,35 +75,44 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Daniel/AppDevelopment/scoreworks/OpticalMusicRecognition&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.ArpackJ [publishToMavenLocal].executor": "Run",
+    "Gradle.PerformanceTest.sparsityPerformanceTest.executor": "Run",
+    "Gradle.Test all.executor": "Run",
+    "Gradle.Upgrade Gradle wrapper.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Daniel/AppDevelopment/ArpackJ",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.40574712",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Daniel\AppDevelopment\ArpackJ\src\main\java\net\scoreworks" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Daniel\AppDevelopment\ArpackJ\src\test\java\net\scoreworks\arpackj" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="net.scoreworks.arpackj.eig" />
       <recent name="net.scoreworks.arpackj" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Test all">
+  <component name="RunManager" selected="Gradle.ArpackJ [publishToMavenLocal]">
     <configuration name="ArpackJ [publishToMavenLocal]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -120,6 +132,31 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="PerformanceTest.sparsityPerformanceTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;net.scoreworks.arpackj.PerformanceTest.sparsityPerformanceTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="Test all" type="GradleRunConfiguration" factoryName="Gradle">
@@ -143,6 +180,7 @@
       <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="UnsymmetricStandardEigTests.foo" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -166,29 +204,7 @@
       <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertImagLI" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;net.scoreworks.arpackj.eig.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertImagLI&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealLM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -212,6 +228,7 @@
       <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealSM" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -235,6 +252,7 @@
       <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="Test" type="JUnit" factoryName="JUnit">
@@ -247,9 +265,9 @@
     </configuration>
     <list>
       <item itemvalue="Gradle.Test all" />
+      <item itemvalue="Gradle.PerformanceTest.sparsityPerformanceTest" />
       <item itemvalue="Gradle.ArpackJ [publishToMavenLocal]" />
       <item itemvalue="Gradle.UnsymmetricStandardEigTests.foo" />
-      <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertImagLI" />
       <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealSM" />
       <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealLM" />
       <item itemvalue="JUnit.Test" />
@@ -257,12 +275,20 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.ArpackJ [publishToMavenLocal]" />
+        <item itemvalue="Gradle.PerformanceTest.sparsityPerformanceTest" />
         <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealSM" />
         <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertRealLM" />
         <item itemvalue="Gradle.UnsymmetricStandardEigTests.foo" />
-        <item itemvalue="Gradle.UnsymmetricStandardEigTests.testStandardEigenvalueProblemShiftInvertImagLI" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -292,7 +318,9 @@
       <workItem from="1706005600495" duration="1486000" />
       <workItem from="1706886673117" duration="6462000" />
       <workItem from="1706963749305" duration="2109000" />
-      <workItem from="1706981355429" duration="1963000" />
+      <workItem from="1706981355429" duration="1991000" />
+      <workItem from="1710579376476" duration="24000" />
+      <workItem from="1733134320998" duration="2239000" />
     </task>
     <task id="LOCAL-00001" summary="asdas">
       <created>1698578035328</created>
@@ -546,7 +574,14 @@
       <option name="project" value="LOCAL" />
       <updated>1704723182581</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="minor changes">
+      <created>1706987889269</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1706987889269</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -564,7 +599,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="made lworkl solver specific" />
     <MESSAGE value="found problem: ipntr must be bigger in unsymmetrical case!" />
     <MESSAGE value="added complex return functions" />
     <MESSAGE value="SM, LM working for non hermetian" />
@@ -589,7 +623,8 @@
     <MESSAGE value="removed all TODOs" />
     <MESSAGE value="added file headers" />
     <MESSAGE value="added local publish" />
-    <option name="LAST_COMMIT_MESSAGE" value="added local publish" />
+    <MESSAGE value="minor changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="minor changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
