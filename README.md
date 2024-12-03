@@ -70,7 +70,7 @@ double[] eigenvalues = solver.getEigenvalues();
 double[] eigenvectors = solver.getEigenvectors();
 ```
 
-### Performin LU decomposition using la4j Matrices
+### Performing LU decomposition using la4j Matrices
 
 ```java
 double[][] dataB = {    //non-symmetric
@@ -104,10 +104,10 @@ invertComplex(3, Z);    // Perform in-place matrix inversion
 ### LinearOperations
 
 In some cases it can be beneficial to define matrices functionally, as ``LinearOperations``. This type can be used throughout
-the library as an alternative to a la4j ``Matrix``. ``LinearOperations`` are functional interfaces that represent a matrix
+the library as an alternative to the la4j ``Matrix`` type. ``LinearOperations`` are functional interfaces that represent a matrix
 as a left-side multiplication operation on vectors.  
 As an example, consider the **sparse** 5x5 matrix with all off-diagonal elements equal to zero:
-$$
+```math
 \begin{bmatrix}
 1 &  &  &  &  \\
  & 2 &  &  &  \\
@@ -115,9 +115,9 @@ $$
  &  &  & 4 &  \\
  &  &  &  & 5
 \end{bmatrix}
-$$
+```
 
-This matrix can be represented as function, acting on an array ``x``, where ``off`` describes where the target vector starts
+This matrix can be represented as a function, acting on an array ``x``, where ``off`` describes where the target vector starts
 in the provided array:
 ```java
 LinearOperation myCustomMatrix = (x, off) -> {
@@ -132,7 +132,7 @@ LinearOperation myCustomMatrix = (x, off) -> {
 ## Runtime analysis
 
 Solving for a few eigenvalues numerically is much faster than solving for all eigenvalues, especially for large and sparse matrices.
-For comparison, solving a 2000x2000 matrix for eigenvalues with openCV takes about 2 minutes, where this code can solve for
+For comparison, solving a 2000x2000 matrix for eigenvalues with openCV takes about 2 minutes, where this project can solve for
 the largest 2 eigenvalues in about 1 second.  
 In most practical scenarios, solving for only the largest or smallest eigenvalue is sufficient. This makes computing all eigenvalues
 unnecessary and computationally prohibitive for large matrices.

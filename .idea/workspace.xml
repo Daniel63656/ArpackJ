@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="minor changes">
-      <change afterPath="$PROJECT_DIR$/docs/runtime.png" afterDir="false" />
+    <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="updating README.md, adding openCV license">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/LinearOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/LinearOperation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -333,7 +331,7 @@
       <workItem from="1706963749305" duration="2109000" />
       <workItem from="1706981355429" duration="1991000" />
       <workItem from="1710579376476" duration="24000" />
-      <workItem from="1733134320998" duration="13814000" />
+      <workItem from="1733134320998" duration="14169000" />
     </task>
     <task id="LOCAL-00001" summary="asdas">
       <created>1698578035328</created>
@@ -594,7 +592,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706987889269</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="updating README.md, adding openCV license">
+      <option name="closed" value="true" />
+      <created>1733223742445</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1733223742445</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -612,7 +618,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="found problem: ipntr must be bigger in unsymmetrical case!" />
     <MESSAGE value="added complex return functions" />
     <MESSAGE value="SM, LM working for non hermetian" />
     <MESSAGE value="corrected java docs, test methods in TestUtils" />
@@ -637,7 +642,8 @@
     <MESSAGE value="added file headers" />
     <MESSAGE value="added local publish" />
     <MESSAGE value="minor changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="minor changes" />
+    <MESSAGE value="updating README.md, adding openCV license" />
+    <option name="LAST_COMMIT_MESSAGE" value="updating README.md, adding openCV license" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
