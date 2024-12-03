@@ -11,16 +11,17 @@ https://opensource.org/licenses/MIT.
 package net.scoreworks.arpackj;
 
 /**
- * Interface for matrix vector operations. This function is intended to return a new result array while leaving the
- * passed one untouched. Supports the case that x is saved as part of a bigger array.
- * See {@link MatrixOperations} for example implementations
+ * A functional interface for representing a matrix {@code A} as a left-side multiplication operation on a vector {@code x}.
+ * Calling {@link #apply(double[], int)} computes the result of {@code A * x} and returns it as a new array.
+ * <p>
+ * Example implementations can be found in {@link MatrixOperations}.
  */
-
 public interface LinearOperation {
     /**
-     * @param x vector to apply the function to
-     * @param offset 0 if x spans the entire array, starting position of x in array otherwise. The
-     *               length of x is implicitly handled by the implementation
+     * @param x vector array to apply the matrix operation to
+     * @param offset the starting position of the vector within the array. Use {@code 0} if {@code x}
+     *               contains only the vector itself or the vector starts at the beginning of the array. The vector length
+     *               must match the size of the underlying {@link LinearOperation}.
      * @return the result of OP @ x
      */
     double[] apply(final double[] x, final int offset);

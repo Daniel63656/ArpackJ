@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6265f4a3-5970-425a-8fa2-ff9559279db4" name="Changes" comment="minor changes">
-      <change afterPath="$PROJECT_DIR$/src/test/java/net/scoreworks/arpackj/PerformanceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/runtime.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/LinearOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/scoreworks/arpackj/LinearOperation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +61,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Daniel63656"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Daniel63656/ArpackJ.git",
+    "accountId": "52c1b8da-eefe-4094-8d01-f8ee8ebae476"
+  }
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -87,7 +99,7 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Daniel/AppDevelopment/ArpackJ",
+    "last_opened_file_path": "C:/Users/Daniel/AppDevelopment/scoreworks/MusicalDocumentRectification",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -105,6 +117,7 @@
       <recent name="C:\Users\Daniel\AppDevelopment\ArpackJ\src\main\java\net\scoreworks" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Daniel\AppDevelopment\ArpackJ\docs" />
       <recent name="C:\Users\Daniel\AppDevelopment\ArpackJ\src\test\java\net\scoreworks\arpackj" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -112,7 +125,7 @@
       <recent name="net.scoreworks.arpackj" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.ArpackJ [publishToMavenLocal]">
+  <component name="RunManager" selected="Gradle.Test all">
     <configuration name="ArpackJ [publishToMavenLocal]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -320,7 +333,7 @@
       <workItem from="1706963749305" duration="2109000" />
       <workItem from="1706981355429" duration="1991000" />
       <workItem from="1710579376476" duration="24000" />
-      <workItem from="1733134320998" duration="2239000" />
+      <workItem from="1733134320998" duration="13814000" />
     </task>
     <task id="LOCAL-00001" summary="asdas">
       <created>1698578035328</created>
